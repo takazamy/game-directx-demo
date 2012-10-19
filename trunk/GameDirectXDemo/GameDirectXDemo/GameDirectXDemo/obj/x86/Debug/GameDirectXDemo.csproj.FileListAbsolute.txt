@@ -1,0 +1,11 @@
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\bin\Debug\GameDirectXDemo.exe
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\bin\Debug\GameDirectXDemo.pdb
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GameDirectXDemo.Properties.Resources.resources
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GenerateResource.read.1.tlog
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GenerateResource.write.1.tlog
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GameDirectXDemo.exe
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GameDirectXDemo.pdb
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\bin\Debug\GameDirectXDemo.exe.config
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GameDirectXDemo.GameResource.resources
+E:\Hoc Tap\C#\GameDirectXDemo\GameDirectXDemo\GameDirectXDemo\obj\x86\Debug\GameDirectXDemo.Form1.resources
