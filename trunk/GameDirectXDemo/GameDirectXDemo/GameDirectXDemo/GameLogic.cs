@@ -70,7 +70,7 @@ namespace GameDirectXDemo
             }
 
            image = new DxImage("Resources/sprite.png", BitmapType.SOLID, 0, new PointF(50, 50), 32, 32, graphics.DDDevice);
-           ani = new DxAnimation(image, 200, AnimationType.SINGLESEQUENCE);
+           ani = new DxAnimation(image, 300, AnimationType.CONTINUOS);
             // Start game loop
             this.gameLoop();
         }
