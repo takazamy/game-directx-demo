@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\DxAnimation.cs" />
+    <Compile Include="Core\DxImage.cs" />
     <Compile Include="Core\DxImageObject.cs" />
     <Compile Include="Core\DxInitGraphics.cs" />
     <Compile Include="Core\DxKeyboard.cs" />
@@ -114,6 +116,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\sprite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

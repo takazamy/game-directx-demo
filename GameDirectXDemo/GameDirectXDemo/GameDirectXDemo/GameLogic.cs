@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput; //Added to take care of the KeyboardState and enum Key
 using GameDirectXDemo.Core;
+using System.Drawing;
 
 namespace GameDirectXDemo
 {
@@ -34,6 +35,11 @@ namespace GameDirectXDemo
         /// and starts the game loop.
         /// </summary>
         /// <param name="RenderTarget">The target control to render to.</param>
+        /// 
+
+        DxImage image;
+        DxAnimation ani;
+
         public GameLogic(Control RenderTarget)
         {
             // Save a reference to the target Control
@@ -63,6 +69,8 @@ namespace GameDirectXDemo
                 return;
             }
 
+           image = new DxImage("Resources/sprite.png", BitmapType.SOLID, 0, new PointF(50, 50), 32, 32, graphics.DDDevice);
+           ani = new DxAnimation(image, 200, AnimationType.SINGLESEQUENCE);
             // Start game loop
             this.gameLoop();
         }
@@ -149,14 +157,16 @@ namespace GameDirectXDemo
                     #region IPO
                     // React on user input
                     this.processInput();
-                    this.mouse.Update();
+                  //  this.mouse.Update();
                     // If the gameState is set to Run
                     if (gameState == GameStates.Run)
                     {
                         //Remember GraphicsEngine RenderSurface method gets the Secondary Surface
-                        graphics.RenderSurface.ColorFill(0);
+                        graphics.RenderSurface.ColorFill(Color.Aqua);
                         graphics.RenderSurface.ForeColor = System.Drawing.Color.Red;
-                        this.mouse.Draw();
+                        ani.Update(dLoopDuration);
+                        ani.Draw(graphics.RenderSurface);
+                       // this.mouse.Draw();
                         //graphics.RenderSurface.DrawText(100, 100, "Ticks per second: " + DxTimer.TicksPerSecond.ToString(), false);
                        // graphics.RenderSurface.DrawText(100, 115, "Frames per second: " + (1000.0 / dLoopDuration).ToString("F2"), false);
                        // graphics.RenderSurface.DrawText(100, 130, "Loop Duration (ms): " + dLoopDuration.ToString("F5"), false);

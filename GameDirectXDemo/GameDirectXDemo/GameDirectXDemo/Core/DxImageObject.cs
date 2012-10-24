@@ -9,11 +9,11 @@ namespace GameDirectXDemo.Core
     /// <summary>
     /// To Enumeration to distinguish the type of bitmap
     /// </summary>
-    public enum BitmapType
-    {
-        SOLID = 0,
-        TRANSPARENT = 1
-    }
+    //enum BitmapType
+    //{
+    //    SOLID = 0,
+    //    TRANSPARENT = 1
+    //}
 
     public class DxImageObject
     {
