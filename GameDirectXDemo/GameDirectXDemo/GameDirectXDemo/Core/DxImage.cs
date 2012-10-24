@@ -74,7 +74,8 @@ namespace GameDirectXDemo.Core
         protected BitmapType _objectType;
         protected ColorKey _tempKey;
         protected int _colorKey;
-        protected Rectangle _sourceRec;
+        //protected Rectangle _sourceRec;
+        protected Rectangle[] _recArray;
 
         // Use for Image
         public DxImage(string imagePath,BitmapType objectType,int colorkey,PointF position, Device graphicsDevice)
@@ -100,6 +101,16 @@ namespace GameDirectXDemo.Core
             _frameHeight = frameHeight;
             _columns = _sourceImage.Width / _frameWidth;
             _rows = _sourceImage.Height / _frameHeight;
+
+            int column;
+            int row;
+            _recArray = new Rectangle[TotalFrame];
+            for(int i = 0; i < _recArray.Length; i++)
+            {
+                column = i % _columns;
+                row = i / _columns;
+                _recArray[i] = new Rectangle(column * _frameWidth, row * _frameHeight, _frameWidth, _frameHeight);
+            }
             CreateSurface();
         }
 
@@ -135,16 +146,13 @@ namespace GameDirectXDemo.Core
         //Use for Sprite
         public void DrawImage(int frameIndex, Surface destSurface)
         {
-            int column = frameIndex % _columns;
-            int row = frameIndex / _columns;
-            _sourceRec = new Rectangle(column * _frameWidth, row * _frameHeight, _frameWidth, _frameHeight);
             if (this._objectType == BitmapType.TRANSPARENT)
             {
-                destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface,_sourceRec, DrawFastFlags.SourceColorKey | DrawFastFlags.Wait);
+                destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface,_recArray[frameIndex], DrawFastFlags.SourceColorKey | DrawFastFlags.Wait);
             }
             else
             {
-                destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface,_sourceRec, DrawFastFlags.NoColorKey | DrawFastFlags.Wait);
+                destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface, _recArray[frameIndex], DrawFastFlags.NoColorKey | DrawFastFlags.Wait);
             }
         }
     }
