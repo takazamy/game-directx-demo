@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(784, 562);
             this.DoubleBuffered = true;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
             this.ResumeLayout(false);
 
