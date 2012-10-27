@@ -28,7 +28,7 @@ namespace GameDirectXDemo
         protected DxInitGraphics graphics;
         protected GameStates gameState;
         protected DxKeyboard input;
-        protected DxMouse mouse;
+       // protected DxMouse mouse;
         protected double dLoopDuration; // Duration of one game loop in milliseconds.
         /// <summary>
         /// Constructor. Initializes the general graphics 
@@ -37,8 +37,8 @@ namespace GameDirectXDemo
         /// <param name="RenderTarget">The target control to render to.</param>
         /// 
 
-        DxImage image;
-        DxAnimation ani;
+        DxTileMap tileMap;
+        DxCamera camera;
 
         public GameLogic(Control RenderTarget)
         {
@@ -54,7 +54,7 @@ namespace GameDirectXDemo
             // Create a new input handler
             this.input = new DxKeyboard(this.target);
             //
-            this.mouse = new DxMouse(this.target, graphics);
+        //    this.mouse = new DxMouse(this.target, graphics);
             // All done - set the game state to initialized
             this.gameState = GameStates.Run;
 
@@ -69,8 +69,8 @@ namespace GameDirectXDemo
                 return;
             }
 
-           image = new DxImage("Resources/sprite.png", BitmapType.SOLID, 0, new PointF(50, 50), 32, 32, graphics.DDDevice);
-           ani = new DxAnimation(image, 300, AnimationType.CONTINUOS);
+            tileMap = new DxTileMap("Map/map2.txt", "Map/map.png", 32, 32, graphics);
+            camera = new DxCamera(new Point(0, 0), new Size(320, 320), tileMap.TileMapSurface, graphics.DDDevice);
             // Start game loop
             this.gameLoop();
         }
@@ -162,18 +162,9 @@ namespace GameDirectXDemo
                     if (gameState == GameStates.Run)
                     {
                         //Remember GraphicsEngine RenderSurface method gets the Secondary Surface
-                        graphics.RenderSurface.ColorFill(Color.Aqua);
-                        graphics.RenderSurface.ForeColor = System.Drawing.Color.Red;
-                        ani.Update(dLoopDuration);
-                        ani.Draw(graphics.RenderSurface);
-                       // this.mouse.Draw();
-                        //graphics.RenderSurface.DrawText(100, 100, "Ticks per second: " + DxTimer.TicksPerSecond.ToString(), false);
-                       // graphics.RenderSurface.DrawText(100, 115, "Frames per second: " + (1000.0 / dLoopDuration).ToString("F2"), false);
-                       // graphics.RenderSurface.DrawText(100, 130, "Loop Duration (ms): " + dLoopDuration.ToString("F5"), false);
-                        
-                        
-                       // graphics.RenderSurface.DrawText(100, 140, "Speed (px): " + (dLoopDuration * 0.3).ToString("F5"), false);
-                        
+                        //tileMap.DrawTileMap(graphics.RenderSurface);
+                        camera.Draw(graphics.RenderSurface);
+                       // this.mouse.Draw();  
                     }
 
 
