@@ -155,5 +155,17 @@ namespace GameDirectXDemo.Core
                 destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface, _recArray[frameIndex], DrawFastFlags.NoColorKey | DrawFastFlags.Wait);
             }
         }
+        //Use for tileMap
+        public void DrawImage(int x,int y,int frameIndex, Surface destSurface)
+        {
+            if (this._objectType == BitmapType.TRANSPARENT)
+            {
+                destSurface.DrawFast(x, y, _sourceSurface, _recArray[frameIndex], DrawFastFlags.SourceColorKey | DrawFastFlags.Wait);
+            }
+            else
+            {
+                destSurface.DrawFast(x, y, _sourceSurface, _recArray[frameIndex], DrawFastFlags.NoColorKey | DrawFastFlags.Wait);
+            }
+        }
     }
 }
