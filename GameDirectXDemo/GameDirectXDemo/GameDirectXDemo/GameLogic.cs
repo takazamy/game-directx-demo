@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Microsoft.DirectX.DirectInput; //Added to take care of the KeyboardState and enum Key
 using GameDirectXDemo.Core;
 using System.Drawing;
+using GameDirectXDemo.Manager;
 
 namespace GameDirectXDemo
 {
@@ -28,7 +29,8 @@ namespace GameDirectXDemo
         protected DxInitGraphics graphics;
         protected GameStates gameState;
         protected DxKeyboard input;
-       // protected DxMouse mouse;
+        protected GameManager gameManager;
+        protected DxMouse mouse;
         protected double dLoopDuration; // Duration of one game loop in milliseconds.
         /// <summary>
         /// Constructor. Initializes the general graphics 
@@ -53,8 +55,12 @@ namespace GameDirectXDemo
 
             // Create a new input handler
             this.input = new DxKeyboard(this.target);
-            //
-        //    this.mouse = new DxMouse(this.target, graphics);
+
+            this.mouse = new DxMouse(this.graphics,this.target, this);
+            
+
+            //Create a game Manager
+            this.gameManager = new GameManager(this.target, this.graphics);
             // All done - set the game state to initialized
             this.gameState = GameStates.Run;
 
@@ -157,14 +163,31 @@ namespace GameDirectXDemo
                     #region IPO
                     // React on user input
                     this.processInput();
-                  //  this.mouse.Update();
+
                     // If the gameState is set to Run
                     if (gameState == GameStates.Run)
                     {
                         //Remember GraphicsEngine RenderSurface method gets the Secondary Surface
+
+                        //graphics.RenderSurface.ColorFill(Color.Aqua);
+                        //graphics.RenderSurface.ForeColor = System.Drawing.Color.Red;
+
+                        //ani.Update(dLoopDuration);
+                        //ani.Draw(graphics.RenderSurface);
+                       // this.mouse.Draw();
+
+                        //graphics.RenderSurface.DrawText(100, 100, "Ticks per second: " + DxTimer.TicksPerSecond.ToString(), false);
+                       // graphics.RenderSurface.DrawText(100, 115, "Frames per second: " + (1000.0 / dLoopDuration).ToString("F2"), false);
+                       // graphics.RenderSurface.DrawText(100, 130, "Loop Duration (ms): " + dLoopDuration.ToString("F5"), false);
+
+                        this.Update(dLoopDuration);
+                       // graphics.RenderSurface.DrawText(100, 140, "Speed (px): " + (dLoopDuration * 0.3).ToString("F5"), false);
+
+                        this.Draw();
                         //tileMap.DrawTileMap(graphics.RenderSurface);
                         camera.Draw(graphics.RenderSurface);
                        // this.mouse.Draw();  
+
                     }
 
 
@@ -186,6 +209,29 @@ namespace GameDirectXDemo
                 // Allow application to handle Windows messages
                 Application.DoEvents();
              }
+        }
+
+        private void Update(double dLoopDuration)
+        {
+            try 
+            {
+                gameManager.Update(dLoopDuration, input.GetKeyboardState(), mouse.GetMouseState());
+            }
+            catch (Exception e) 
+            {
+                
+            }
+        }
+
+        private void Draw()
+        {
+            try
+            {
+                gameManager.Draw(this.graphics);
+            }
+            catch
+            {
+            }
         }
     
     }
