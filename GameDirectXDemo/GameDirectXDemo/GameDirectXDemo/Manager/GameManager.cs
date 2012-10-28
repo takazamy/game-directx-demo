@@ -64,9 +64,9 @@ namespace GameDirectXDemo.Manager
             _scrManager.Update(deltaTime, keyState, mouseState);
         }
 
-        public void Draw(DxInitGraphics graphics, double deltaTime)
+        public void Draw(DxInitGraphics graphics)
         {
-            _scrManager.Draw(graphics, deltaTime);
+            _scrManager.Draw(graphics);
         }
     }
 }
