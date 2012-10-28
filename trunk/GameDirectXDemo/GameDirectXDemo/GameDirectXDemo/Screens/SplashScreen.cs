@@ -6,6 +6,7 @@ using GameDirectXDemo.Core;
 using System.Drawing;
 using Microsoft.DirectX.DirectInput;
 using GameDirectXDemo.Manager;
+using Microsoft.DirectX.DirectDraw;
 
 namespace GameDirectXDemo.Screens
 {
@@ -36,24 +37,24 @@ namespace GameDirectXDemo.Screens
         {
             base.Initialize();
             _surface.ColorFill(Color.FromArgb(0, 255, 0, 255));
-         //   bg = new DxImage("Resources/SplashScreen.png", _graphics.DDDevice);
+            bg = new DxImage(GameResource.SplashScreen,Global.BitmapType.SOLID,0, _graphics.DDDevice);
         }
 
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState)
         {
             _ellapsedTime += deltaTime;
-            if (SoundManager.Instance.isLoop)
-            {
-                if (SoundManager.Instance.CheckDuration(SoundManager.SoundType.SplashScreenMusic))
-                {
-                    SoundManager.Instance.Play(SoundManager.SoundType.SplashScreenMusic);
-                }
-            }
-            if (IsDone)
-            {
-                //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
-                _scrManager.NextScreen();
-            }
+            //if (SoundManager.Instance.isLoop)
+            //{
+            //    if (SoundManager.Instance.CheckDuration(SoundManager.SoundType.SplashScreenMusic))
+            //    {
+            //        SoundManager.Instance.Play(SoundManager.SoundType.SplashScreenMusic);
+            //    }
+            //}
+            //if (IsDone)
+            //{
+            //    //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
+            //    _scrManager.NextScreen();
+            //}
 
             HandleKeyboard(keyState);
             HandleMouse(mouseState);
@@ -65,7 +66,7 @@ namespace GameDirectXDemo.Screens
             if (keyState[Key.Escape])
             {
                 //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
-                _scrManager.NextScreen();
+                //_scrManager.NextScreen();
             }
         }
 
@@ -73,17 +74,17 @@ namespace GameDirectXDemo.Screens
         {
             if (mouseState.GetMouseButtons()[0] != 0)
             {
-                SoundManager.Instance.Stop(SoundManager.SoundType.SplashScreenMusic);
+               // SoundManager.Instance.Stop(SoundManager.SoundType.SplashScreenMusic);
                 //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
-                _scrManager.NextScreen();
+               // _scrManager.NextScreen();
             }
 
         }
         public override void Draw()
         {
-           // bg.DrawFast(0, 0, base.Surface, DrawFastFlags.Wait);
-            SoundManager.Instance.Play(SoundManager.SoundType.SplashScreenMusic);
-            SoundManager.Instance.isLoop = true;
+            bg.DrawImage(this.Surface);
+           // SoundManager.Instance.Play(SoundManager.SoundType.SplashScreenMusic);
+          //  SoundManager.Instance.isLoop = true;
             //   .DrawFast(_location.X, _location.Y, bg.XImage, DrawFastFlags.Wait);
             base.Draw();
         }

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Linq;
 using Microsoft.DirectX.DirectDraw;
 
 namespace GameDirectXDemo.Core
@@ -81,7 +81,7 @@ namespace GameDirectXDemo.Core
             _graphics = graphics;
             _cellWidth = cellWidth;
             _cellHeight = cellHeight;
-            _textute = new DxImage(mapImagePath, BitmapType.SOLID, 0, new PointF(0, 0),_cellWidth,_cellHeight, _graphics.DDDevice);
+            _textute = new DxImage(mapImagePath, Global.BitmapType.SOLID, 0, new PointF(0, 0),_cellWidth,_cellHeight, _graphics.DDDevice);
             CrearTileMapSurface();
         }
         private void CrearTileMapSurface()

@@ -75,8 +75,8 @@ namespace GameDirectXDemo
                 return;
             }
 
-            tileMap = new DxTileMap("Map/map2.txt", "Map/map.png", 32, 32, graphics);
-            camera = new DxCamera(new Point(0, 0), new Size(320, 320), tileMap.TileMapSurface, graphics.DDDevice);
+           // tileMap = new DxTileMap("Map/map2.txt", "Map/map.png", 32, 32, graphics);
+           // camera = new DxCamera(new Point(0, 0), new Size(320, 320), tileMap.TileMapSurface, graphics.DDDevice);
             // Start game loop
             this.gameLoop();
         }
@@ -92,6 +92,7 @@ namespace GameDirectXDemo
         protected void restore(object Sender, System.EventArgs e)
         {
             // Recreate graphics handler
+            graphics.CreateSurfaces();
             this.graphics = new DxInitGraphics(this.target);
         }
 
@@ -185,7 +186,7 @@ namespace GameDirectXDemo
 
                         this.Draw();
                         //tileMap.DrawTileMap(graphics.RenderSurface);
-                        camera.Draw(graphics.RenderSurface);
+                        //camera.Draw(graphics.RenderSurface);
                        // this.mouse.Draw();  
 
                     }
@@ -196,7 +197,7 @@ namespace GameDirectXDemo
                     {
                         return;
                     }
-                    
+                  //  mouse.DrawMouse(this.graphics);
                     // Draw everything to the screen
                     graphics.Flip(); // Flip the secondary to the primary surface.
 #endregion
@@ -215,11 +216,14 @@ namespace GameDirectXDemo
         {
             try 
             {
+                mouse.Update();
                 gameManager.Update(dLoopDuration, input.GetKeyboardState(), mouse.GetMouseState());
+                //mouse.getMouseState();
+                
             }
             catch (Exception e) 
             {
-                
+                Console.WriteLine(e);
             }
         }
 
@@ -228,9 +232,11 @@ namespace GameDirectXDemo
             try
             {
                 gameManager.Draw(this.graphics);
+                mouse.DrawMouse(this.graphics);
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
             }
         }
     
