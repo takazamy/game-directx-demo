@@ -34,17 +34,12 @@ namespace GameDirectXDemo.Manager
         Audio _levelScreenMusic = new Audio("Assets/Sound/LevelScreenMusic.mp3");
         Audio _map1Music = new Audio("Assets/Sound/map1Music.mp3");
         Audio _atkSound = new Audio("Assets/Sound/AttackSound.mp3");
-
-
         #endregion
 
         Dictionary<string, Audio> _library;
-
-
         private SoundManager()
         {
             LoadAllSounds();
-
         }
 
         public static SoundManager Instance
@@ -73,13 +68,11 @@ namespace GameDirectXDemo.Manager
             _library.Add(SoundType.LevelScreenMusic, _levelScreenMusic);
             _library.Add(SoundType.Map1Music, _map1Music);
             _library.Add(SoundType.AtkSound, _atkSound);
-
         }
 
         public void Play(string key)
         {
             _library[key].Play();
-
         }
         public void Stop(string key)
         {
