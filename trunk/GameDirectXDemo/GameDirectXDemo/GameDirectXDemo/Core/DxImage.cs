@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using Microsoft.DirectX.DirectDraw;
+//using GameDirectXDemo.Global;
 
 namespace GameDirectXDemo.Core
 {
-    public enum BitmapType
-    {
-        SOLID = 0,
-        TRANSPARENT = 1
-    }
+    
     public class DxImage
     {
         protected string _imagePath;
@@ -71,14 +68,14 @@ namespace GameDirectXDemo.Core
         {
             get { return _rows * _columns; }
         }
-        protected BitmapType _objectType;
+        protected Global.BitmapType _objectType;
         protected ColorKey _tempKey;
         protected int _colorKey;
         //protected Rectangle _sourceRec;
         protected Rectangle[] _recArray;
 
         // Use for Image
-        public DxImage(string imagePath,BitmapType objectType,int colorkey,PointF position, Device graphicsDevice)
+        public DxImage(string imagePath,Global.BitmapType objectType,int colorkey,PointF position, Device graphicsDevice)
         {
             _sourceImage = Image.FromFile(imagePath);
             _graphicsDevice = graphicsDevice;
@@ -89,7 +86,7 @@ namespace GameDirectXDemo.Core
             CreateSurface();
         }
         //Use for sprite
-        public DxImage(string imagePath, BitmapType objectType, int colorkey, PointF position, int frameWidth, int frameHeight, Device graphicsDevice)
+        public DxImage(string imagePath, Global.BitmapType objectType, int colorkey, PointF position, int frameWidth, int frameHeight, Device graphicsDevice)
         {
             _sourceImage = Image.FromFile(imagePath);
             _graphicsDevice = graphicsDevice;
@@ -114,6 +111,76 @@ namespace GameDirectXDemo.Core
             CreateSurface();
         }
 
+        public DxImage(Bitmap SourceBitmap, Global.BitmapType ObjectType, int cKey, Device TargetDevice)
+        {
+            // Save references to the source bitmap,
+            // to the bitmap type and the device
+            _sourceImage = SourceBitmap;
+            _objectType = ObjectType;
+            _graphicsDevice = TargetDevice;
+
+            // Create a rectangle with the bitmaps dimensions
+            //objectSizeRect = new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height);
+
+            // Create a rectangle with the bitmaps position
+           // rectPosition = new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height);
+
+            // Save width and height seperately
+           // iWidth = SourceBitmap.Width;
+           // iHeight = SourceBitmap.Height;
+
+            // Build surface description
+           // initializeSurfaceDescription();
+
+            // Create ColorKey object
+           // tempKey = new ColorKey();
+
+            // Save Colorkey value
+           // colKey = cKey;
+
+            // Create surface
+           // initializeSurface(cKey);
+        }
+
+        /// <summary>
+        /// Constructor that takes a resource string i.e. path to the image file.
+        /// </summary>
+        /// <param name="ObjectType">Desired bitmap type i.e SOLID or TRANSPARENT</param>
+        /// <param name="TargetDevice">DirectDraw target device</param>
+        /// <param name="cKey">Desired Colorkey for Image. Will be applied only if BitmapType is equal to TRANSPARENT.</param>
+        /// <param name="AssemblyImageResource">Resource to images imbedded in the executables</param>
+        public DxImage(Global.BitmapType ObjectType, Device TargetDevice, int cKey, string AssemblyImageResource)
+        {
+            // Create a new bitmap from the resource
+            //sourceBitmap = new Bitmap(GetType().Module.Assembly.GetManifestResourceStream(AssemblyImageResource));
+
+            // Save bitmap type and target device
+          //  objectType = ObjectType;
+          //  targetDevice = TargetDevice;
+
+            // Create a rectangle with the bitmaps dimensions 
+           // objectSizeRect = new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height);
+
+            // Create a rectangle with the bitmaps position
+           // rectPosition = new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height);
+
+            // Save width and height seperately
+          //  iWidth = sourceBitmap.Width;
+           // iHeight = sourceBitmap.Height;
+
+            // Build surface description
+          //  initializeSurfaceDescription();
+
+            // Create ColorKey object
+           // tempKey = new ColorKey();
+
+            // Save Colorkey value
+           // colKey = cKey;
+
+            // Create surface
+           // initializeSurface(cKey);
+        }
+
         private void CreateSurface()
         {            
             SurfaceDescription desc = new SurfaceDescription();
@@ -123,7 +190,7 @@ namespace GameDirectXDemo.Core
             _sourceSurface = new Surface(new Bitmap(_sourceImage), desc, _graphicsDevice);
             switch (_objectType)
             {
-                case BitmapType.TRANSPARENT:
+                case Global.BitmapType.TRANSPARENT:
                     _tempKey.ColorSpaceHighValue = _colorKey;
                     _tempKey.ColorSpaceLowValue = _colorKey;
                     _sourceSurface.SetColorKey(ColorKeyFlags.SourceDraw, _tempKey);
@@ -134,7 +201,7 @@ namespace GameDirectXDemo.Core
         //Use for Image
         public void DrawImage(Surface destSurface)
         {
-            if (this._objectType == BitmapType.TRANSPARENT)
+            if (this._objectType == Global.BitmapType.TRANSPARENT)
             {
                 destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface, DrawFastFlags.SourceColorKey | DrawFastFlags.Wait);
             }
@@ -146,7 +213,7 @@ namespace GameDirectXDemo.Core
         //Use for Sprite
         public void DrawImage(int frameIndex, Surface destSurface)
         {
-            if (this._objectType == BitmapType.TRANSPARENT)
+            if (this._objectType == Global.BitmapType.TRANSPARENT)
             {
                 destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface,_recArray[frameIndex], DrawFastFlags.SourceColorKey | DrawFastFlags.Wait);
             }
@@ -158,7 +225,7 @@ namespace GameDirectXDemo.Core
         //Use for tileMap
         public void DrawImage(int x,int y,int frameIndex, Surface destSurface)
         {
-            if (this._objectType == BitmapType.TRANSPARENT)
+            if (this._objectType == Global.BitmapType.TRANSPARENT)
             {
                 destSurface.DrawFast(x, y, _sourceSurface, _recArray[frameIndex], DrawFastFlags.SourceColorKey | DrawFastFlags.Wait);
             }
