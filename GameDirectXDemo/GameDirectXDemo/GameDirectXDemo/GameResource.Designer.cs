@@ -67,6 +67,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap mouse_cursor {
+            get {
+                object obj = ResourceManager.GetObject("mouse_cursor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap SplashScreen {
             get {
                 object obj = ResourceManager.GetObject("SplashScreen", resourceCulture);

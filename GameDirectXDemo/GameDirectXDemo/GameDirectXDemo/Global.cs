@@ -7,8 +7,7 @@ namespace GameDirectXDemo
 {
     public class Global
     {
-        public enum BitmapType{ SOLID = 0,TRANSPARENT = 1}
-        
+        public enum BitmapType{ SOLID = 0,TRANSPARENT = 1}        
        
         public enum CursorState{Normal,Highlight}
 
@@ -16,9 +15,6 @@ namespace GameDirectXDemo
 
         public enum Side{Enemy,Player}
 
-        //public static void SetEnum(Enum e,ref Type t) 
-        //{
-            
-        //}
+        public enum AnimationType { CONTINUOS = 0, SINGLESEQUENCE = 1 }
     }
 }

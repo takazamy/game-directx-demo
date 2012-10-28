@@ -130,15 +130,17 @@ namespace GameDirectXDemo.Core
            // iHeight = SourceBitmap.Height;
 
             // Build surface description
+           // CreateSurface();
            // initializeSurfaceDescription();
 
             // Create ColorKey object
-           // tempKey = new ColorKey();
+            _tempKey = new ColorKey();
 
             // Save Colorkey value
-           // colKey = cKey;
+             _colorKey = cKey;
 
             // Create surface
+             CreateSurface();
            // initializeSurface(cKey);
         }
 
@@ -210,6 +212,7 @@ namespace GameDirectXDemo.Core
                 destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface, DrawFastFlags.NoColorKey | DrawFastFlags.Wait);
             }
         }
+
         //Use for Sprite
         public void DrawImage(int frameIndex, Surface destSurface)
         {
@@ -222,6 +225,7 @@ namespace GameDirectXDemo.Core
                 destSurface.DrawFast((int)_position.X, (int)_position.Y, _sourceSurface, _recArray[frameIndex], DrawFastFlags.NoColorKey | DrawFastFlags.Wait);
             }
         }
+
         //Use for tileMap
         public void DrawImage(int x,int y,int frameIndex, Surface destSurface)
         {

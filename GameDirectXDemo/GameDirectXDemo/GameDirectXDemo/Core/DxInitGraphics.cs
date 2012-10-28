@@ -64,13 +64,13 @@ namespace GameDirectXDemo.Core
 #endif
 
             // create surfaces
-            this.createSurfaces();
+            this.CreateSurfaces();
         }
 
         /// <summary>
         /// This method creates the primary and secondary surfaces
         /// </summary>
-        protected void createSurfaces()
+        public void CreateSurfaces()
         {
             // Every surface needs a description
             // This is where you set the parameters for the surface
@@ -153,8 +153,10 @@ namespace GameDirectXDemo.Core
                 // On activation of power saving mode 
                 // and in other situations we may lose the surfaces
                 // and have to recreate them
-                this.createSurfaces();
+                this.CreateSurfaces();
             }
         }
+
+        
     }
 }

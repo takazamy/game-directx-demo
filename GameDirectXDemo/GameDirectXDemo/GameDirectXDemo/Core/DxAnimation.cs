@@ -6,21 +6,16 @@ using Microsoft.DirectX.DirectDraw;
 
 namespace GameDirectXDemo.Core
 {
-   public enum AnimationType
-    {
-        CONTINUOS = 0,
-        SINGLESEQUENCE = 1
-    }
-    public class DxAnimation
+     public class DxAnimation
     {
         private DxImage _imageObject;
         private double _frameTime; //milisecond;
         private double _elapsedMilisec;
-        private AnimationType _aniType;
+        private Global.AnimationType _aniType;
         private int _currentFrame = 0;
         private bool _isPlaying = true;
 
-        public DxAnimation(DxImage imageObject, double frameTime, AnimationType aniType)
+        public DxAnimation(DxImage imageObject, double frameTime, Global.AnimationType aniType)
         {
             _imageObject = imageObject;
             _frameTime = frameTime;
@@ -38,7 +33,7 @@ namespace GameDirectXDemo.Core
                     _currentFrame++;
                     if (_currentFrame > _imageObject.TotalFrame - 1)
                     {
-                        if (_aniType == AnimationType.CONTINUOS)
+                        if (_aniType == Global.AnimationType.CONTINUOS)
                         {
                             _currentFrame = 0;
                         }

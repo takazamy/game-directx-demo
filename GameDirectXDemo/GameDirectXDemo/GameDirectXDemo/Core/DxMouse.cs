@@ -17,7 +17,7 @@ namespace GameDirectXDemo.Core
         protected Device mice = null;
         protected DxInitGraphics graphics;
         protected DxImage MouseCur;
-       // protected DxAnimationSF MouseCur1;
+       // protected DxAnimation MouseCur1;
         GameLogic game;
         Control form1;
         public MouseState mouseState;
@@ -48,36 +48,49 @@ namespace GameDirectXDemo.Core
             this.form1 = form1;
             this.form1.MouseEnter += new EventHandler(form1_MouseEnter);
             this.form1.MouseLeave += new EventHandler(form1_MouseLeave);
+          //  this.form1.MouseMove += new EventHandler(form1_MouseMove);
             mice = new Device(SystemGuid.Mouse);
             mice.SetDataFormat(DeviceDataFormat.Mouse);
             mice.SetCooperativeLevel(form1,
                                          CooperativeLevelFlags.Foreground |
                                          CooperativeLevelFlags.NonExclusive |
                                          CooperativeLevelFlags.NoWindowsKey);
-          //  MouseCur = new DxImage(new Bitmap(Ani.MouseCur0), BitmapType.TRANSPARENT, 0xFFFFFF, this.graphics.DDDevice);
-            Rectangle[] listRec = new Rectangle[2];
-            listRec[0] = new Rectangle(0, 0, 32, 32);
-            listRec[1] = new Rectangle(32, 0, 32, 32);
-           // MouseCur1 = new DxAnimationSF(this.graphics, MouseCur, listRec, AniType.Continuous, 24);
+            MouseCur = new DxImage(GameResource.mouse_cursor, Global.BitmapType.TRANSPARENT, 0xFFFFFF, this.graphics.DDDevice);
+            //Rectangle listRec = new Rectangle();
+            //listRec = new Rectangle(0, 0,28, 31);
+            //listRec[1] = new Rectangle(32, 0, 32, 32);
+            //MouseCur1 = new DxAnimation(MouseCur, 24, Global.AnimationType.CONTINUOS);
             mousex = form1.Width / 2;
             mousey = form1.Height / 2;
             SetCursorPos(mousex, mousey);
-            recMouse = new Rectangle(mousex, mousey, 2, 2);
+            recMouse = new Rectangle(mousex, mousey, this.MouseCur.FrameWidth, this.MouseCur.FrameHeight);
         }
 
         void form1_MouseLeave(object sender, EventArgs e)
         {
-            this.cursorOutOfGame = true;
+            if ((mousex > form1.Width - this.MouseCur.FrameWidth) || (mousey > form1.Height - this.MouseCur.FrameHeight))
+            {
+                this.cursorOutOfGame = true;
+            }
+           
+            //Console.WriteLine("form1_MouseLeave:{0}", cursorOutOfGame);
         }
 
         void form1_MouseEnter(object sender, EventArgs e)
         {
+            this.MouseCur.Position = this.MouseCur.LastPosition;
+            this.mousex = (int)this.MouseCur.LastPosition.X;
+            this.mousey = (int)this.MouseCur.LastPosition.Y;
             cursorOutOfGame = false;
+            
+            
+            Console.WriteLine("form1_MouseEnter:{0}", cursorOutOfGame);
+            //UpdateMousePos(mousex, mousey);
             SetCursorPos(mousex, mousey);
         }
-        public void DrawMouse(double dLoopDuration)
+        public void DrawMouse(DxInitGraphics graphics)
         {
-            //MouseCur1.Play(this.mousex, this.mousey, 1, 2, dLoopDuration);
+            MouseCur.DrawImage(graphics.RenderSurface);
 
         }
         public void UpdateMousePos(int x, int y)
@@ -88,7 +101,12 @@ namespace GameDirectXDemo.Core
             {
                 this.mousex += x;
                 this.mousey += y;
-                SetCursorPos(mousex, mousey);
+                //Console.WriteLine("x:{0}", x);
+                //Console.WriteLine("mousex:{0}", mousex);
+               // Console.WriteLine(x);
+                //Console.WriteLine(this.mousex);
+                //SetCursorPos(mousex, mousey);
+               
                 if (mousex < 0)
                 {
                     mousex = 0;
@@ -99,16 +117,17 @@ namespace GameDirectXDemo.Core
                     mousey = 0;
                     //SetCursorPos(mousex, mousey);
                 }
-                if (mousex > form1.Width - 32)
+                if (mousex > form1.Width - this.MouseCur.FrameWidth)
                 {
-                    mousex = form1.Width - 32;
+                    mousex = form1.Width - this.MouseCur.FrameWidth;
                     //SetCursorPos(mousex, mousey);
                 }
-                if (mousey > form1.Height - 32)
+                if (mousey > form1.Height - this.MouseCur.FrameHeight)
                 {
-                    mousey = form1.Height - 32;
+                    mousey = form1.Height - this.MouseCur.FrameHeight;
                     //SetCursorPos(mousex, mousey);
                 }
+                this.MouseCur.LastPosition = this.MouseCur.Position;
             }
             else
             {
@@ -155,6 +174,7 @@ namespace GameDirectXDemo.Core
                     // and don't care about exceptions
                     try
                     {
+                        Application.DoEvents();
                         mice.Acquire();
                     }
                     catch (InputLostException)
@@ -172,6 +192,13 @@ namespace GameDirectXDemo.Core
             // return the retrieved keyboard state
             return state;
         }
+        public void Update()
+        {
+            getMouseState();
+            
+            PointF p = new PointF((float)mousex, (float)mousey);
+            this.MouseCur.Position = p;
+        }
 
         public void getMouseState()
         {
@@ -179,6 +206,7 @@ namespace GameDirectXDemo.Core
             {
                 mUpPress = false;
                 mouseState = GetMouseState();
+                Console.WriteLine("mouseState:{0},{1}", mouseState.X,mouseState.Y);
                 UpdateMousePos(mouseState.X, mouseState.Y);
                 buttonPressed = mouseState.GetMouseButtons();
                 if (buttonPressed[0] != 0)
