@@ -5,90 +5,132 @@ using System.Text;
 //using Generic.TwoD.API;
 using Microsoft.DirectX.DirectInput;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace GameDirectXDemo.Core
 {
-    enum CursorState
-    {
-        Normal,
-        Highlight
-    }
+    
 
     class DxMouse
     {
-        int x, y;
-        DxImageObject imageObject;
-        DxInitGraphics graphics;
-
         protected Device mice = null;
-        protected byte[] ButtonPressed;
+        protected DxInitGraphics graphics;
+        protected DxImage MouseCur;
+       // protected DxAnimationSF MouseCur1;
+        GameLogic game;
+        Control form1;
+        public MouseState mouseState;
+        Rectangle recMouse;
+        byte[] buttonPressed;
+        public int mousex, mousey;
 
-        CursorState currentState = CursorState.Normal;
-        public CursorState CurrentState
+        #region Using User32 to SetCurPos
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetCursorPos(int X, int Y);
+        #endregion
+
+        public bool mLeftDown;
+        public bool mRightDown;
+        public bool mUpPress;
+        bool cursorOutOfGame = false;
+
+        enum StatusMouse
         {
-            get
-            {
-                return currentState;
-            }
-            set
-            {
-                currentState = value;
-            }
+            notarget = 0,
+            targetChar = 1,
         }
-
-        public int X
-        {
-            get
-            {
-                return x;
-            }
-        }
-
-        public int Y
-        {
-            get
-            {
-                return y;
-            }
-        }
-
-        public DxMouse(Control gameForm, DxInitGraphics graphics)
+        public DxMouse(DxInitGraphics graphics, Control form1, GameLogic game)
         {
             this.graphics = graphics;
-            // Create a new Device with the keyboard guid
+            this.game = game;
+            this.form1 = form1;
+            this.form1.MouseEnter += new EventHandler(form1_MouseEnter);
+            this.form1.MouseLeave += new EventHandler(form1_MouseLeave);
             mice = new Device(SystemGuid.Mouse);
-
-            // Set data format to keyboard data
             mice.SetDataFormat(DeviceDataFormat.Mouse);
-
-            // Set the cooperative level to foreground non-exclusive
-            // and deactivate windows key
-            mice.SetCooperativeLevel(gameForm,
+            mice.SetCooperativeLevel(form1,
                                          CooperativeLevelFlags.Foreground |
                                          CooperativeLevelFlags.NonExclusive |
                                          CooperativeLevelFlags.NoWindowsKey);
-
-            imageObject = new DxImageObject(GameResource.Cursor, BitmapType.TRANSPARENT, 0xFFFFFF, graphics.DDDevice);
-
+          //  MouseCur = new DxImage(new Bitmap(Ani.MouseCur0), BitmapType.TRANSPARENT, 0xFFFFFF, this.graphics.DDDevice);
+            Rectangle[] listRec = new Rectangle[2];
+            listRec[0] = new Rectangle(0, 0, 32, 32);
+            listRec[1] = new Rectangle(32, 0, 32, 32);
+           // MouseCur1 = new DxAnimationSF(this.graphics, MouseCur, listRec, AniType.Continuous, 24);
+            mousex = form1.Width / 2;
+            mousey = form1.Height / 2;
+            SetCursorPos(mousex, mousey);
+            recMouse = new Rectangle(mousex, mousey, 2, 2);
         }
 
-        public void Update()
+        void form1_MouseLeave(object sender, EventArgs e)
         {
-           
-            // This will save the current Mouse state
-            MouseState state;
-
-            // Get the Mouse state
-            state = GetMouseState();
-            this.x += state.X;
-            this.y += state.Y;
+            this.cursorOutOfGame = true;
         }
 
-        public void Draw()
+        void form1_MouseEnter(object sender, EventArgs e)
+        {
+            cursorOutOfGame = false;
+            SetCursorPos(mousex, mousey);
+        }
+        public void DrawMouse(double dLoopDuration)
+        {
+            //MouseCur1.Play(this.mousex, this.mousey, 1, 2, dLoopDuration);
+
+        }
+        public void UpdateMousePos(int x, int y)
+        {
+            Rectangle rect = new Rectangle(this.form1.Location, this.form1.Size);
+            if (rect.Contains(mousex, mousey))
+            //if (mousex >= 0 && mousex <= form1.Width && mousey >= 0 && mousey <= form1.Height)
+            {
+                this.mousex += x;
+                this.mousey += y;
+                SetCursorPos(mousex, mousey);
+                if (mousex < 0)
+                {
+                    mousex = 0;
+                    //SetCursorPos(mousex, mousey);
+                }
+                if (mousey < 0)
+                {
+                    mousey = 0;
+                    //SetCursorPos(mousex, mousey);
+                }
+                if (mousex > form1.Width - 32)
+                {
+                    mousex = form1.Width - 32;
+                    //SetCursorPos(mousex, mousey);
+                }
+                if (mousey > form1.Height - 32)
+                {
+                    mousey = form1.Height - 32;
+                    //SetCursorPos(mousex, mousey);
+                }
+            }
+            else
+            {
+                cursorOutOfGame = true;
+                Console.WriteLine("mouse out");
+            }
+        }
+
+        public void mLeftClick()
         {
 
-            imageObject.DrawBitmap(graphics.RenderSurface, this.X, this.Y);
         }
+
+        public void mRightClick()
+        {
+
+        }
+        public void mLeftClickDown()
+        {
+
+        }
+
 
         public MouseState GetMouseState()
         {
@@ -108,7 +150,6 @@ namespace GameDirectXDemo.Core
                 catch (InputException)
                 {
                     // let the application handle Windows messages
-                    Application.DoEvents();
 
                     // Try to get reacquire the mice 
                     // and don't care about exceptions
@@ -130,6 +171,44 @@ namespace GameDirectXDemo.Core
 
             // return the retrieved keyboard state
             return state;
+        }
+
+        public void getMouseState()
+        {
+            if (!cursorOutOfGame)
+            {
+                mUpPress = false;
+                mouseState = GetMouseState();
+                UpdateMousePos(mouseState.X, mouseState.Y);
+                buttonPressed = mouseState.GetMouseButtons();
+                if (buttonPressed[0] != 0)
+                {
+                    mLeftDown = true;
+                }
+                else
+                {
+                    if (mLeftDown == true)
+                    {
+                        mUpPress = true;
+                    }
+                    mLeftDown = false;
+                }
+                if (buttonPressed[1] != 0)
+                {
+                    mRightDown = true;
+                }
+                else
+                {
+                    mRightDown = false;
+                }
+            }
+        }
+        public void restoreSurface()
+        {
+            mousex = form1.Width / 2;
+            mousey = form1.Height / 2;
+            SetCursorPos(mousex, mousey);
+           // this.MouseCur.RestoreSurface();
         }
     }
 }
