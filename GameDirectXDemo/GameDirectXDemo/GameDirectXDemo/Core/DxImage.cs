@@ -70,8 +70,7 @@ namespace GameDirectXDemo.Core
         }
         protected Global.BitmapType _objectType;
         protected ColorKey _tempKey;
-        protected int _colorKey;
-        //protected Rectangle _sourceRec;
+        protected int _colorKey;        
         protected Rectangle[] _recArray;
 
         // Use for Image
@@ -110,7 +109,31 @@ namespace GameDirectXDemo.Core
             }
             CreateSurface();
         }
+        //use for sprite
+        public DxImage(Bitmap sourceBitmap, Global.BitmapType objectType, int colorkey, PointF position, int frameWidth, int frameHeight, Device graphicsDevice)
+        {
+            _sourceImage = sourceBitmap;
+            _graphicsDevice = graphicsDevice;
+            _objectType = objectType;
+            _colorKey = colorkey;
+            _tempKey = new ColorKey();
+            _position = position;
+            _frameWidth = frameWidth;
+            _frameHeight = frameHeight;
+            _columns = _sourceImage.Width / _frameWidth;
+            _rows = _sourceImage.Height / _frameHeight;
 
+            int column;
+            int row;
+            _recArray = new Rectangle[TotalFrame];
+            for (int i = 0; i < _recArray.Length; i++)
+            {
+                column = i % _columns;
+                row = i / _columns;
+                _recArray[i] = new Rectangle(column * _frameWidth, row * _frameHeight, _frameWidth, _frameHeight);
+            }
+            CreateSurface();
+        }
         public DxImage(Bitmap SourceBitmap, Global.BitmapType ObjectType, int cKey, Device TargetDevice)
         {
             // Save references to the source bitmap,
