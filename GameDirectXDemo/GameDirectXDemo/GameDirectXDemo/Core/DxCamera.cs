@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using Microsoft.DirectX.DirectDraw;
+using Microsoft.DirectX.DirectInput;
 
 namespace GameDirectXDemo.Core
 {
@@ -22,10 +23,11 @@ namespace GameDirectXDemo.Core
         }
         private Size _size;
         private Surface _sourceSurface;
-        private Device _graphicsDevice;
-        private Rectangle _sourceRect;
+        private Microsoft.DirectX.DirectDraw.Device _graphicsDevice;
+        private Rectangle _sourceRect,_destRect;
+        
 
-        public DxCamera(Point position,Size surfaceSize, Surface sourceSurface, Device graphicsDevice)
+        public DxCamera(Point position,Size surfaceSize, Surface sourceSurface, Microsoft.DirectX.DirectDraw.Device graphicsDevice)
         {
             _position = position;
             _sourceSurface = sourceSurface;
@@ -41,11 +43,59 @@ namespace GameDirectXDemo.Core
             desc.Height = _size.Height;
             _renderSurface = new Surface(desc, _graphicsDevice);
             _sourceRect = new Rectangle(_position, _size);
+            _destRect = new Rectangle(new Point(0, 0), _size);
         }
         public void Draw(Surface destSurface)
         {
             _renderSurface.Draw(_sourceSurface, _sourceRect, DrawFlags.Wait);
-            destSurface.Draw(_sourceRect,_renderSurface, DrawFlags.Wait);
+            destSurface.Draw(_destRect,_renderSurface, DrawFlags.Wait);
+        }
+        public void Update(KeyboardState state)
+        {
+            if (state[Key.Right])
+            {
+                if (_sourceRect.X < _sourceSurface.SurfaceDescription.Width - _size.Width)
+                {
+                        _sourceRect.X += 5;
+                        if (_sourceRect.X > _sourceSurface.SurfaceDescription.Width - _size.Width)
+                        {
+                            _sourceRect.X = _sourceSurface.SurfaceDescription.Width - _size.Width;
+                        }
+                }
+            }
+            else if(state[Key.Left])
+            {
+                if (_sourceRect.X > 0)
+                {
+                    _sourceRect.X -= 5;
+                    if (_sourceRect.X < 0)
+                    {
+                        _sourceRect.X = 0;
+                    }                    
+                }
+            }
+            else if (state[Key.Up])
+            {
+                if (_sourceRect.Y > 0)
+                {
+                    _sourceRect.Y -= 5;
+                    if (_sourceRect.Y < 0)
+                    {
+                        _sourceRect.Y = 0;
+                    }  
+                }
+            }
+            else if (state[Key.Down])
+            {
+                if (_sourceRect.Y < _sourceSurface.SurfaceDescription.Height - _size.Height)
+                {
+                    _sourceRect.Y += 5;
+                    if (_sourceRect.Y > _sourceSurface.SurfaceDescription.Height - _size.Height)
+                    {
+                        _sourceRect.Y = _sourceSurface.SurfaceDescription.Height - _size.Height;
+                    }
+                }
+            }
         }
     }
 }
