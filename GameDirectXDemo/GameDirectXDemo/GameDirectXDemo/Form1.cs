@@ -17,7 +17,8 @@ namespace GameDirectXDemo
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.Manual;
             this.Show();
-
+            // Hide the cursor
+            this.Cursor.Dispose();
             GameLogic game = new GameLogic(this);
            // game.Initialize();
            // game.GameLoop();

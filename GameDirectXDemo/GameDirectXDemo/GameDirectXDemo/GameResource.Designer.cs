@@ -60,6 +60,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap cRedit {
+            get {
+                object obj = ResourceManager.GetObject("cRedit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Cursor {
             get {
                 object obj = ResourceManager.GetObject("Cursor", resourceCulture);
@@ -67,9 +74,111 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap EXIT {
+            get {
+                object obj = ResourceManager.GetObject("EXIT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap HowToPlay {
+            get {
+                object obj = ResourceManager.GetObject("HowToPlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [header]
+        ///width=16
+        ///height=12
+        ///
+        ///[layer]
+        ///type=background
+        ///data=
+        ///33,34,35,15,15,33,34,35,38,48,47,48,47,48,47,48,
+        ///33,34,35,15,15,33,34,35,39,31,32,31,32,31,32,31,
+        ///33,34,35,15,15,33,34,35,38,39,38,39,38,39,38,39,
+        ///33,34,35,15,15,33,34,44,26,26,26,26,26,26,26,26,
+        ///33,34,35,15,15,33,34,34,34,34,34,34,34,34,34,34,
+        ///33,34,35,15,15,41,42,42,42,42,42,42,42,42,42,42,
+        ///33,34,35,15,15,15,15,15,15,15,15,15,15,15,15,15,
+        ///33,34,35,15,15,15,15,15,15,15,15,15,15,15,15,15,
+        ///33,34,44,26,26,26,26,26,26,26,26,26,26,26,26,2 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string map1 {
+            get {
+                return ResourceManager.GetString("map1", resourceCulture);
+            }
+        }
+        
+        internal static byte[] map11 {
+            get {
+                object obj = ResourceManager.GetObject("map11", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [header]
+        ///width=18
+        ///height=18
+        ///
+        ///[layer]
+        ///type=background
+        ///data=
+        ///34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,
+        ///34,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,34,
+        ///34,30,31,31,31,31,31,31,31,31,31,31,31,31,31,31,30,34,
+        ///34,30,31,38,38,38,38,38,38,38,38,38,38,38,38,31,30,34,
+        ///34,30,31,38,47,47,47,47,47,47,47,47,47,47,38,31,30,34,
+        ///34,30,31,38,47,32,32,32,32,32,32,32,32,47,38,31,30,34,
+        ///34,30,31,38,47,32,46,46,46,46,46,46,32,47,38,31,30,34,
+        ///34,30,31,38,47,32,46,39,39,39,39,46,32,47,38,31,30,34, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string map2 {
+            get {
+                return ResourceManager.GetString("map2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [header]
+        ///width=36
+        ///height=24
+        ///
+        ///[layer]
+        ///type=background
+        ///data=
+        ///46,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,31,31,30,
+        ///30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,31,30,30,30,30,30,30,30,30,31,31,31,31,30,
+        ///30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,34,34,30,30,30,30,30,31,31,30,30,30,30,30,30,30,31,31,31,30,30,
+        ///30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,34,34,30,30,30,30,30,31,31,31,31,31,31,31,31,31,31,31,31,31,30,
+        ///38,38, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string map3 {
+            get {
+                return ResourceManager.GetString("map3", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap MenuScreen {
+            get {
+                object obj = ResourceManager.GetObject("MenuScreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap mouse_cursor {
             get {
                 object obj = ResourceManager.GetObject("mouse_cursor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap NewGame {
+            get {
+                object obj = ResourceManager.GetObject("NewGame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -84,6 +193,13 @@ namespace GameDirectXDemo {
         internal static System.Drawing.Bitmap sprite {
             get {
                 object obj = ResourceManager.GetObject("sprite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tittle {
+            get {
+                object obj = ResourceManager.GetObject("tittle", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
