@@ -25,6 +25,7 @@ namespace GameDirectXDemo.Core
         private Surface _sourceSurface;
         private Microsoft.DirectX.DirectDraw.Device _graphicsDevice;
         private Rectangle _sourceRect,_destRect;
+        private int _cameraSpeed = 8;
         
 
         public DxCamera(Point position,Size surfaceSize, Surface sourceSurface, Microsoft.DirectX.DirectDraw.Device graphicsDevice)
@@ -56,7 +57,7 @@ namespace GameDirectXDemo.Core
             {
                 if (_sourceRect.X < _sourceSurface.SurfaceDescription.Width - _size.Width)
                 {
-                        _sourceRect.X += 5;
+                    _sourceRect.X += _cameraSpeed;
                         if (_sourceRect.X > _sourceSurface.SurfaceDescription.Width - _size.Width)
                         {
                             _sourceRect.X = _sourceSurface.SurfaceDescription.Width - _size.Width;
@@ -67,7 +68,7 @@ namespace GameDirectXDemo.Core
             {
                 if (_sourceRect.X > 0)
                 {
-                    _sourceRect.X -= 5;
+                    _sourceRect.X -= _cameraSpeed;
                     if (_sourceRect.X < 0)
                     {
                         _sourceRect.X = 0;
@@ -78,7 +79,7 @@ namespace GameDirectXDemo.Core
             {
                 if (_sourceRect.Y > 0)
                 {
-                    _sourceRect.Y -= 5;
+                    _sourceRect.Y -= _cameraSpeed;
                     if (_sourceRect.Y < 0)
                     {
                         _sourceRect.Y = 0;
@@ -89,7 +90,7 @@ namespace GameDirectXDemo.Core
             {
                 if (_sourceRect.Y < _sourceSurface.SurfaceDescription.Height - _size.Height)
                 {
-                    _sourceRect.Y += 5;
+                    _sourceRect.Y += _cameraSpeed;
                     if (_sourceRect.Y > _sourceSurface.SurfaceDescription.Height - _size.Height)
                     {
                         _sourceRect.Y = _sourceSurface.SurfaceDescription.Height - _size.Height;
