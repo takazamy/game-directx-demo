@@ -50,11 +50,11 @@ namespace GameDirectXDemo.Screens
             //        SoundManager.Instance.Play(SoundManager.SoundType.SplashScreenMusic);
             //    }
             //}
-            //if (IsDone)
-            //{
-            //    //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
-            //    _scrManager.NextScreen();
-            //}
+            if (IsDone)
+            {
+                _scrManager._state = Global.ScreenState.GS_MENU;
+                _scrManager.NextScreen();
+            }
 
             HandleKeyboard(keyState);
             HandleMouse(mouseState);
@@ -65,8 +65,8 @@ namespace GameDirectXDemo.Screens
         {
             if (keyState[Key.Escape])
             {
-                //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
-                //_scrManager.NextScreen();
+                _scrManager._state = Global.ScreenState.GS_MENU;
+                _scrManager.NextScreen();
             }
         }
 
@@ -75,8 +75,8 @@ namespace GameDirectXDemo.Screens
             if (mouseState.GetMouseButtons()[0] != 0)
             {
                // SoundManager.Instance.Stop(SoundManager.SoundType.SplashScreenMusic);
-                //_scrManager._state = TestDirectX2.ScreenManager.GameState.GS_MENU;
-               // _scrManager.NextScreen();
+                _scrManager._state = Global.ScreenState.GS_MENU;
+                _scrManager.NextScreen();
             }
 
         }
