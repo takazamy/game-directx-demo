@@ -9,19 +9,9 @@ namespace GameDirectXDemo.Manager
 {
     public class ScreenManager
     {
-        public enum GameState
-        {
-            GS_SPLASH_SCREEN = 0,
-            GS_MENU = 1,
-            GS_LEVEL = 2,
-            GS_HELP = 3,
-            GS_CREDIT = 4,
-            GS_MAIN_GAME = 5,
-            GS_ENDGAME = 6,
-            GS_EXIT = 7
-        }
 
-        public GameState _state = GameState.GS_SPLASH_SCREEN;
+
+        public Global.ScreenState _state = Global.ScreenState.GS_SPLASH_SCREEN;
 
         List<DxScreen> _children;
 

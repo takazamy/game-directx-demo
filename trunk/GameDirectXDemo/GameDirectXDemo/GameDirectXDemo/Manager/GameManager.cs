@@ -47,8 +47,8 @@ namespace GameDirectXDemo.Manager
             _scrManager.Append(new SplashScreen(_scrManager, _graphics, Point.Empty,
               new Size(800, 600),
               5000));
-            //_scrManager.Append(new MenuScreen(_scrManager, _graphics, Point.Empty,
-            //     new Size(800, 600)));
+            _scrManager.Append(new MenuScreen(_scrManager, _graphics, Point.Empty,
+                 new Size(800, 600)));
 
             //_scrManager.Append(new LevelScreen(_scrManager, _graphics, Point.Empty, new Size(800, 600)));
             //_scrManager.Append(new InstructionScreen(_scrManager, _graphics, Point.Empty, new Size(800, 600)));
