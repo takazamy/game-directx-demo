@@ -14,7 +14,7 @@ namespace GameDirectXDemo
         protected int _stamina = 0;
         protected int _damage = 0;
         protected int _shield = 0;
-        protected int _shieldRestorePoint = 0;
+        
         protected Boolean _canAttackNear;
         protected Boolean _canAttackFar;
 
@@ -63,7 +63,7 @@ namespace GameDirectXDemo
         protected DxImage _objectImg;
         public Object(String info)
         {
-            //Type,Side,hp,stamina,damage,shield,shieldRestore
+            //Type,Side,hp,stamina,damage,shield
             String[] val = info.Split(',');
             ObjectType = (Global.ObjectType)Enum.Parse(typeof(Global.ObjectType), val[0]);
             Side = (Global.Side)Enum.Parse(typeof(Global.Side), val[1]);
@@ -71,7 +71,7 @@ namespace GameDirectXDemo
             _stamina = int.Parse(val[3]);
             _damage = int.Parse(val[4]);
             _shield = int.Parse(val[5]);
-            _shieldRestorePoint = int.Parse(val[6]);
+           
 
             //_objectImg = new DxImage(;
         }

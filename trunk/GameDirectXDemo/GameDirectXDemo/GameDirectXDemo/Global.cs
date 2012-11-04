@@ -11,10 +11,43 @@ namespace GameDirectXDemo
        
         public enum CursorState{Normal,Highlight}
 
-        public enum ObjectType{Tanker,Ranger,Defender}
+        public enum ObjectType
+        {
+            Tanker = 1,
+            Ranger = 2,
+            Defender = 3
+        }
 
         public enum Side{Enemy,Player}
 
         public enum AnimationType { CONTINUOS = 0, SINGLESEQUENCE = 1 }
+
+        public enum ScreenState
+        {
+            GS_SPLASH_SCREEN = 0,
+            GS_MENU = 1,
+            GS_LEVEL = 2,
+            GS_HELP = 3,
+            GS_CREDIT = 4,
+            GS_MAIN_GAME = 5,
+            GS_ENDGAME = 6,
+            GS_EXIT = 7
+        }
+
+
+        public enum ButtonState
+        {
+            BS_NORMAL = 0,
+            BS_HOLD = 1,
+        }
+
+        /// <summary>
+        /// Holds the various game states.
+        /// </summary>
+        public enum GameStates
+        {
+            Run = 0,
+            Exit = 1
+        }
     }
 }

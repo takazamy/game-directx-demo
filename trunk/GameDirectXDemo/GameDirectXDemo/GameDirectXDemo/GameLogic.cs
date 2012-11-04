@@ -14,23 +14,16 @@ namespace GameDirectXDemo
     /// interaction between all other game classes.
     /// </summary>
 
-    /// <summary>
-    /// Holds the various game states.
-    /// </summary>
-    public enum GameStates
-    {
-        Run = 0,
-        Exit = 1
-    }
-
+    
+   
     class GameLogic
     {
         protected Control target;
         protected DxInitGraphics graphics;
-        protected GameStates gameState;
+        public static Global.GameStates gameState;
         protected DxKeyboard input;
         protected GameManager gameManager;
-        protected DxMouse mouse;
+        public static DxMouse mouse;
         protected double dLoopDuration; // Duration of one game loop in milliseconds.
         /// <summary>
         /// Constructor. Initializes the general graphics 
@@ -56,13 +49,13 @@ namespace GameDirectXDemo
             // Create a new input handler
             this.input = new DxKeyboard(this.target);
 
-            this.mouse = new DxMouse(this.graphics,this.target, this);
+            mouse = new DxMouse(this.graphics,this.target, this);
             
 
             //Create a game Manager
             this.gameManager = new GameManager(this.target, this.graphics);
             // All done - set the game state to initialized
-            this.gameState = GameStates.Run;
+            gameState = Global.GameStates.Run;
 
             try
             {
@@ -115,7 +108,7 @@ namespace GameDirectXDemo
                 // on escape -> exit
                 if (state[Key.Escape])
                 {
-                    gameState = GameStates.Exit;
+                    gameState = Global.GameStates.Exit;
                 }
             }
         }
@@ -166,7 +159,7 @@ namespace GameDirectXDemo
                     this.processInput();
 
                     // If the gameState is set to Run
-                    if (gameState == GameStates.Run)
+                    if (gameState == Global.GameStates.Run)
                     {
                         //Remember GraphicsEngine RenderSurface method gets the Secondary Surface
 
@@ -193,11 +186,11 @@ namespace GameDirectXDemo
 
 
                     // If the gameState is set to exit, shut down game
-                    if (gameState == GameStates.Exit)
+                    if (gameState == Global.GameStates.Exit)
                     {
                         return;
                     }
-                  //  mouse.DrawMouse(this.graphics);
+                
                     // Draw everything to the screen
                     graphics.Flip(); // Flip the secondary to the primary surface.
 #endregion
@@ -217,8 +210,10 @@ namespace GameDirectXDemo
             try 
             {
                 mouse.Update();
-                gameManager.Update(dLoopDuration, input.GetKeyboardState(), mouse.GetMouseState());
-                //mouse.getMouseState();
+                KeyboardState keystate = input.GetKeyboardState();
+                MouseState mousestate = mouse.GetMouseState();
+                gameManager.Update(dLoopDuration, keystate, mousestate);
+                
                 
             }
             catch (Exception e) 
