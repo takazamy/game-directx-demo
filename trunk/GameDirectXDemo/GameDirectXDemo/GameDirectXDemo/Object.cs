@@ -31,12 +31,13 @@ namespace GameDirectXDemo
                     case Global.ObjectType.Defender:
                         _canAttackFar = false;
                         _canAttackNear = true;
+                       //khởi tạo image cho object
                         break;
                     case Global.ObjectType.Ranger:
                         _canAttackFar = true;
                         _canAttackNear = false;
                         break;
-                    case Global.ObjectType.Tanker:
+                    case Global.ObjectType.Assault:
                         _canAttackFar = true;
                         _canAttackNear = true;
                         break;
@@ -64,7 +65,7 @@ namespace GameDirectXDemo
         public Object(String info)
         {
             //Type,Side,hp,stamina,damage,shield
-            String[] val = info.Split(',');
+            String[] val = info.Split('-');
             ObjectType = (Global.ObjectType)Enum.Parse(typeof(Global.ObjectType), val[0]);
             Side = (Global.Side)Enum.Parse(typeof(Global.Side), val[1]);
             _hp = int.Parse(val[2]);
@@ -72,8 +73,6 @@ namespace GameDirectXDemo
             _damage = int.Parse(val[4]);
             _shield = int.Parse(val[5]);
            
-
-            //_objectImg = new DxImage(;
         }
 
         public virtual void Move() { }

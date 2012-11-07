@@ -13,12 +13,12 @@ namespace GameDirectXDemo
 
         public enum ObjectType
         {
-            Tanker = 1,
+            Assault = 1,
             Ranger = 2,
             Defender = 3
         }
 
-        public enum Side{Enemy,Player}
+        public enum Side{Enemy = 1,Player = 2}
 
         public enum AnimationType { CONTINUOS = 0, SINGLESEQUENCE = 1 }
 
