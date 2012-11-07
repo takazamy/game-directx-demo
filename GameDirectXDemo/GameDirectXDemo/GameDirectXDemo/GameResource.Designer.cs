@@ -60,6 +60,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap Assault {
+            get {
+                object obj = ResourceManager.GetObject("Assault", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap cRedit {
             get {
                 object obj = ResourceManager.GetObject("cRedit", resourceCulture);
@@ -74,6 +81,20 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap Defender {
+            get {
+                object obj = ResourceManager.GetObject("Defender", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap desc {
+            get {
+                object obj = ResourceManager.GetObject("desc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap EXIT {
             get {
                 object obj = ResourceManager.GetObject("EXIT", resourceCulture);
@@ -81,9 +102,37 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap Fight_button {
+            get {
+                object obj = ResourceManager.GetObject("Fight_button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap HowToPlay {
             get {
                 object obj = ResourceManager.GetObject("HowToPlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap incr {
+            get {
+                object obj = ResourceManager.GetObject("incr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap LevelBg {
+            get {
+                object obj = ResourceManager.GetObject("LevelBg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap map {
+            get {
+                object obj = ResourceManager.GetObject("map", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -179,6 +228,13 @@ namespace GameDirectXDemo {
         internal static System.Drawing.Bitmap NewGame {
             get {
                 object obj = ResourceManager.GetObject("NewGame", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Ranger {
+            get {
+                object obj = ResourceManager.GetObject("Ranger", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
