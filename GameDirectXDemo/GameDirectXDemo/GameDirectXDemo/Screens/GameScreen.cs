@@ -12,17 +12,22 @@ namespace GameDirectXDemo.Screens
     public class GameScreen:DxScreen
     {
         DxTileMap tileMap;
-        Object[] objects;
-        public GameScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size) :
+        DxCamera camera;
+        List<Object> objects;
+        public GameScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size,List<Object> objects,DxTileMap tileMap) :
             base(scrManager, graphics, location, size)
         {
+            this.tileMap = tileMap;
+            this.objects = objects;
+
             Initialize();
 
         }
 
         public override void Initialize()
         {
-            
+            this._state = Global.ScreenState.GS_MAIN_GAME;
+            camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
             
         }
 
@@ -30,13 +35,14 @@ namespace GameDirectXDemo.Screens
         {
            // objects = new Object(
         }
-        public void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
+        public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
         { 
             
         }
 
-        public void Draw() 
+        public override void Draw() 
         {
+            camera.Draw(this.Surface);
             base.Draw();
         }
     }

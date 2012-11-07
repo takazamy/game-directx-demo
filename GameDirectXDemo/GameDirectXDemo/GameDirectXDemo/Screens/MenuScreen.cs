@@ -32,12 +32,13 @@ namespace GameDirectXDemo.Screens
         public override void Initialize()
         {
             base.Initialize();
-            
-            
+
+            this._state = Global.ScreenState.GS_MENU;
             _playBtn = new DxButton(600, 300, GameResource.NewGame, _graphics.DDDevice, 150, 50);
             _creditBtn = new DxButton(600, 350,GameResource.cRedit, _graphics.DDDevice, 150, 50);
             _exitBtn = new DxButton(600, 450,GameResource.EXIT, _graphics.DDDevice, 150, 50);
             _howtoplayBtn = new DxButton(600, 400, GameResource.HowToPlay, _graphics.DDDevice, 150, 50);
+            
             bg = new DxImage(GameResource.MenuScreen,Global.BitmapType.SOLID,0, _graphics.DDDevice);
             title = new DxImage(GameResource.tittle, Global.BitmapType.TRANSPARENT, 0xffffff, _graphics.DDDevice);
             PointF position = new PointF(100, 20);
@@ -54,8 +55,7 @@ namespace GameDirectXDemo.Screens
             _playBtn.OnMouseUp = delegate()
             {
                 //SoundManager.Instance.Stop(SoundManager.SoundType.MenuScreenMusic);
-                _scrManager._state = Global.ScreenState.GS_LEVEL;
-                _scrManager.PlayScreen((int)Global.ScreenState.GS_LEVEL);
+                GoToLevelScreen();
                 //  Console.WriteLine("Mouse up");
             };
 
@@ -80,7 +80,27 @@ namespace GameDirectXDemo.Screens
                 _onCredit = -1;
             };
         }
-
+        private void GoToLevelScreen()
+        {
+            _scrManager._state = Global.ScreenState.GS_LEVEL;
+            Boolean flag = false;
+            foreach (DxScreen scr in _scrManager.Children)
+            {
+                if (scr._state == Global.ScreenState.GS_LEVEL)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                LevelScreen level = new LevelScreen(_scrManager, _graphics, Point.Empty, new Size(800, 600));
+                _scrManager.Append(level);
+                //_scrManager.UpdateIndex();
+            }
+            
+            _scrManager.PlayScreen(Global.ScreenState.GS_LEVEL);
+        }
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState)
         {
            

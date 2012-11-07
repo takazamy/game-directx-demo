@@ -30,6 +30,7 @@ namespace GameDirectXDemo.Screens
         {
 
             this._liveTime = liveTime;
+            this._state = Global.ScreenState.GS_SPLASH_SCREEN;
             Initialize();
         }
 
@@ -52,21 +53,40 @@ namespace GameDirectXDemo.Screens
             //}
             if (IsDone)
             {
-                _scrManager._state = Global.ScreenState.GS_MENU;
-                _scrManager.NextScreen();
+                GoToMenuScreen();
             }
 
             HandleKeyboard(keyState);
             HandleMouse(mouseState);
             base.Update(deltaTime, keyState, mouseState);
         }
+        private void GoToMenuScreen()
+        {
+            _scrManager._state = Global.ScreenState.GS_MENU;
+            Boolean flag = false;
+            foreach (DxScreen scr in _scrManager.Children)
+            {
+                if (scr._state == Global.ScreenState.GS_MENU)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                MenuScreen menu = new MenuScreen(_scrManager, _graphics, Point.Empty,
+                    new Size(800, 600));
+                _scrManager.Append(menu);
+                //_scrManager.UpdateIndex();
+            }
 
+            _scrManager.PlayScreen(Global.ScreenState.GS_MENU);
+        }
         public void HandleKeyboard(KeyboardState keyState)
         {
             if (keyState[Key.Escape])
             {
-                _scrManager._state = Global.ScreenState.GS_MENU;
-                _scrManager.NextScreen();
+                GoToMenuScreen();
             }
         }
 
@@ -75,8 +95,7 @@ namespace GameDirectXDemo.Screens
             if (mouseState.GetMouseButtons()[0] != 0)
             {
                // SoundManager.Instance.Stop(SoundManager.SoundType.SplashScreenMusic);
-                _scrManager._state = Global.ScreenState.GS_MENU;
-                _scrManager.NextScreen();
+                GoToMenuScreen();
             }
 
         }
