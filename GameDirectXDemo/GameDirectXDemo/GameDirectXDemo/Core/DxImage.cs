@@ -175,27 +175,14 @@ namespace GameDirectXDemo.Core
             CreateSurface();
         }*/
 
+        //For Image
         public DxImage(Bitmap SourceBitmap, Global.BitmapType ObjectType, int cKey, Device TargetDevice)
         {
             // Save references to the source bitmap,
             // to the bitmap type and the device
             SourceImage = SourceBitmap;
             _objectType = ObjectType;
-            _graphicsDevice = TargetDevice;
-
-            // Create a rectangle with the bitmaps dimensions
-            //objectSizeRect = new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height);
-
-            // Create a rectangle with the bitmaps position
-           // rectPosition = new Rectangle(0, 0, SourceBitmap.Width, SourceBitmap.Height);
-
-            // Save width and height seperately
-           // iWidth = SourceBitmap.Width;
-           // iHeight = SourceBitmap.Height;
-
-            // Build surface description
-           // CreateSurface();
-           // initializeSurfaceDescription();
+            _graphicsDevice = TargetDevice;            
 
             // Create ColorKey object
             _tempKey = new ColorKey();
@@ -206,6 +193,29 @@ namespace GameDirectXDemo.Core
             // Create surface
              CreateSurface();
            // initializeSurface(cKey);
+        }
+
+        public DxImage(Bitmap SourceBitmap, Global.BitmapType ObjectType, int cKey,Point position, Device TargetDevice)
+        {
+            // Save references to the source bitmap,
+            // to the bitmap type and the device
+            SourceImage = SourceBitmap;
+            _objectType = ObjectType;
+            _graphicsDevice = TargetDevice;
+
+
+            //Position
+            _position = position;
+
+            // Create ColorKey object
+            _tempKey = new ColorKey();
+
+            // Save Colorkey value
+            _colorKey = cKey;
+
+            // Create surface
+            CreateSurface();
+            // initializeSurface(cKey);
         }
 
         /// <summary>

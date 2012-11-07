@@ -136,7 +136,7 @@ namespace GameDirectXDemo.Core
             else
             {
                 cursorOutOfGame = true;
-                Console.WriteLine("mouse out");
+                //Console.WriteLine("mouse out");
             }
         }
 
@@ -212,7 +212,7 @@ namespace GameDirectXDemo.Core
             {
                 mUpPress = false;
                 mouseState = GetMouseState();
-                Console.WriteLine("mouseState:{0},{1}", mouseState.X,mouseState.Y);
+               // Console.WriteLine("mouseState:{0},{1}", mouseState.X,mouseState.Y);
                 UpdateMousePos(mouseState.X, mouseState.Y);
                 buttonPressed = mouseState.GetMouseButtons();
                 if (buttonPressed[0] != 0)
