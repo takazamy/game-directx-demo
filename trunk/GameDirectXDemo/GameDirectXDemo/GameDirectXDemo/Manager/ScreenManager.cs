@@ -38,7 +38,11 @@ namespace GameDirectXDemo.Manager
         internal DxScreen CurrentScreen
         {
             get { return _currentScreen; }
-            set { _currentScreen = value; }
+            set 
+            {
+                _currentScreen = value;
+                _currentIndex = _currentScreen._index;
+            }
         }
 
         private int _currentIndex = -1;
@@ -50,7 +54,8 @@ namespace GameDirectXDemo.Manager
 
         public void Append(DxScreen screen)
         {
-            _children.Add(screen);
+            screen._index = this._children.Count - 1;
+            _children.Add(screen);            
         }
 
         public void PlayScreen(int index)
@@ -58,10 +63,27 @@ namespace GameDirectXDemo.Manager
             _currentScreen = _children[index];
             _currentIndex = index;
         }
-
+        public void PlayScreen(Global.ScreenState state)
+        {
+            try
+            {
+                foreach (DxScreen scr in this._children)
+                {
+                    if (scr._state == state)
+                    {
+                        _currentScreen = scr;
+                        _currentIndex = scr._index;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
         public void NextScreen()
         {
-            _currentScreen = _children[++_currentIndex];
+            _currentScreen = _children[++_currentIndex];           
         }
 
         public void PrevScreen()
@@ -69,6 +91,13 @@ namespace GameDirectXDemo.Manager
             _currentScreen = _children[--_currentIndex];
         }
 
+        public void UpdateIndex()
+        {
+            for (int i = 0; i < this._children.Count; i++)
+            {
+                _children[i]._index = i;
+            }
+        }
         public void Update(double deltaTime, KeyboardState keyState, MouseState mouseState)
         {
             _currentScreen.Update(deltaTime, keyState, mouseState);
