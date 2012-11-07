@@ -10,7 +10,7 @@ using Microsoft.DirectX.DirectDraw;
 
 namespace GameDirectXDemo.Core
 {
-    class DxTileMap
+    public class DxTileMap
     {
         StreamReader _reader;
         JObject _jsonObject = new JObject();
@@ -47,6 +47,8 @@ namespace GameDirectXDemo.Core
                 _data = data;
             }
         }
+
+        //Json
         public DxTileMap(string jsonFilePath, string mapImagePath, DxInitGraphics graphics)
         {
             #region ReadJsonFile
@@ -94,6 +96,56 @@ namespace GameDirectXDemo.Core
             CrearTileMapSurface();
            
         }
+
+
+        public DxTileMap(string jsonFilePath, Bitmap mapImage, DxInitGraphics graphics)
+        {
+            #region ReadJsonFile
+            _reader = File.OpenText(jsonFilePath);
+            _jsonObject = JObject.Parse(_reader.ReadToEnd());
+            Layer templayer;
+            _rows = (int)_jsonObject["height"];
+            _columns = (int)_jsonObject["width"];
+            _cellWidth = (int)_jsonObject["tilewidth"];
+            _cellHeight = (int)_jsonObject["tileheight"];
+            _collisionMap = new int[_rows, _columns];
+            foreach (var array in _jsonObject["layers"])
+            {
+                int height = (int)array["height"];
+                int width = (int)array["width"];
+                string name = (string)array["name"];
+                bool isVisible = (bool)array["visible"];
+                int[,] data = new int[height, width];
+                int i = 0;
+                foreach (var value in array["data"])
+                {
+
+                    if (name != "collision")
+                    {
+                        data[i / width, i % width] = (int)value - 1;
+                    }
+                    else
+                    {
+                        data[i / width, i % width] = (int)value;
+                    }
+                    i++;
+                }
+                if (name == "collision")
+                {
+                    _collisionMap = data;
+                }
+                templayer = new Layer(height, width, name, isVisible, data);
+                _layers.Add(templayer);
+                //Console.WriteLine(array["height"]);
+            }
+
+            #endregion
+            _graphics = graphics;
+            _textute = new DxImage(mapImage, Global.BitmapType.SOLID, 0, new PointF(0, 0), _cellWidth, _cellHeight, _graphics.DDDevice);
+            CrearTileMapSurface();
+
+        }
+        //Text txt
         public DxTileMap(string textFilePath, string mapImagePath,int cellWidth, int cellHeight, DxInitGraphics graphics)
         {
             #region ReadTextFile

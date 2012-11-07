@@ -42,6 +42,8 @@ namespace GameDirectXDemo.Core
         protected KeyboardState _keyState;
         protected MouseState _mouseState;
         protected ScreenManager _scrManager;
+        public Global.ScreenState _state;
+        public int _index;
 
         public DxScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size)
         {
