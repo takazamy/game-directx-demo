@@ -164,13 +164,13 @@ namespace GameDirectXDemo.Screens
                 switch (CreateRandomNumber(1, 3))
                 {
                     case 1:
-                        temp = new Object("1-1-150-20-5-5");
+                        temp = new Object("1-1-150-20-5-5",this._graphics);
                         break;
                     case 2:
-                        temp = new Object("2-1-50-5-20-5");
+                        temp = new Object("2-1-50-5-20-5", this._graphics);
                         break;
                     case 3:
-                        temp = new Object("3-1-500-10-3-10");
+                        temp = new Object("3-1-500-10-3-10", this._graphics);
                         break;
                 }
                 objects.Add(temp);
@@ -268,19 +268,19 @@ namespace GameDirectXDemo.Screens
                 for (int i = 0; i < unit1Num; i++)
                 {
                     temp = null;
-                    temp = new Object("1-2-150-20-5-5");
+                    temp = new Object("1-2-150-20-5-5",this._graphics);
                     objects.Add(temp);
                 }
                 for (int i = 0; i < unit2Num; i++)
                 {
                     temp = null;
-                    temp = new Object("2-2-50-5-20-5");
+                    temp = new Object("2-2-50-5-20-5", this._graphics);
                     objects.Add(temp);
                 }
                 for (int i = 0; i < unit3Num; i++)
                 {
                     temp = null;
-                    temp = new Object("3-2-500-10-3-10");
+                    temp = new Object("3-2-500-10-3-10",this._graphics);
                     objects.Add(temp);
                 }
 

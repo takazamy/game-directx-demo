@@ -44,13 +44,8 @@ namespace GameDirectXDemo.Screens
             PointF position = new PointF(100, 20);
             title.Position = position;
             //credit = new DxImage("Assets/CreditSreen.png", _graphics.DDDevice);
-            //howtoplay = new DxImage("Assets/howtoplayScreen.png", _graphics.DDDevice);
+            //howtoplay = new DxImage("Assets/howtoplayScreen.png", _graphics.DDDevice); 
             
-            //_playBtn.OnMouseDown = delegate()
-            //{
-               
-
-            //};
 
             _playBtn.OnMouseUp = delegate()
             {
@@ -123,11 +118,11 @@ namespace GameDirectXDemo.Screens
             //SoundManager.Instance.Play(SoundManager.SoundType.MenuScreenMusic);
             //SoundManager.Instance.isLoop = true;
             bg.DrawImageTo(new Rectangle(0,0,800,600), base.Surface);
-            title.DrawImage(base.Surface);
-            _playBtn.DrawFast(base.Surface);
-            _exitBtn.DrawFast(base.Surface);
-            _creditBtn.DrawFast(base.Surface);
-            _howtoplayBtn.DrawFast(base.Surface);
+            title.DrawImage(this.Surface);
+            _playBtn.DrawFast(this.Surface);
+            _exitBtn.DrawFast(this.Surface);
+            _creditBtn.DrawFast(this.Surface);
+            _howtoplayBtn.DrawFast(this.Surface);
             if (_onCredit > 0)
             {
                 //credit.DrawFast(200, 300, base.Surface, DrawFastFlags.Wait);
