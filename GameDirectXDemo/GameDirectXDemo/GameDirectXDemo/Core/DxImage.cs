@@ -74,7 +74,15 @@ namespace GameDirectXDemo.Core
             set { _frameHeight = value; }
         }
         protected int _rows;
+        public int Rows
+        {
+            get { return _rows; }
+        }
         protected int _columns;
+        public int Columns
+        {
+            get { return _columns; }
+        }
         public int TotalFrame
         {
             get { return _rows * _columns; }

@@ -14,10 +14,21 @@ namespace GameDirectXDemo
         protected int _stamina = 0;
         protected int _damage = 0;
         protected int _shield = 0;
-        
+        protected float _moveSpeed = 5;
         protected Boolean _canAttackNear;
         protected Boolean _canAttackFar;
-
+        protected PointF _position;
+        public PointF Position
+        {
+            get { return _position; }
+            set { _position = value; }
+        }
+        protected Global.ObjectDirection _lastDirection;
+        protected Global.ObjectDirection _currentDirection;
+        public Global.ObjectDirection CurrentDirection
+        {
+            get { return _currentDirection; }
+        }
         protected Global.ObjectType _objType;
 
         protected Global.ObjectType ObjectType
@@ -75,7 +86,32 @@ namespace GameDirectXDemo
            
         }
 
-        public virtual void Move() { }
+        public virtual void Move() 
+        {
+            switch (_currentDirection)
+            {
+                case Global.ObjectDirection.DOWN:
+                    {
+                        this._position.Y += _moveSpeed;
+                        break;
+                    }
+                case Global.ObjectDirection.LEFT:
+                    {
+                        this._position.X -= _moveSpeed;
+                        break;
+                    }
+                case Global.ObjectDirection.RIGHT:
+                    {
+                        this._position.X += _moveSpeed;
+                        break;
+                    }
+                case Global.ObjectDirection.UP:
+                    {
+                        this._position.Y -= _moveSpeed;
+                        break;
+                    }
+            }
+        }
 
         public virtual void Attack() { }
 
