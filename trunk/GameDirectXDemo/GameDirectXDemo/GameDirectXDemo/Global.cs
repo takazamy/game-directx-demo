@@ -49,5 +49,12 @@ namespace GameDirectXDemo
             Run = 0,
             Exit = 1
         }
+        public enum ObjectDirection
+        {
+            LEFT = 0,
+            RIGHT = 1,
+            UP = 2,
+            DOWN = 3
+        }
     }
 }
