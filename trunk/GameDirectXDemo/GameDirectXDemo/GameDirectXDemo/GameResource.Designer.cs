@@ -60,6 +60,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap ActionScreen {
+            get {
+                object obj = ResourceManager.GetObject("ActionScreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Assault {
             get {
                 object obj = ResourceManager.GetObject("Assault", resourceCulture);
@@ -225,6 +232,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap move {
+            get {
+                object obj = ResourceManager.GetObject("move", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap NewGame {
             get {
                 object obj = ResourceManager.GetObject("NewGame", resourceCulture);
@@ -235,6 +249,13 @@ namespace GameDirectXDemo {
         internal static System.Drawing.Bitmap Ranger {
             get {
                 object obj = ResourceManager.GetObject("Ranger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap robot {
+            get {
+                object obj = ResourceManager.GetObject("robot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

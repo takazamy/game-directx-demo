@@ -56,5 +56,11 @@ namespace GameDirectXDemo
             UP = 2,
             DOWN = 3
         }
+
+        public enum Turn
+        {
+            EnemyTurn = 0,
+            PlayerTurn = 1
+        }
     }
 }
