@@ -53,7 +53,7 @@ namespace GameDirectXDemo
                         _canAttackNear = true;
                         _ani = new DxAnimation(this._objectImg, 300, 9, 11, Global.AnimationType.CONTINUOS);
                        //khởi tạo image cho object
-
+                        
                         break;
                     case Global.ObjectType.Ranger:
                         _canAttackFar = true;
@@ -157,7 +157,8 @@ namespace GameDirectXDemo
 
         public void Update(double deltaTime,KeyboardState keyState, MouseState mouseState)
         {
-            
+            this._objectImg.Position = this.Position;
+            _ani.Update(deltaTime, this._currentDirection);
         }
 
         public void Draw(Surface desSurf)
