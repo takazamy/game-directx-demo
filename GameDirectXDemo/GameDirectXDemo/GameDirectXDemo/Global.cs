@@ -62,5 +62,11 @@ namespace GameDirectXDemo
             EnemyTurn = 0,
             PlayerTurn = 1
         }
+
+        public enum CharacterStatus
+        {
+            Move = 0,
+            Attack = 1
+        }
     }
 }
