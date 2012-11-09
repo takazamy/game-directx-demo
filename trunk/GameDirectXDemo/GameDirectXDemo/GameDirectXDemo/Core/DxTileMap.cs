@@ -155,12 +155,15 @@ namespace GameDirectXDemo.Core
             int line = 0;
             while (reader.EndOfStream == false)
             {
-                data = reader.ReadLine(); line++;
+                data = reader.ReadLine(); 
+                line++;
                 if (data == "[header]")
                 {
-                    data = reader.ReadLine(); line++;
+                    data = reader.ReadLine(); 
+                    line++;
                     _columns = Convert.ToInt32(data.Remove(0, 6));
-                    data = reader.ReadLine(); line++;
+                    data = reader.ReadLine(); 
+                    line++;
                     _rows = Convert.ToInt32(data.Remove(0, 7));
                     _tileMap = new int[_rows, _columns];
                     _collisionMap = new int[_rows, _columns];
