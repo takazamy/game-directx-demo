@@ -34,7 +34,7 @@ namespace GameDirectXDemo.Manager
         {
             _renderTarget = parent;
             _graphics = graphics;
-            _scrManager = new ScreenManager();
+            _scrManager = new ScreenManager(_renderTarget);
             Initialized();
 
             _scrManager.PlayScreen(0);
@@ -45,7 +45,7 @@ namespace GameDirectXDemo.Manager
             
 
             _scrManager.Append(new SplashScreen(_scrManager, _graphics, Point.Empty,
-              new Size(800, 600),
+              new Size(_renderTarget.Width, _renderTarget.Height),
               5000));
             
             _scrManager.CurrentScreen = _scrManager.Children[0];

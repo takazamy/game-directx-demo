@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GameDirectXDemo.Core;
 using Microsoft.DirectX.DirectInput;
+using System.Windows.Forms;
 
 namespace GameDirectXDemo.Manager
 {
@@ -14,6 +15,7 @@ namespace GameDirectXDemo.Manager
         public Global.ScreenState _state = Global.ScreenState.GS_SPLASH_SCREEN;
 
         List<DxScreen> _children;
+        public Control _renderTarget;
 
         internal List<DxScreen> Children
         {
@@ -47,8 +49,9 @@ namespace GameDirectXDemo.Manager
 
         private int _currentIndex = -1;
 
-        public ScreenManager()
+        public ScreenManager(Control parent)
         {
+            _renderTarget = parent;
             _children = new List<DxScreen>();
         }
 
