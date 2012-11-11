@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.DirectX.DirectInput;
 
 namespace GameDirectXDemo
 {
@@ -71,6 +72,19 @@ namespace GameDirectXDemo
             Move = 1,
             Attack = 2,
 
+        }
+
+        public static Boolean CheckKeyDown(KeyboardState keyState)
+        {
+            Boolean _keyDown = false;
+            for (int i = 0; i < 256; i++)
+            {
+                if (keyState[(Key)i])
+                {
+                    _keyDown = true;
+                }
+            }
+            return _keyDown;
         }
     }
 }

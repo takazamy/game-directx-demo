@@ -187,13 +187,16 @@
   <data name="robot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\robot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ActionScreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ActionScreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="move" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\move.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GameScreenCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\GameScreenCursor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="selectImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\selectImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ActionScreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ActionScreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
