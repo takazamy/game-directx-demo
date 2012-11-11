@@ -33,32 +33,32 @@ namespace GameDirectXDemo
             _map = collisionMap;
             _rows = _map.GetLength(0);
             _columns = _map.GetLength(1);
-            _searchNodes = new SearchNode[_rows, _columns];
+            
             InitSearchNode(_map);
         }
         private void InitSearchNode(int[,] map)
         {
-            _searchNodes = new SearchNode[_rows, _columns];
-            for (int i = 0; i < _rows; i++)
+            _searchNodes = new SearchNode[_columns,_rows];
+            for (int x = 0; x < _columns; x++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int y = 0; y < _rows; y++)
                 {
                     SearchNode node = new SearchNode();
-                    node.Position = new Point(i, j);
-                    node.WalkAble = map[i, j] == 0; // Equal to if(map[i,j] == 0) return true or false 
+                    node.Position = new Point(x, y);
+                    node.WalkAble = map[y,x] == 0; // Equal to if(map[x,y] == 0) return true or false 
                     if (node.WalkAble == true)
                     {
                         node.Neighbors = new SearchNode[4];
-                        _searchNodes[i, j] = node;
+                        _searchNodes[x, y] = node;
                     }
                 }
             }
 
-            for (int i = 0; i < _rows; i++)
+            for (int x = 0; x < _columns; x++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int y = 0; y < _rows; y++)
                 {
-                    SearchNode node = _searchNodes[i, j];
+                    SearchNode node = _searchNodes[x, y];
                     if (node == null || node.WalkAble == false)
                     {
                         continue;
@@ -66,16 +66,16 @@ namespace GameDirectXDemo
 
                     Point[] neighbors = new Point[]
                     {
-                        new Point (i ,j-1),
-                        new Point (i ,j+1),
-                        new Point (i-1 ,j),
-                        new Point (i+1 ,j),
+                        new Point (x ,y-1),
+                        new Point (x ,y+1),
+                        new Point (x-1 ,y),
+                        new Point (x+1 ,y),
                     };
                     for (int n = 0; n < neighbors.Length; n++)
                     {
                         Point position = neighbors[n];
-                        if (position.X < 0 || position.X > _rows - 1 ||
-                            position.Y < 0 || position.Y > _columns - 1)
+                        if (position.X < 0 || position.X > _columns - 1 ||
+                            position.Y < 0 || position.Y > _rows - 1)
                         {
                             continue;
                         }
@@ -102,11 +102,11 @@ namespace GameDirectXDemo
         {
             _openList.Clear();
             _closedList.Clear();
-            for (int i = 0; i < _rows; i++)
+            for (int x = 0; x < _columns; x++)
             {
-                for (int j = 0; j < _columns; j++)
+                for (int y = 0; y < _rows; y++)
                 {
-                    SearchNode node = _searchNodes[i, j];
+                    SearchNode node = _searchNodes[x, y];
                     if (node == null)
                     {
                         continue;
