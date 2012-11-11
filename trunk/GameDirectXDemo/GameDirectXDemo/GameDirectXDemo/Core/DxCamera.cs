@@ -22,10 +22,10 @@ namespace GameDirectXDemo.Core
             get { return _renderSurface; }
         }
         private Size _size;
-        private Surface _sourceSurface;
+        public Surface _sourceSurface;
         private Microsoft.DirectX.DirectDraw.Device _graphicsDevice;
         private Rectangle _sourceRect,_destRect;
-        private int _cameraSpeed = 8;
+        private int _cameraSpeed = 32;
         
 
         public DxCamera(Point position,Size surfaceSize, Surface sourceSurface, Microsoft.DirectX.DirectDraw.Device graphicsDevice)
@@ -97,6 +97,7 @@ namespace GameDirectXDemo.Core
                     }
                 }
             }
+            //_position = new Point(_sourceRect.X, _sourceRect.Y);
         }
     }
 }
