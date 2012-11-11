@@ -11,14 +11,15 @@ namespace GameDirectXDemo.Screens
 {
     public class GameScreen:DxScreen
     {
-        DxTileMap tileMap;
-        DxCamera camera;
+        public DxTileMap tileMap;
+        public DxCamera camera;
         List<Object> objects;
         List<Object> PlayerList;
         List<Object> EnemyList;
         ActionScreen actionScreen;
         Global.Turn gameTurn = Global.Turn.EnemyTurn;
-        DxImage gameCursor;
+       
+        GameCursor gameCursor;
         int[,] colisionMap;
         int[,] objectMap;
         double counter = 0;
@@ -33,16 +34,18 @@ namespace GameDirectXDemo.Screens
             this.objects = objects;
             objectMap = new int[colisionMap.GetLength(0), colisionMap.GetLength(1)];
             pathFinder = new PathFinding(colisionMap);
+
             Initialize();
 
         }
 
         public override void Initialize()
         {
+
             try
             {
                 this._state = Global.ScreenState.GS_MAIN_GAME;
-                gameCursor = new DxImage(GameResource.GameScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
+                gameCursor = new GameCursor(_graphics, this);
                 camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
                 actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this.Surface);
                 EnemyList = new List<Object>();
@@ -66,6 +69,7 @@ namespace GameDirectXDemo.Screens
             }
         }
 
+        #region Create Game
         private void CreateGame()
         {
             RandomPostion();
@@ -125,73 +129,131 @@ namespace GameDirectXDemo.Screens
             }
            
         }
+
+        #endregion
+
         private void HandleKey(KeyboardState keyState)
         {
             try
             {
-                if (keyState != null)
+                if (Global.CheckKeyDown(keyState))
                 {
                     // on escape -> exit
+                    gameCursor.Update(keyState);
+                    if (keyState[Key.Z])
+                    {
+                        //if (!disabeCursor)
+                        //{
+                             IsSelect(gameCursor.tileMapPosition);
+                        //}
 
-                    if (keyState[Key.Right])
+                    }
+                    if (keyState[Key.X])
                     {
-                        PointF p = new PointF(gameCursor.Position.X+32,gameCursor.Position.Y);
-                        if (p.X + gameCursor.FrameWidth*2 > this.Size.Width)
+                        actionScreen.isShow = false;
+                        gameCursor.enable = true;
+
+                        IsSelect(gameCursor.tileMapPosition);
+                    }
+                    if (!gameCursor.enable)
+                    {
+                        if (keyState[Key.Right])
                         {
-                            camera.Update(keyState);
+
+                            //PointF p = new PointF(gameCursor.Position.X + 32, gameCursor.Position.Y);
+                            //if (p.X + gameCursor.FrameWidth * 2 > this.Size.Width)
+                            //{
+                            //    camera.Update(keyState);
+                            //    gameCursor.Position = p;
+                            //}
+                            //else
+                            //{
+                            //    gameCursor.Position = p;
+                            //}
                         }
-                        else
+                        if (keyState[Key.Left])
                         {
-                            gameCursor.Position = p;
+                            //if (!disabeCursor)
+                            //{
+                            //    PointF p = new PointF(gameCursor.Position.X - 32, gameCursor.Position.Y);
+                            //    if (p.X < 0)
+                            //    {
+                            //        camera.Update(keyState);
+                            //    }
+                            //    else
+                            //    {
+                            //        gameCursor.Position = p;
+                            //    }
+                            //}
                         }
-                        
+                        if (keyState[Key.Down])
+                        {
+                            //if (!disabeCursor)
+                            //{
+                            //    PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y + 32);
+                            //    if (p.Y + gameCursor.FrameHeight * 2 > this.Size.Height)
+                            //    {
+                            //        camera.Update(keyState);
+                            //    }
+                            //    else
+                            //    {
+                            //        gameCursor.Position = p;
+                            //    }
+                            //}
+                        }
+                        if (keyState[Key.Up])
+                        {
+                            //if (!disabeCursor)
+                            //{
+                            //    PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y - 32);
+                            //    if (p.Y < 0)
+                            //    {
+                            //        camera.Update(keyState);
+                            //    }
+                            //    else
+                            //    {
+                            //        gameCursor.Position = p;
+                            //    }
+
+                            //}
+
+
+                        }
                        
                     }
-                    if (keyState[Key.Left])
-                    {
-                        PointF p = new PointF(gameCursor.Position.X - 32, gameCursor.Position.Y);
-                        if (p.X < 0)
-                        {
-                            camera.Update(keyState);
-                        }
-                        else
-                        {
-                            gameCursor.Position = p;
-                        }
-                       
-                        
-                    }
-                    if (keyState[Key.Down])
-                    {
-                        PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y+32);
-                        if (p.Y + gameCursor.FrameHeight * 2 > this.Size.Height)
-                        {
-                            camera.Update(keyState);
-                        }
-                        else
-                        {
-                            gameCursor.Position = p;
-                        }
-                        
-                    }
-                    if (keyState[Key.Up])
-                    {
-                        PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y - 32);
-                        if (p.Y < 0)
-                        {
-                            camera.Update(keyState);
-                        }
-                        else
-                        {
-                            gameCursor.Position = p;
-                        }
-                       
-                    }
+                    
                 }
             }
             catch (Exception ex)
             {
 
+            }
+        }
+        
+        private void IsSelect(PointF position)
+        {
+            bool haveTrue = false;
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+                if (!PlayerList[i].IsSelected(position))
+                {
+                    if (!haveTrue)
+                    {
+                        actionScreen.isShow = false;
+                        gameCursor.enable = true;
+                    }
+                    
+                }
+                else
+                {
+                    haveTrue = true;
+                    //Console.WriteLine("true:" + i);
+                    Point p = new Point((int)gameCursor.gameScreenPosition.X + gameCursor.size.Width, (int)gameCursor.gameScreenPosition.Y);
+                    actionScreen.Location = p;
+                    actionScreen.isShow = true;
+                    gameCursor.enable = false;
+                    //disabeCursor = true;
+                } 
             }
         }
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
@@ -222,8 +284,15 @@ namespace GameDirectXDemo.Screens
                 }
 
 
-
-                HandleKey(keyState);
+                //if (!disabeCursor)
+                //{
+                    HandleKey(keyState);
+                //}
+                //else
+               // {
+                    actionScreen.Update(deltaTime, keyState, mouseState);
+               // }
+               
                 counter = 0;
             }
             
@@ -255,12 +324,16 @@ namespace GameDirectXDemo.Screens
                     //}
                     
                 }
-               
+                gameCursor.Draw(tileMap.TileMapSurface);
                 
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
                 actionScreen.Draw();
-                gameCursor.DrawImage(this.Surface);
+                //if (!disabeCursor)
+                //{
+                
+               // }
+                
                 base.Draw();
             }
             catch (Exception ex)

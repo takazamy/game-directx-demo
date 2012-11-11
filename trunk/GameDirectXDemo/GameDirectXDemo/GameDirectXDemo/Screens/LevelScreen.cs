@@ -325,7 +325,7 @@ namespace GameDirectXDemo.Screens
 
         public override void Draw()
         {
-            bg.DrawImage(base.Surface);
+            bg.DrawImageTo(new Rectangle(new Point(0,0),this.Size), base.Surface);
 
             this.Surface.DrawText((int)unit1.Position.X, 5, "Assault", false);
             this.Surface.DrawText((int)unit2.Position.X, 5, "Ranger", false);
