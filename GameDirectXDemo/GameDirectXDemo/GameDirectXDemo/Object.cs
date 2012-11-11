@@ -11,7 +11,7 @@ namespace GameDirectXDemo
 {
     public class Object
     {
-
+        int pathIndex = 0;
         public delegate void Action();
         public int _hp = 0;
         public int _stamina = 0;
@@ -24,7 +24,7 @@ namespace GameDirectXDemo
         protected DxImage _objectImg;
         protected DxAnimation _ani;
         protected DxInitGraphics _graphics;
-        protected float _moveSpeed = 5;
+        protected float _moveSpeed = 32;
 
         protected PointF _position;
         public PointF Position
@@ -92,6 +92,7 @@ namespace GameDirectXDemo
             set { onMouseDown = value; }
         }
 
+        protected Global.CharacterStatus _state = Global.CharacterStatus.Move;
 
         public Object(String info, DxInitGraphics graphics)
         {
@@ -123,30 +124,85 @@ namespace GameDirectXDemo
             //}
         }
 
-        public virtual void Move() 
+
+        public virtual void Move(List<Point> path)
         {
-            switch (_currentDirection)
+            if (_state == Global.CharacterStatus.Move)
             {
-                case Global.ObjectDirection.DOWN:
+                #region get direction
+                if (this.Position != path[pathIndex])
+                {
+
+                    if (this._position.X < path[pathIndex].X)
                     {
-                        this._position.Y += _moveSpeed;
-                        break;
+                        _currentDirection = Global.ObjectDirection.RIGHT;
                     }
-                case Global.ObjectDirection.LEFT:
+                    else if (this._position.X > path[pathIndex].X)
                     {
-                        this._position.X -= _moveSpeed;
-                        break;
+                        _currentDirection = Global.ObjectDirection.LEFT;
                     }
-                case Global.ObjectDirection.RIGHT:
+                    else if (this._position.Y < path[pathIndex].Y)
                     {
-                        this._position.X += _moveSpeed;
-                        break;
+                        _currentDirection = Global.ObjectDirection.DOWN;
                     }
-                case Global.ObjectDirection.UP:
+                    else if (this._position.Y > path[pathIndex].Y)
                     {
-                        this._position.Y -= _moveSpeed;
-                        break;
+                        _currentDirection = Global.ObjectDirection.UP;
                     }
+                }                
+                #endregion
+                #region move
+                switch (_currentDirection)
+                {
+                    case Global.ObjectDirection.DOWN:
+                        {
+                            this._position.Y += _moveSpeed;
+                            if (this._position.Y > path[pathIndex].Y)
+                            {
+                                this._position.Y = path[pathIndex].Y;
+                            }
+                            break;
+                        }
+                    case Global.ObjectDirection.LEFT:
+                        {
+                            this._position.X -= _moveSpeed;
+                            if (this._position.X < path[pathIndex].X)
+                            {
+                                this._position.X = path[pathIndex].X;
+                            }
+                            break;
+                        }
+                    case Global.ObjectDirection.RIGHT:
+                        {
+                            this._position.X += _moveSpeed;
+                            if (this._position.X > path[pathIndex].X)
+                            {
+                                this._position.X = path[pathIndex].X;
+                            }
+                            break;
+                        }
+                    case Global.ObjectDirection.UP:
+                        {
+                            this._position.Y -= _moveSpeed;
+                            if (this._position.Y < path[pathIndex].Y)
+                            {
+                                this._position.Y = path[pathIndex].Y;
+                            }
+                            break;
+                        }
+                }
+                #endregion
+                Point objectPos = new Point((int)this._position.X / 32, (int)this._position.Y / 32);
+                Point pathPos = new Point((int)path[pathIndex].X / 32, (int)path[pathIndex].Y / 32);
+                if (objectPos == pathPos)
+                {
+                    pathIndex++;
+                    if (pathIndex >= path.Count)
+                    {
+                        _state = Global.CharacterStatus.Idle;
+
+                    }
+                }
             }
         }
 
@@ -157,12 +213,17 @@ namespace GameDirectXDemo
 
         public void Update(double deltaTime,KeyboardState keyState, MouseState mouseState)
         {
+           // this.Move(path);
             this._objectImg.Position = this.Position;
-            _ani.Update(deltaTime, this._currentDirection);
+            if (_state == Global.CharacterStatus.Move)
+            {
+                _ani.Update(deltaTime, this._currentDirection);
+            }
+
         }
 
         public void Draw(Surface desSurf)
-        {
+        {            
             _ani.Draw(desSurf);
         }
 
