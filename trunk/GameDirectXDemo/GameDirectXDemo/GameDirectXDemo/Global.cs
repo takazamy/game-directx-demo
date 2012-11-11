@@ -65,8 +65,10 @@ namespace GameDirectXDemo
 
         public enum CharacterStatus
         {
-            Move = 0,
-            Attack = 1
+            Idle = 0,
+            Move = 1,
+            Attack = 2,
+
         }
     }
 }
