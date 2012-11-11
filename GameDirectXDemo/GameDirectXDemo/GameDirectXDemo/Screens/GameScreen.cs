@@ -17,46 +17,60 @@ namespace GameDirectXDemo.Screens
         List<Object> PlayerList;
         List<Object> EnemyList;
         ActionScreen actionScreen;
-        Global.Turn gameTurn = Global.Turn.PlayerTurn;
+        Global.Turn gameTurn = Global.Turn.EnemyTurn;
         DxImage gameCursor;
-        int[,] colisionMap;       
+        int[,] colisionMap;
+        int[,] objectMap;
         double counter = 0;
+        PathFinding pathFinder;
+        List<Point> path;
+
         public GameScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size,List<Object> objects,DxTileMap tileMap) :
             base(scrManager, graphics, location, size)
         {
             this.tileMap = tileMap;
             colisionMap = tileMap.CollisionMap;
             this.objects = objects;
-
+            objectMap = new int[colisionMap.GetLength(0), colisionMap.GetLength(1)];
+            pathFinder = new PathFinding(colisionMap);
             Initialize();
 
         }
 
         public override void Initialize()
         {
-            this._state = Global.ScreenState.GS_MAIN_GAME;
-            gameCursor = new DxImage(GameResource.GameScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
-            camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
-            actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this.Surface);
-            EnemyList = new List<Object>();
-            PlayerList = new List<Object>();
-            foreach (Object obj in objects)
+            try
             {
-                if (obj.Side == Global.Side.Enemy)
+                this._state = Global.ScreenState.GS_MAIN_GAME;
+                gameCursor = new DxImage(GameResource.GameScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
+                camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
+                actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this.Surface);
+                EnemyList = new List<Object>();
+                PlayerList = new List<Object>();
+                foreach (Object obj in objects)
                 {
-                    EnemyList.Add(obj);
+                    if (obj.Side == Global.Side.Enemy)
+                    {
+                        EnemyList.Add(obj);
+                    }
+                    else
+                    {
+                        PlayerList.Add(obj);
+                    }
                 }
-                else
-                {
-                    PlayerList.Add(obj);
-                }
+                CreateGame();
             }
-            CreateGame();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
         }
 
         private void CreateGame()
         {
             RandomPostion();
+            path = pathFinder.FindPath(new Point((int)EnemyList[0].Position.X/32,(int)EnemyList[0].Position.Y/32),
+                new Point((int)PlayerList[0].Position.X/32,(int)PlayerList[0].Position.Y/32));
         }
         
         private void RandomPostion()
@@ -76,10 +90,10 @@ namespace GameDirectXDemo.Screens
                         temp = rand.Next(0, 10);
                         col = temp;
 
-                        if (colisionMap[row, col] == 0)
+                        if (colisionMap[row, col] == 0 && objectMap[row,col] == 0)
                         {
                             PlayerList[i].Position = new PointF((float)col * 32, (float)row * 32);//32 = frameWidth 
-                            colisionMap[row, col] = -1;
+                            objectMap[row, col] = 1;
                             break;
                         }
                     }
@@ -95,10 +109,10 @@ namespace GameDirectXDemo.Screens
                         temp = rand.Next(25, 34);
                         col = temp;
 
-                        if (colisionMap[row, col] == 0)
+                        if (colisionMap[row, col] == 0 && objectMap[row,col] == 0)
                         {
                             EnemyList[i].Position = new PointF((float)col * 32, (float)row * 32);//32 = frameWidth 
-                            colisionMap[row, col] = -2;
+                            objectMap[row, col] = 2;
                             break;
                         }
                     }
@@ -186,15 +200,25 @@ namespace GameDirectXDemo.Screens
             counter += deltaTime;
             if (counter >= 100)
             {
+                foreach (Object obj in this.objects)
+                {
+                    //if (obj.Side == Global.Side.Player)
+                    //{
+                    obj.Update(deltaTime, keyState, mouseState);
+                    //}
+                }
                 if (gameTurn == Global.Turn.PlayerTurn)
                 {
-                    foreach (Object obj in this.objects)
+                    
+                    PlayerList[0].Move(path);
+                }
+                else if(gameTurn == Global.Turn.EnemyTurn)
+                {
+                    foreach(Object obj in this.EnemyList)
                     {
-                        //if (obj.Side == Global.Side.Player)
-                        //{
                         obj.Update(deltaTime, keyState, mouseState);
-                        //}
                     }
+                    EnemyList[0].Move(path);
                 }
 
 

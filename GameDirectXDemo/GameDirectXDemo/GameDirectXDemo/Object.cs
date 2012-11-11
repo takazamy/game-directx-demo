@@ -33,7 +33,7 @@ namespace GameDirectXDemo
             set { _position = value; }
         }
         protected Global.ObjectDirection _lastDirection;
-        protected Global.ObjectDirection _currentDirection;
+        protected Global.ObjectDirection _currentDirection = Global.ObjectDirection.DOWN;
         public Global.ObjectDirection CurrentDirection
         {
             get { return _currentDirection; }
@@ -51,19 +51,19 @@ namespace GameDirectXDemo
                     case Global.ObjectType.Defender:
                         _canAttackFar = false;
                         _canAttackNear = true;
-                        _ani = new DxAnimation(this._objectImg, 300, 9, 11, Global.AnimationType.CONTINUOS);
+                        _ani = new DxAnimation(this._objectImg, 100, 9, 11, Global.AnimationType.CONTINUOS);
                        //khởi tạo image cho object
                         
                         break;
                     case Global.ObjectType.Ranger:
                         _canAttackFar = true;
                         _canAttackNear = false;
-                        _ani = new DxAnimation(this._objectImg, 300, 6, 8, Global.AnimationType.CONTINUOS);
+                        _ani = new DxAnimation(this._objectImg, 100, 6, 8, Global.AnimationType.CONTINUOS);
                         break;
                     case Global.ObjectType.Assault:
                         _canAttackFar = true;
                         _canAttackNear = true;
-                        _ani = new DxAnimation(this._objectImg, 300, 0, 2, Global.AnimationType.CONTINUOS);
+                        _ani = new DxAnimation(this._objectImg, 100, 0, 2, Global.AnimationType.CONTINUOS);
                         break;
                 }                
             }
@@ -92,7 +92,7 @@ namespace GameDirectXDemo
             set { onMouseDown = value; }
         }
 
-        protected Global.CharacterStatus _state = Global.CharacterStatus.Move;
+        protected Global.CharacterStatus _state = Global.CharacterStatus.Idle;
 
         public Object(String info, DxInitGraphics graphics)
         {
@@ -127,6 +127,10 @@ namespace GameDirectXDemo
 
         public virtual void Move(List<Point> path)
         {
+            if(pathIndex<= 0)
+            {
+                _state = Global.CharacterStatus.Move;
+            }
             if (_state == Global.CharacterStatus.Move)
             {
                 #region get direction

@@ -235,7 +235,6 @@ namespace GameDirectXDemo.Core
                     }
                 }
             }
-        }
-
+        }       
     }
 }
