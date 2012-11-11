@@ -12,13 +12,13 @@ namespace GameDirectXDemo.Core
         private double _frameTime; //milisecond;
         private double _elapsedMilisec;
         private Global.AnimationType _aniType;
-        private int _currentFrame = 0;
+        private int _currentFrame ;
         private bool _isPlaying = true;
         private int _firstFrame;
         private int _lastFrame;
         private int _tmpFirstFrame;
         private int _tmpLastFrame;
-        private Global.ObjectDirection _lastDirection;
+        private Global.ObjectDirection _lastDirection ;
 
         public DxAnimation(DxImage imageObject, double frameTime, Global.AnimationType aniType)
         {
@@ -33,6 +33,7 @@ namespace GameDirectXDemo.Core
             _firstFrame = firstFrame;
             _lastFrame = lastFarme;
             _aniType = aniType;
+            _currentFrame = firstFrame;
         }
         public void Update(double elapsedMilisec)
         {
@@ -111,13 +112,13 @@ namespace GameDirectXDemo.Core
                     {
                         if (_aniType == Global.AnimationType.CONTINUOS)
                         {
-                            //_currentFrame = _tmpFirstFrame;
-                            _currentFrame = _firstFrame;
+                           _currentFrame = _tmpFirstFrame;
+                           // _currentFrame = _firstFrame;
                         }
                         else
                         {
                             //_currentFrame = _tmpFirstFrame;
-                            _currentFrame = _firstFrame;
+                            //_currentFrame = _firstFrame;
                             _isPlaying = false;
                         }
                     }

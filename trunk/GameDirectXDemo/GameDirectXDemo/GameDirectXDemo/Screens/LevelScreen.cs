@@ -89,7 +89,7 @@ namespace GameDirectXDemo.Screens
         string mapPath = "";
         string errorString = "";
         List<Object> objects;
-        DxTileMap mapGame;
+        DxTileMap mapGame;        
         public LevelScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size) :
             base(scrManager, graphics, location, size)
         { 
@@ -164,7 +164,7 @@ namespace GameDirectXDemo.Screens
                 switch (CreateRandomNumber(1, 3))
                 {
                     case 1:
-                        temp = new Object("1-1-150-20-5-5",this._graphics);
+                        temp = new Object("1-1-150-20-5-5", this._graphics);
                         break;
                     case 2:
                         temp = new Object("2-1-50-5-20-5", this._graphics);
