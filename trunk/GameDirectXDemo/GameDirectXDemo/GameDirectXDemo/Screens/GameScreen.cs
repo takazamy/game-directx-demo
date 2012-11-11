@@ -18,7 +18,10 @@ namespace GameDirectXDemo.Screens
         List<Object> EnemyList;
         ActionScreen actionScreen;
         Global.Turn gameTurn = Global.Turn.PlayerTurn;
+        DxImage gameCursor;
         int[,] colisionMap;
+        Boolean checkTime = false;
+        double counter = 0;
         public GameScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size,List<Object> objects,DxTileMap tileMap) :
             base(scrManager, graphics, location, size)
         {
@@ -33,6 +36,7 @@ namespace GameDirectXDemo.Screens
         public override void Initialize()
         {
             this._state = Global.ScreenState.GS_MAIN_GAME;
+            gameCursor = new DxImage(GameResource.GameScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
             camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
             actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this.Surface);
             EnemyList = new List<Object>();
@@ -108,20 +112,68 @@ namespace GameDirectXDemo.Screens
             }
            
         }
-
-        public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
+        private void HandleKey(KeyboardState keyState)
         {
-            if (gameTurn == Global.Turn.PlayerTurn)
+            try
             {
-                foreach (Object obj in this.objects)
+                if (keyState != null)
                 {
-                    //if (obj.Side == Global.Side.Player)
-                    //{
-                        obj.Update(deltaTime, keyState, mouseState);
-                    //}
+                    // on escape -> exit
+
+                    if (keyState[Key.Right])
+                    {
+                        PointF p = new PointF(gameCursor.Position.X+32,gameCursor.Position.Y);
+                        gameCursor.Position = p;
+                       
+                    }
+                    if (keyState[Key.Left])
+                    {
+                        PointF p = new PointF(gameCursor.Position.X - 32, gameCursor.Position.Y);
+                        gameCursor.Position = p;
+                        
+                    }
+                    if (keyState[Key.Down])
+                    {
+                        PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y+32);
+                        gameCursor.Position = p;
+                    }
+                    if (keyState[Key.Up])
+                    {
+                        PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y - 32);
+                        gameCursor.Position = p;
+                    }
                 }
             }
-            camera.Update(keyState);
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
+        {
+            Console.WriteLine("Counter_deltatime:" + counter + "_" + deltaTime);
+            counter += deltaTime;
+            if (counter >= 100)
+            {
+                if (gameTurn == Global.Turn.PlayerTurn)
+                {
+                    foreach (Object obj in this.objects)
+                    {
+                        //if (obj.Side == Global.Side.Player)
+                        //{
+                        obj.Update(deltaTime, keyState, mouseState);
+                        //}
+                    }
+                }
+
+
+
+                HandleKey(keyState);
+                counter = 0;
+            }
+            
+            
+            //camera.Update(keyState);
             
         }
 
@@ -140,7 +192,7 @@ namespace GameDirectXDemo.Screens
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
                 actionScreen.Draw();
-
+                gameCursor.DrawImage(this.Surface);
                 base.Draw();
             }
             catch (Exception ex)
