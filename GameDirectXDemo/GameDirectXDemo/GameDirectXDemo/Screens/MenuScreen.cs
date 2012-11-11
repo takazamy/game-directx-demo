@@ -91,7 +91,7 @@ namespace GameDirectXDemo.Screens
             }
             if (!flag)
             {
-                LevelScreen level = new LevelScreen(_scrManager, _graphics, Point.Empty, new Size(800, 600));
+                LevelScreen level = new LevelScreen(_scrManager, _graphics, Point.Empty, new Size(_scrManager._renderTarget.Width, _scrManager._renderTarget.Height));
                 _scrManager.Append(level);
                 //_scrManager.UpdateIndex();
             }
@@ -119,7 +119,7 @@ namespace GameDirectXDemo.Screens
         {
             //SoundManager.Instance.Play(SoundManager.SoundType.MenuScreenMusic);
             //SoundManager.Instance.isLoop = true;
-            bg.DrawImageTo(new Rectangle(0,0,800,600), base.Surface);
+            bg.DrawImageTo(new Rectangle(0,0,this._size.Width,this._size.Height), base.Surface);
             title.DrawImage(this.Surface);
             _playBtn.DrawFast(this.Surface);
             _exitBtn.DrawFast(this.Surface);

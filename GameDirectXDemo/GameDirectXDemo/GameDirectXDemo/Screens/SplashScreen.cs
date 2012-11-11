@@ -75,7 +75,7 @@ namespace GameDirectXDemo.Screens
             if (!flag)
             {
                 MenuScreen menu = new MenuScreen(_scrManager, _graphics, Point.Empty,
-                    new Size(800, 600));
+                    new Size(_scrManager._renderTarget.Width, _scrManager._renderTarget.Height));
                 _scrManager.Append(menu);
                 //_scrManager.UpdateIndex();
             }
@@ -101,7 +101,7 @@ namespace GameDirectXDemo.Screens
         }
         public override void Draw()
         {
-            bg.DrawImage(this.Surface);
+            bg.DrawImageTo(new Rectangle(new Point(0,0),this._size), this.Surface);
            // SoundManager.Instance.Play(SoundManager.SoundType.SplashScreenMusic);
           //  SoundManager.Instance.isLoop = true;
             //   .DrawFast(_location.X, _location.Y, bg.XImage, DrawFastFlags.Wait);
