@@ -13,8 +13,9 @@ namespace GameDirectXDemo.Screens
     public class MenuScreen:DxScreen
     {
         private DxImage bg;
-        private DxImage credit;
-        private DxImage howtoplay;
+       // private DxImage credit;
+        private CreditScreen _credit;
+        private HowToPlayScreen _htp;
         private DxImage title;
         private DxButton _playBtn = null;
         private DxButton _exitBtn = null;
@@ -22,6 +23,7 @@ namespace GameDirectXDemo.Screens
         private DxButton _howtoplayBtn = null;
         private int _onCredit = -1;
         private int _onHTP = -1;
+
         public MenuScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size) :
             base(scrManager, graphics, location, size)
         {
@@ -45,8 +47,8 @@ namespace GameDirectXDemo.Screens
             title.Position = position;
             //credit = new DxImage("Assets/CreditSreen.png", _graphics.DDDevice);
             //howtoplay = new DxImage("Assets/howtoplayScreen.png", _graphics.DDDevice); 
-            
-
+            _credit = new CreditScreen(_scrManager,_graphics,new Point(100,100),new System.Drawing.Size(200,300));
+            _htp = new HowToPlayScreen(_scrManager, _graphics, new Point(100, 100), new System.Drawing.Size(200, 300));
             _playBtn.OnMouseUp = delegate()
             {
                 //SoundManager.Instance.Stop(SoundManager.SoundType.MenuScreenMusic);
@@ -126,14 +128,16 @@ namespace GameDirectXDemo.Screens
             if (_onCredit > 0)
             {
                 //credit.DrawFast(200, 300, base.Surface, DrawFastFlags.Wait);
+                _credit.Draw(this._surface);
             }
             if (_onHTP > 0)
             {
                 //howtoplay.DrawFast(200, 300, base.Surface, DrawFastFlags.Wait);
+                _htp.Draw(this._surface);
             }
             //   .DrawFast(_location.X, _location.Y, bg.XImage, DrawFastFlags.Wait);
             base.Draw();
         }
-
+       
     }
 }
