@@ -25,6 +25,8 @@ namespace GameDirectXDemo
         protected DxAnimation _ani;
         protected DxInitGraphics _graphics;
         protected float _moveSpeed = 32;
+        public Boolean isSelected = false;
+        DxImage selectImage;
 
         protected PointF _position;
         public PointF Position
@@ -114,6 +116,8 @@ namespace GameDirectXDemo
         public void Initialize()
         {
             _objectImg = new DxImage(GameResource.robot, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(),PointF.Empty,32,32, _graphics.DDDevice);
+            selectImage = new DxImage(GameResource.selectImage, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
+            
             //if (this._side == Global.Side.Player)
             //{
 
@@ -215,19 +219,54 @@ namespace GameDirectXDemo
 
         public virtual void Die() { }
 
+        public Boolean IsSelected(PointF selectPosition)
+        {
+            if (isSelected)
+            {
+                this.isSelected = false;
+                return false;
+            }
+            else
+            {
+                if (selectPosition == this.Position)
+                {
+                    this.isSelected = true;
+                    return true;
+                }
+                else
+                {
+                    this.isSelected = false;
+                    return false;
+                }
+            }
+
+        }
+        public void DeSelected()
+        {
+            this.isSelected = false;
+        }
         public void Update(double deltaTime,KeyboardState keyState, MouseState mouseState)
         {
            // this.Move(path);
             this._objectImg.Position = this.Position;
+
+            this.selectImage.Position = this.Position;
+           
+
             if (_state == Global.CharacterStatus.Move)
             {
                 _ani.Update(deltaTime, this._currentDirection);
             }
 
+
         }
 
         public void Draw(Surface desSurf)
         {            
+            if (this.isSelected && this.Side == Global.Side.Player)
+            {
+                selectImage.DrawImage(desSurf);
+            }
             _ani.Draw(desSurf);
         }
 

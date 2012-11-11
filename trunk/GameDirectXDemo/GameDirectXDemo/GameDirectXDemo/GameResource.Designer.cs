@@ -267,6 +267,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap selectImage {
+            get {
+                object obj = ResourceManager.GetObject("selectImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap SplashScreen {
             get {
                 object obj = ResourceManager.GetObject("SplashScreen", resourceCulture);
