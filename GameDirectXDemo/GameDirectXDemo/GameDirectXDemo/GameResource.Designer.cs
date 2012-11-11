@@ -116,6 +116,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap GameScreenCursor {
+            get {
+                object obj = ResourceManager.GetObject("GameScreenCursor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap HowToPlay {
             get {
                 object obj = ResourceManager.GetObject("HowToPlay", resourceCulture);
