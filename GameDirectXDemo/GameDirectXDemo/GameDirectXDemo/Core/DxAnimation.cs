@@ -111,11 +111,13 @@ namespace GameDirectXDemo.Core
                     {
                         if (_aniType == Global.AnimationType.CONTINUOS)
                         {
-                            _currentFrame = _tmpFirstFrame;
+                            //_currentFrame = _tmpFirstFrame;
+                            _currentFrame = _firstFrame;
                         }
                         else
                         {
-                            _currentFrame = _tmpFirstFrame;
+                            //_currentFrame = _tmpFirstFrame;
+                            _currentFrame = _firstFrame;
                             _isPlaying = false;
                         }
                     }
