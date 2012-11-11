@@ -19,8 +19,7 @@ namespace GameDirectXDemo.Screens
         ActionScreen actionScreen;
         Global.Turn gameTurn = Global.Turn.PlayerTurn;
         DxImage gameCursor;
-        int[,] colisionMap;
-        Boolean checkTime = false;
+        int[,] colisionMap;       
         double counter = 0;
         public GameScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size,List<Object> objects,DxTileMap tileMap) :
             base(scrManager, graphics, location, size)
@@ -108,7 +107,7 @@ namespace GameDirectXDemo.Screens
             }
             catch(Exception ex)
             {
-                
+                Console.WriteLine(ex.StackTrace);
             }
            
         }
@@ -123,24 +122,56 @@ namespace GameDirectXDemo.Screens
                     if (keyState[Key.Right])
                     {
                         PointF p = new PointF(gameCursor.Position.X+32,gameCursor.Position.Y);
-                        gameCursor.Position = p;
+                        if (p.X + gameCursor.FrameWidth*2 > this.Size.Width)
+                        {
+                            camera.Update(keyState);
+                        }
+                        else
+                        {
+                            gameCursor.Position = p;
+                        }
+                        
                        
                     }
                     if (keyState[Key.Left])
                     {
                         PointF p = new PointF(gameCursor.Position.X - 32, gameCursor.Position.Y);
-                        gameCursor.Position = p;
+                        if (p.X < 0)
+                        {
+                            camera.Update(keyState);
+                        }
+                        else
+                        {
+                            gameCursor.Position = p;
+                        }
+                       
                         
                     }
                     if (keyState[Key.Down])
                     {
                         PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y+32);
-                        gameCursor.Position = p;
+                        if (p.Y + gameCursor.FrameHeight * 2 > this.Size.Height)
+                        {
+                            camera.Update(keyState);
+                        }
+                        else
+                        {
+                            gameCursor.Position = p;
+                        }
+                        
                     }
                     if (keyState[Key.Up])
                     {
                         PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y - 32);
-                        gameCursor.Position = p;
+                        if (p.Y < 0)
+                        {
+                            camera.Update(keyState);
+                        }
+                        else
+                        {
+                            gameCursor.Position = p;
+                        }
+                       
                     }
                 }
             }
@@ -151,7 +182,7 @@ namespace GameDirectXDemo.Screens
         }
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
         {
-            Console.WriteLine("Counter_deltatime:" + counter + "_" + deltaTime);
+            
             counter += deltaTime;
             if (counter >= 100)
             {
@@ -182,13 +213,26 @@ namespace GameDirectXDemo.Screens
            //
             try
             {
-                foreach (Object obj in this.objects)
+               
+                this.tileMap.DrawTileMap();
+                foreach (Object obj in this.PlayerList)
                 {
                     //if (obj.Side == Global.Side.Player)
                     //{
                     obj.Draw(tileMap.TileMapSurface);
                     //}
+                    
                 }
+                foreach (Object obj in this.EnemyList)
+                {
+                    //if (obj.Side == Global.Side.Player)
+                    //{
+                    obj.Draw(tileMap.TileMapSurface);
+                    //}
+                    
+                }
+               
+                
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
                 actionScreen.Draw();
@@ -196,8 +240,8 @@ namespace GameDirectXDemo.Screens
                 base.Draw();
             }
             catch (Exception ex)
-            { 
-                
+            {
+                Console.WriteLine(ex.StackTrace);
             }
             
             
