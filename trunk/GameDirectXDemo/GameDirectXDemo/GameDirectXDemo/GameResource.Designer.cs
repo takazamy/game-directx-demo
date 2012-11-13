@@ -67,9 +67,23 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap ActionScreenCursor {
+            get {
+                object obj = ResourceManager.GetObject("ActionScreenCursor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Assault {
             get {
                 object obj = ResourceManager.GetObject("Assault", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap attack {
+            get {
+                object obj = ResourceManager.GetObject("attack", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -98,6 +112,13 @@ namespace GameDirectXDemo {
         internal static System.Drawing.Bitmap desc {
             get {
                 object obj = ResourceManager.GetObject("desc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap endturn {
+            get {
+                object obj = ResourceManager.GetObject("endturn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
