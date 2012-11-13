@@ -7,6 +7,7 @@ using GameDirectXDemo.Manager;
 using System.Drawing;
 using Microsoft.DirectX.DirectInput;
 using System.Windows.Forms;
+using Microsoft.DirectX.DirectDraw;
 
 namespace GameDirectXDemo.Screens
 {

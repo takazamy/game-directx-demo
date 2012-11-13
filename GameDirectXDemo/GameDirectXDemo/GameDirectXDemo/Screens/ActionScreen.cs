@@ -15,13 +15,16 @@ namespace GameDirectXDemo.Screens
         DxButton move;
         DxButton attack;
         DxButton endTurn;
-        Surface parent;
+        GameScreen parent;
         DxImage bg;
+        DxImage select;
         public Boolean isShow = false;
-        public ActionScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size,Surface gameScreenSurf) :
+        public Boolean isInScreen = false;
+        public Object currSelect;
+        public ActionScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size, GameScreen gameScreen) :
             base(scrManager, graphics, location, size)
         {
-            parent = gameScreenSurf;
+            parent = gameScreen;
             Initialize();
         }
 
@@ -29,21 +32,95 @@ namespace GameDirectXDemo.Screens
         {
  	         base.Initialize();
              bg = new DxImage(GameResource.ActionScreen, Global.BitmapType.SOLID, 0, _graphics.DDDevice);
+             select = new DxImage(GameResource.ActionScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(),new Point(0,0), _graphics.DDDevice);
+             
+           //  this.Surface.SurfaceDescription.SurfaceCaps.Alpha = true;
+           //  this.Surface.SurfaceDescription.SurfaceCaps.Overlay = true;
              move = new DxButton(5, 5, GameResource.move, _graphics.DDDevice, GameResource.move.Width, GameResource.move.Height/3);
+             attack = new DxButton(5, 35, GameResource.attack, _graphics.DDDevice, GameResource.attack.Width, GameResource.attack.Height / 3);
+             endTurn = new DxButton(5, 65, GameResource.endturn, _graphics.DDDevice, GameResource.endturn.Width, GameResource.endturn.Height / 3);
         }
 
         public override void Update(double deltaTime,KeyboardState keyState, MouseState mouseState)
         {
+            //select.Position = move.Position;
+            if (isInScreen)
+            {
+                HanldeKey(keyState);
+            }
+           
             base.Update(deltaTime, keyState, mouseState);
+        }
+
+        private void HanldeKey(KeyboardState keystate)
+        {
+            try
+            {
+                if (keystate[Key.Down])
+                {
+                    PointF p = new PointF(select.Position.X, select.Position.Y + 30);
+                    if (p.Y+select.FrameHeight<= this.Size.Height)
+                    {
+                        select.Position = p;
+                    }
+                    
+                }
+                if (keystate[Key.Up])
+                {
+                    PointF p = new PointF(select.Position.X, select.Position.Y - 30);
+                    if (p.Y >= 0)
+                    {
+                        select.Position = p;
+                    }
+                    
+                }
+                if (keystate[Key.Left] || keystate[Key.X])
+                {
+                    this.isInScreen = false;
+                }
+                if (keystate[Key.Z])
+                {
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void CheckButtonClick(PointF pos)
+        {
+            RectangleF rect = new RectangleF(pos,new SizeF((float)select.FrameWidth,(float)select.FrameHeight));
+            if (rect.Contains(move.Position))
+            {
+               // move.
+            }
         }
         public override void Draw()
         {
-            if (isShow)
+            try
             {
-                bg.DrawImage(this.Surface);
-                move.DrawFast(this.Surface);
-                parent.Draw(new Rectangle(this.Location, this.Size), this.Surface, DrawFlags.Wait);
-            }           
+                if (isShow)
+                {
+                    
+                    //bg.DrawImageTo(new Rectangle(this.Location, this.Size), this.Surface);
+                    
+                    bg.DrawImage(this.Surface);
+                    if (isInScreen)
+                    {
+                        select.DrawImage(this.Surface);
+                    }
+                    
+                    move.DrawFast(this.Surface);
+                    attack.DrawFast(this.Surface);
+                    endTurn.DrawFast(this.Surface);
+                    parent.Surface.Draw(new Rectangle(this.Location, this.Size), this.Surface, DrawFlags.Wait);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
             //base.Draw();
         }
         

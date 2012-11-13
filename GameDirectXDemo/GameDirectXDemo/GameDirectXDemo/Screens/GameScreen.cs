@@ -17,7 +17,7 @@ namespace GameDirectXDemo.Screens
         List<Object> PlayerList;
         List<Object> EnemyList;
         ActionScreen actionScreen;
-        Global.Turn gameTurn = Global.Turn.EnemyTurn;
+        Global.Turn gameTurn = Global.Turn.PlayerTurn;
        
         GameCursor gameCursor;
         int[,] colisionMap;
@@ -25,7 +25,16 @@ namespace GameDirectXDemo.Screens
         double counter = 0;
         PathFinding pathFinder;
         List<Point> path;
-
+        Object currSelect;
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="scrManager"></param>
+        /// <param name="graphics"></param>
+        /// <param name="location"></param>
+        /// <param name="size"></param>
+        /// <param name="objects"></param>
+        /// <param name="tileMap"></param>
         public GameScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size,List<Object> objects,DxTileMap tileMap) :
             base(scrManager, graphics, location, size)
         {
@@ -47,7 +56,7 @@ namespace GameDirectXDemo.Screens
                 this._state = Global.ScreenState.GS_MAIN_GAME;
                 gameCursor = new GameCursor(_graphics, this);
                 camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
-                actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this.Surface);
+                actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this);
                 EnemyList = new List<Object>();
                 PlayerList = new List<Object>();
                 foreach (Object obj in objects)
@@ -70,13 +79,18 @@ namespace GameDirectXDemo.Screens
         }
 
         #region Create Game
+        /// <summary>
+        /// Create the elements for game
+        /// </summary>
         private void CreateGame()
         {
             RandomPostion();
-            path = pathFinder.FindPath(new Point((int)EnemyList[0].Position.X/32,(int)EnemyList[0].Position.Y/32),
-                new Point((int)PlayerList[0].Position.X/32,(int)PlayerList[0].Position.Y/32));
+            path = pathFinder.FindPath(new Point((int)EnemyList[0].Position.X / 32, (int)EnemyList[0].Position.Y / 32),
+                new Point((int)PlayerList[0].Position.X / 32, (int)PlayerList[0].Position.Y / 32));
         }
-        
+        /// <summary>
+        /// Function Create Position for all Object in game
+        /// </summary>
         private void RandomPostion()
         {
             // chọn khu vực để tạo vị trí random cho quân
@@ -131,96 +145,78 @@ namespace GameDirectXDemo.Screens
         }
 
         #endregion
-
-        private void HandleKey(KeyboardState keyState)
+        /// <summary>
+        /// Manage Interaction Through Keyboard
+        /// </summary>
+        /// <param name="keyState">Array of keys'value </param>
+        private void HandleKey(double deltaTime,KeyboardState keyState,MouseState mouseState)
         {
             try
             {
                 if (Global.CheckKeyDown(keyState))
                 {
-                    // on escape -> exit
+                    // Check gameCursor state;
                     gameCursor.Update(keyState);
-                    if (keyState[Key.Z])
+                    if (!actionScreen.isInScreen && actionScreen.isShow == false)
                     {
-                        //if (!disabeCursor)
-                        //{
-                             IsSelect(gameCursor.tileMapPosition);
-                        //}
+                        if (keyState[Key.Z])
+                        {
+                            //if (!disabeCursor)
+                            //{
+                            IsSelect(gameCursor.tileMapPosition);
+                            //}
 
-                    }
-                    if (keyState[Key.X])
-                    {
-                        actionScreen.isShow = false;
-                        gameCursor.enable = true;
-
-                        IsSelect(gameCursor.tileMapPosition);
-                    }
-                    if (!gameCursor.enable)
+                        }
+                        if (keyState[Key.X])
+                        {
+                            //IsSelect(gameCursor.tileMapPosition);
+                            actionScreen.isShow = false;
+                            gameCursor.enable = true;
+                            for (int i = 0; i < PlayerList.Count; i++)
+                            {
+                                if (PlayerList[i].isSelected)
+                                {
+                                    PlayerList[i].isSelected = false;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                          
+                    }else if (!actionScreen.isInScreen)
                     {
                         if (keyState[Key.Right])
                         {
-
-                            //PointF p = new PointF(gameCursor.Position.X + 32, gameCursor.Position.Y);
-                            //if (p.X + gameCursor.FrameWidth * 2 > this.Size.Width)
-                            //{
-                            //    camera.Update(keyState);
-                            //    gameCursor.Position = p;
-                            //}
-                            //else
-                            //{
-                            //    gameCursor.Position = p;
-                            //}
+                            actionScreen.isInScreen = true;
                         }
-                        if (keyState[Key.Left])
+                        if (keyState[Key.Z])
                         {
                             //if (!disabeCursor)
                             //{
-                            //    PointF p = new PointF(gameCursor.Position.X - 32, gameCursor.Position.Y);
-                            //    if (p.X < 0)
-                            //    {
-                            //        camera.Update(keyState);
-                            //    }
-                            //    else
-                            //    {
-                            //        gameCursor.Position = p;
-                            //    }
+                            IsSelect(gameCursor.tileMapPosition);
                             //}
+
                         }
-                        if (keyState[Key.Down])
+                        if (keyState[Key.X])
                         {
-                            //if (!disabeCursor)
-                            //{
-                            //    PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y + 32);
-                            //    if (p.Y + gameCursor.FrameHeight * 2 > this.Size.Height)
-                            //    {
-                            //        camera.Update(keyState);
-                            //    }
-                            //    else
-                            //    {
-                            //        gameCursor.Position = p;
-                            //    }
-                            //}
+                            //IsSelect(gameCursor.tileMapPosition);
+                            actionScreen.isShow = false;
+                            gameCursor.enable = true;
+                            for (int i = 0; i < PlayerList.Count; i++)
+                            {
+                                if (PlayerList[i].isSelected)
+                                {
+                                    PlayerList[i].isSelected = false;
+                                    break;
+                                }
+                            }
                         }
-                        if (keyState[Key.Up])
-                        {
-                            //if (!disabeCursor)
-                            //{
-                            //    PointF p = new PointF(gameCursor.Position.X, gameCursor.Position.Y - 32);
-                            //    if (p.Y < 0)
-                            //    {
-                            //        camera.Update(keyState);
-                            //    }
-                            //    else
-                            //    {
-                            //        gameCursor.Position = p;
-                            //    }
-
-                            //}
-
-
-                        }
-                       
                     }
+                    else
+                    {
+                        actionScreen.Update(deltaTime, keyState, mouseState); 
+                    }
+                   
                     
                 }
             }
@@ -229,75 +225,97 @@ namespace GameDirectXDemo.Screens
 
             }
         }
-        
+        /// <summary>
+        /// Check the selected of Objects
+        /// </summary>
+        /// <param name="position">the game cursor position</param>
         private void IsSelect(PointF position)
         {
             bool haveTrue = false;
-            for (int i = 0; i < PlayerList.Count; i++)
-            {
-                if (!PlayerList[i].IsSelected(position))
+            //if (gameCursor.enable)
+            //{
+                for (int i = 0; i < PlayerList.Count; i++)
                 {
-                    if (!haveTrue)
+                    if (!PlayerList[i].IsSelected(position))
                     {
-                        actionScreen.isShow = false;
-                        gameCursor.enable = true;
+                        if (!haveTrue)
+                        {
+                            actionScreen.isShow = false;
+                            gameCursor.enable = true;
+                        }
+
                     }
-                    
+                    else
+                    {
+                        haveTrue = true;
+                        //Console.WriteLine("true:" + i);
+                        Point p = new Point((int)gameCursor.gameScreenPosition.X + gameCursor.size.Width, (int)gameCursor.gameScreenPosition.Y);
+                        actionScreen.Location = p;
+                        actionScreen.isShow = true;
+                        actionScreen.currSelect = PlayerList[i];
+                        this.currSelect = PlayerList[i];
+                        gameCursor.enable = false;
+                        //disabeCursor = true;
+                    }
                 }
-                else
-                {
-                    haveTrue = true;
-                    //Console.WriteLine("true:" + i);
-                    Point p = new Point((int)gameCursor.gameScreenPosition.X + gameCursor.size.Width, (int)gameCursor.gameScreenPosition.Y);
-                    actionScreen.Location = p;
-                    actionScreen.isShow = true;
-                    gameCursor.enable = false;
-                    //disabeCursor = true;
-                } 
-            }
+            //}
+            
         }
+
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
         {
             
             counter += deltaTime;
             if (counter >= 100)
             {
-                foreach (Object obj in this.objects)
+                if (this.gameTurn == Global.Turn.PlayerTurn)
                 {
-                    //if (obj.Side == Global.Side.Player)
-                    //{
-                    obj.Update(deltaTime, keyState, mouseState);
-                    //}
-                }
-                if (gameTurn == Global.Turn.PlayerTurn)
-                {
-                    
-                    PlayerList[0].Move(path);
-                }
-                else if(gameTurn == Global.Turn.EnemyTurn)
-                {
-                    foreach(Object obj in this.EnemyList)
+                    foreach (Object obj in this.PlayerList)
                     {
                         obj.Update(deltaTime, keyState, mouseState);
                     }
-                    EnemyList[0].Move(path);
+                    //if (gameTurn == Global.Turn.PlayerTurn)
+                    //{
+
+                        //PlayerList[0].Move(path);
+                    //}
+                    //else if (gameTurn == Global.Turn.EnemyTurn)
+                    //{
+                        foreach (Object obj in this.EnemyList)
+                        {
+                            obj.Update(deltaTime, keyState, mouseState);
+                        }
+                    //    
+                    //}
+
+
+                    //if (!disabeCursor)
+                    //{
+                    HandleKey(deltaTime,keyState,mouseState);
+                    //}
+                    //else
+                    // {
+                    //actionScreen.Update(deltaTime, keyState, mouseState);
+                    // }
+
+                    counter = 0;
                 }
-
-
-                //if (!disabeCursor)
-                //{
-                    HandleKey(keyState);
-                //}
-                //else
-               // {
-                    actionScreen.Update(deltaTime, keyState, mouseState);
-               // }
-               
-                counter = 0;
+                else
+                {
+                    foreach (Object obj in this.EnemyList)
+                    {
+                        //if (obj.Side == Global.Side.Player)
+                        //{
+                        //obj.Update(deltaTime, keyState, mouseState);
+                        //}
+                        //EnemyList[0].Move(path);
+                    }
+                }
+                
             }
             
             
-            //camera.Update(keyState);
+            
             
         }
 
@@ -329,11 +347,6 @@ namespace GameDirectXDemo.Screens
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
                 actionScreen.Draw();
-                //if (!disabeCursor)
-                //{
-                
-               // }
-                
                 base.Draw();
             }
             catch (Exception ex)
