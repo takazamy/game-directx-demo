@@ -199,4 +199,13 @@
   <data name="ActionScreen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ActionScreen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ActionScreenCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ActionScreenCursor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="attack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\attack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="endturn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\endturn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

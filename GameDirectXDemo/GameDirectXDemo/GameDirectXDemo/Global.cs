@@ -8,7 +8,7 @@ namespace GameDirectXDemo
 {
     public class Global
     {
-        public enum BitmapType{ SOLID = 0,TRANSPARENT = 1}        
+        public enum BitmapType{ SOLID = 0,TRANSPARENT = 1, OVERLAY = 2}        
        
         public enum CursorState{Normal,Highlight}
 
