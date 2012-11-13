@@ -216,13 +216,18 @@ namespace GameDirectXDemo.Screens
                     {
                         actionScreen.Update(deltaTime, keyState, mouseState); 
                     }
-                   
+                    //if (actionScreen.choice != Global.ActionSreenChoice.NoAction || actionScreen.choice != Global.ActionSreenChoice.EndTurn)
+                    //{
+                    //    actionScreen.isShow = false;
+                    //    gameCursor.enable = true;
+                    //}
                     
                 }
+                
             }
             catch (Exception ex)
             {
-
+               
             }
         }
         /// <summary>
@@ -262,6 +267,65 @@ namespace GameDirectXDemo.Screens
             
         }
 
+        /// <summary>
+        /// Get the Object From Lists
+        /// </summary>
+        /// <param name="rect">GameCursor Rectangle</param>
+        /// <param name="side"></param>
+        /// <param name="all">Boolean if true will find in 2 Lists</param>
+        /// <returns></returns>
+        private Object GetObjectAtPosition(RectangleF rect, Global.Side side,Boolean all = false)
+        {
+            Object temp = null;
+            if (all)
+            {
+                for (int i = 0; i < EnemyList.Count; i++)
+                {
+
+                    if (rect.Contains(EnemyList[i].positionCenter))
+                    {
+                        temp = EnemyList[i];
+                        break;
+                    }
+                }
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    if (rect.Contains(PlayerList[i].positionCenter))
+                    {
+                        temp = PlayerList[i];
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                switch (side)
+                {
+                    case Global.Side.Enemy:
+                        for (int i = 0; i < EnemyList.Count; i++)
+                        {
+
+                            if (rect.Contains(EnemyList[i].positionCenter))
+                            {
+                                temp = EnemyList[i];
+                                break;
+                            }
+                        }
+                        break;
+                    case Global.Side.Player:
+                        for (int i = 0; i < PlayerList.Count; i++)
+                        {
+                            if (rect.Contains(PlayerList[i].positionCenter))
+                            {
+                                temp = PlayerList[i];
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+            return temp;
+        }
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
         {
             
