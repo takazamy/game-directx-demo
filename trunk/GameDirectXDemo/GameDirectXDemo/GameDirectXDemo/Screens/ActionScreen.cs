@@ -21,6 +21,7 @@ namespace GameDirectXDemo.Screens
         public Boolean isShow = false;
         public Boolean isInScreen = false;
         public Object currSelect;
+        public Global.ActionSreenChoice choice;
         public ActionScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size, GameScreen gameScreen) :
             base(scrManager, graphics, location, size)
         {
@@ -33,7 +34,7 @@ namespace GameDirectXDemo.Screens
  	         base.Initialize();
              bg = new DxImage(GameResource.ActionScreen, Global.BitmapType.SOLID, 0, _graphics.DDDevice);
              select = new DxImage(GameResource.ActionScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(),new Point(0,0), _graphics.DDDevice);
-             
+             choice = Global.ActionSreenChoice.NoAction;
            //  this.Surface.SurfaceDescription.SurfaceCaps.Alpha = true;
            //  this.Surface.SurfaceDescription.SurfaceCaps.Overlay = true;
              move = new DxButton(5, 5, GameResource.move, _graphics.DDDevice, GameResource.move.Width, GameResource.move.Height/3);
@@ -80,7 +81,7 @@ namespace GameDirectXDemo.Screens
                 }
                 if (keystate[Key.Z])
                 {
-                    
+                    //CheckButtonClick(select.Position);
                 }
             }
             catch (Exception ex)
@@ -90,10 +91,27 @@ namespace GameDirectXDemo.Screens
 
         private void CheckButtonClick(PointF pos)
         {
-            RectangleF rect = new RectangleF(pos,new SizeF((float)select.FrameWidth,(float)select.FrameHeight));
-            if (rect.Contains(move.Position))
+            try
             {
-               // move.
+                RectangleF rect = new RectangleF(pos, new SizeF((float)select.FrameWidth, (float)select.FrameHeight));
+                if (rect.Contains(move.Position))
+                {
+                    choice = Global.ActionSreenChoice.Move;
+                    // move.
+                }
+                if (rect.Contains(attack.Position))
+                {
+                    choice = Global.ActionSreenChoice.Attack;
+                }
+                if (rect.Contains(endTurn.Position))
+                {
+                    choice = Global.ActionSreenChoice.EndTurn;
+                    //Show EndTurnBox
+                    //this.parent 
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
         public override void Draw()
