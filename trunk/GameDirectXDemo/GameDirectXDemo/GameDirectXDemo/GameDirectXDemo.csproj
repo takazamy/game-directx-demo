@@ -105,6 +105,7 @@
     <Compile Include="Manager\ScreenManager.cs" />
     <Compile Include="Screens\ActionScreen.cs" />
     <Compile Include="Screens\CreditScreen.cs" />
+    <Compile Include="Screens\EndTurnBox.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\HowToPlayScreen.cs" />
     <Compile Include="Screens\InfoScreen.cs" />

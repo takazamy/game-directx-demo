@@ -86,5 +86,13 @@ namespace GameDirectXDemo
             }
             return _keyDown;
         }
+
+        public enum ActionSreenChoice
+        {
+            Move,
+            Attack,
+            EndTurn,
+            NoAction
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace GameDirectXDemo
         protected float _moveSpeed = 32;
         public Boolean isSelected = false;
         DxImage selectImage;
+        public PointF positionCenter;
 
         protected PointF _position;
         public PointF Position
@@ -117,7 +118,7 @@ namespace GameDirectXDemo
         {
             _objectImg = new DxImage(GameResource.robot, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(),PointF.Empty,32,32, _graphics.DDDevice);
             selectImage = new DxImage(GameResource.selectImage, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
-            
+            positionCenter = this.Position;
             //if (this._side == Global.Side.Player)
             //{
 
@@ -257,7 +258,8 @@ namespace GameDirectXDemo
             {
                 _ani.Update(deltaTime, this._currentDirection);
             }
-
+            positionCenter.X = this.Position.X + this._objectImg.FrameWidth / 2;
+            positionCenter.X = this.Position.X + this._objectImg.FrameHeight / 2;
 
         }
 
