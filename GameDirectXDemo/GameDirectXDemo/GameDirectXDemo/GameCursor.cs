@@ -28,7 +28,7 @@ namespace GameDirectXDemo
             gameScreenPosition = new Point(0, 0);
             tileMapPosition = new Point(0, 0);
             this.parent = parent;
-            tilemapSize = new Size(parent.tileMap.TileMapSurface.SurfaceDescription.Width, parent.tileMap.TileMapSurface.SurfaceDescription.Height);
+            tilemapSize = parent.tileMap.tilemapSize;
             size = new Size(cursorImage.FrameWidth, cursorImage.FrameHeight);
             bound = new Rectangle(tileMapPosition, size);
         }
