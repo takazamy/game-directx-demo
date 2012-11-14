@@ -16,6 +16,7 @@ namespace GameDirectXDemo
         public delegate void Action();
         private int _fullHp;
         public int _hp = 0;
+        private int _fullSta;
         public int _stamina = 0;
         public int _damage = 0;
         public int _shield = 0;
@@ -30,6 +31,8 @@ namespace GameDirectXDemo
         public Boolean isSelected = false;
         DxImage selectImage;
         public PointF positionCenter;
+        public float RangeAttack { get; set; }
+        public List<Point> path = null;
 
         protected Point _position;
         public Point Position
@@ -57,6 +60,7 @@ namespace GameDirectXDemo
                         _canAttackFar = false;
                         _canAttackNear = true;
                         _ani = new DxAnimation(this._objectImg, 100, 9, 11, Global.AnimationType.CONTINUOS);
+                        RangeAttack = 1;
                        //khởi tạo image cho object
                         
                         break;
@@ -64,11 +68,13 @@ namespace GameDirectXDemo
                         _canAttackFar = true;
                         _canAttackNear = false;
                         _ani = new DxAnimation(this._objectImg, 100, 6, 8, Global.AnimationType.CONTINUOS);
+                        RangeAttack = 10;
                         break;
                     case Global.ObjectType.Assault:
                         _canAttackFar = true;
                         _canAttackNear = true;
                         _ani = new DxAnimation(this._objectImg, 100, 0, 2, Global.AnimationType.CONTINUOS);
+                        RangeAttack = 3;
                         break;
                 }                
             }
@@ -114,7 +120,8 @@ namespace GameDirectXDemo
             _damage = int.Parse(val[4]);
             _shield = int.Parse(val[5]);
             _fullHp = _hp;
-            
+            _fullSta = _stamina;
+            path = new List<Point>();
         }
 
 
@@ -136,93 +143,100 @@ namespace GameDirectXDemo
 
         public virtual void Move(List<Point> path)
         {
-            if(pathIndex<= 0)
+            if (path.Count > 0)
             {
-                _state = Global.CharacterStatus.Move;
-            }
-            if (_state == Global.CharacterStatus.Move)
-            {
-                #region get direction
-                if (this.Position != path[pathIndex])
+                Console.WriteLine("Object Move");
+                if (pathIndex <= 0)
                 {
-
-                    if (this._position.X < path[pathIndex].X)
-                    {
-                        _currentDirection = Global.ObjectDirection.RIGHT;
-                    }
-                    else if (this._position.X > path[pathIndex].X)
-                    {
-                        _currentDirection = Global.ObjectDirection.LEFT;
-                    }
-                    else if (this._position.Y < path[pathIndex].Y)
-                    {
-                        _currentDirection = Global.ObjectDirection.DOWN;
-                    }
-                    else if (this._position.Y > path[pathIndex].Y)
-                    {
-                        _currentDirection = Global.ObjectDirection.UP;
-                    }
-                }                
-                #endregion
-                #region move
-                switch (_currentDirection)
-                {
-                    case Global.ObjectDirection.DOWN:
-                        {
-                            this._position.Y += (int)_moveSpeed;
-                            if (this._position.Y > path[pathIndex].Y)
-                            {
-                                this._position.Y = path[pathIndex].Y;
-                            }
-                            break;
-                        }
-                    case Global.ObjectDirection.LEFT:
-                        {
-                            this._position.X -= (int)_moveSpeed;
-                            if (this._position.X < path[pathIndex].X)
-                            {
-                                this._position.X = path[pathIndex].X;
-                            }
-                            break;
-                        }
-                    case Global.ObjectDirection.RIGHT:
-                        {
-                            this._position.X += (int)_moveSpeed;
-                            if (this._position.X > path[pathIndex].X)
-                            {
-                                this._position.X = path[pathIndex].X;
-                            }
-                            break;
-                        }
-                    case Global.ObjectDirection.UP:
-                        {
-                            this._position.Y -= (int)_moveSpeed;
-                            if (this._position.Y < path[pathIndex].Y)
-                            {
-                                this._position.Y = path[pathIndex].Y;
-                            }
-                            break;
-                        }
+                    _state = Global.CharacterStatus.Move;
                 }
-                #endregion
-                Point objectPos = new Point((int)this._position.X / 32, (int)this._position.Y / 32);
-                Point pathPos = new Point((int)path[pathIndex].X / 32, (int)path[pathIndex].Y / 32);
-                if (objectPos == pathPos)
+                if (_state == Global.CharacterStatus.Move)
                 {
-                    pathIndex++;
-                    if (pathIndex >= path.Count)
+                    #region get direction
+                    if (this.Position != path[pathIndex])
                     {
-                        _state = Global.CharacterStatus.Idle;
 
+                        if (this._position.X < path[pathIndex].X)
+                        {
+                            _currentDirection = Global.ObjectDirection.RIGHT;
+                        }
+                        else if (this._position.X > path[pathIndex].X)
+                        {
+                            _currentDirection = Global.ObjectDirection.LEFT;
+                        }
+                        else if (this._position.Y < path[pathIndex].Y)
+                        {
+                            _currentDirection = Global.ObjectDirection.DOWN;
+                        }
+                        else if (this._position.Y > path[pathIndex].Y)
+                        {
+                            _currentDirection = Global.ObjectDirection.UP;
+                        }
+                    }
+                    #endregion
+                    #region move
+                    switch (_currentDirection)
+                    {
+                        case Global.ObjectDirection.DOWN:
+                            {
+                                this._position.Y += (int)_moveSpeed;
+                                if (this._position.Y > path[pathIndex].Y)
+                                {
+                                    this._position.Y = path[pathIndex].Y;
+                                }
+                                break;
+                            }
+                        case Global.ObjectDirection.LEFT:
+                            {
+                                this._position.X -= (int)_moveSpeed;
+                                if (this._position.X < path[pathIndex].X)
+                                {
+                                    this._position.X = path[pathIndex].X;
+                                }
+                                break;
+                            }
+                        case Global.ObjectDirection.RIGHT:
+                            {
+                                this._position.X += (int)_moveSpeed;
+                                if (this._position.X > path[pathIndex].X)
+                                {
+                                    this._position.X = path[pathIndex].X;
+                                }
+                                break;
+                            }
+                        case Global.ObjectDirection.UP:
+                            {
+                                this._position.Y -= (int)_moveSpeed;
+                                if (this._position.Y < path[pathIndex].Y)
+                                {
+                                    this._position.Y = path[pathIndex].Y;
+                                }
+                                break;
+                            }
+                    }
+                    #endregion
+                    Point objectPos = new Point((int)this._position.X / 32, (int)this._position.Y / 32);
+                    Point pathPos = new Point((int)path[pathIndex].X / 32, (int)path[pathIndex].Y / 32);
+                    if (objectPos == pathPos)
+                    {
+                        pathIndex++;
+                        if (pathIndex >= path.Count)
+                        {
+                            _state = Global.CharacterStatus.Idle;
+                            this.path = new List<Point>();
+                            pathIndex = 0;
+                        }
                     }
                 }
             }
+           
         }
 
 
         public virtual void Attack(Object targetobj) 
         {
             Console.WriteLine("Attack The Enemy");
+            _state = Global.CharacterStatus.Attack;
         }
 
         public virtual void Die() { }
@@ -236,7 +250,7 @@ namespace GameDirectXDemo
             }
             else
             {
-                if (selectPosition == this.Position)
+               if (selectPosition == this.Position)
                 {
                     this.isSelected = true;
                     return true;
@@ -255,7 +269,7 @@ namespace GameDirectXDemo
         }
         public void Update(double deltaTime,KeyboardState keyState, MouseState mouseState)
         {
-           // this.Move(path);
+            this.Move(path);
             this._objectImg.Position = this.Position;
 
             this.selectImage.Position = this.Position;
@@ -266,7 +280,7 @@ namespace GameDirectXDemo
                 _ani.Update(deltaTime, this._currentDirection);
             }
             positionCenter.X = this.Position.X + this._objectImg.FrameWidth / 2;
-            positionCenter.X = this.Position.X + this._objectImg.FrameHeight / 2;
+            positionCenter.Y = this.Position.Y + this._objectImg.FrameHeight / 2;
 
         }
 
@@ -281,5 +295,7 @@ namespace GameDirectXDemo
 
 
 
+
+        
     }
 }
