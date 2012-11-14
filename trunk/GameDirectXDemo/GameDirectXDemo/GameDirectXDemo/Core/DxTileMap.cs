@@ -32,6 +32,7 @@ namespace GameDirectXDemo.Core
             get { return _tileMapSurface; }
         }
         private List<Layer> _layers = new List<Layer>();
+        public Size tilemapSize;
         private class Layer
         {
             public string _name;
@@ -203,6 +204,7 @@ namespace GameDirectXDemo.Core
             desc.Width = _columns * _cellWidth;
             desc.Height = _rows * _cellHeight;
             _tileMapSurface = new Surface(desc, _graphics.DDDevice);
+            tilemapSize = new Size(desc.Width, desc.Height);
             DrawTileMap();
         }
         //use for read text file
