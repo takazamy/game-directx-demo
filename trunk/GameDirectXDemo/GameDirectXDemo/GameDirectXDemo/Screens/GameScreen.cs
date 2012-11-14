@@ -26,6 +26,8 @@ namespace GameDirectXDemo.Screens
         public PathFinding pathFinder;
         public List<Point> path;
         public Object currSelect;
+        InfoScreen info;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -207,6 +209,36 @@ namespace GameDirectXDemo.Screens
                             }
                         }
                     }
+                    if (keyState[Key.Space] && actionScreen.choice == Global.ActionSreenChoice.NoAction)
+                    {
+                        if (info != null)
+                        {
+                            if (info.isShow == true)
+                            {
+                                info.isShow = false;
+                            }
+                            else
+                            {
+                                Object obj = this.GetObjectAtPosition(gameCursor.bound, Global.Side.Enemy, true);
+                                if (obj != null)
+                                {
+                                    GetObjectInfo(obj);
+                                }
+                               
+                            }
+                             
+                        }
+                        else
+                        {
+                            Object obj = this.GetObjectAtPosition(gameCursor.bound, Global.Side.Enemy, true);
+                            if (obj != null)
+                            {
+                                GetObjectInfo(obj);
+                            }
+                            
+                        }                                     
+                      
+                    }
                     //if (!actionScreen.isInScreen && actionScreen.isShow == false)
                     //{
                         
@@ -334,6 +366,14 @@ namespace GameDirectXDemo.Screens
             }
             return temp;
         }
+
+        private void GetObjectInfo(Object obj)
+        {
+            Point p = new Point();
+            info = new InfoScreen(_scrManager, _graphics, p, new Size(100, 100), obj, true);
+            info.SetPosition(this.tileMap.tilemapSize, this.gameCursor.tileMapPosition, this.gameCursor.size);  
+
+        }
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
         {
             
@@ -346,13 +386,7 @@ namespace GameDirectXDemo.Screens
                     {
                         obj.Update(deltaTime, keyState, mouseState);
                     }
-                    //if (gameTurn == Global.Turn.PlayerTurn)
-                    //{
-
-                        //PlayerList[0].Move(path);
-                    //}
-                    //else if (gameTurn == Global.Turn.EnemyTurn)
-                    //{
+                    
                     foreach (Object obj in this.EnemyList)
                     {
                         obj.Update(deltaTime, keyState, mouseState);
@@ -416,6 +450,11 @@ namespace GameDirectXDemo.Screens
                 }
                 gameCursor.Draw(tileMap.TileMapSurface);
                 actionScreen.Draw();
+                if (info != null)
+                {
+                    info.DrawTextObjectInfo(tileMap.TileMapSurface);                    
+                }
+               
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
                 
