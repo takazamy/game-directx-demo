@@ -22,6 +22,8 @@ namespace GameDirectXDemo.Screens
         public Boolean isInScreen = false;
         public Object currSelect;
         public Global.ActionSreenChoice choice;
+        
+
         public ActionScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size, GameScreen gameScreen) :
             base(scrManager, graphics, location, size)
         {
@@ -120,12 +122,19 @@ namespace GameDirectXDemo.Screens
                     Object targetobj = parent.GetObjectAtPosition(parent.gameCursor.bound, Global.Side.Enemy);
                     if (CheckCanAttack(currSelect, targetobj))
                     {
-                         currSelect.Attack(targetobj);
-                   
-                    } 
+                        if (currSelect._stamina > 0)
+                        {
+                            currSelect.Attack(targetobj);
+                        }
 
-                   
+
+                    }
+                    else
+                    {
+                        ResetSelectAction();
+                    }                   
                 }
+                
             }
             catch (Exception ex)
             {
