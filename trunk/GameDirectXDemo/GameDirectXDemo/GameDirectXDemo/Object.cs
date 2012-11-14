@@ -105,7 +105,11 @@ namespace GameDirectXDemo
 
         protected Global.CharacterStatus _state = Global.CharacterStatus.Idle;
 
-
+        public Global.CharacterStatus State
+        {
+            get { return _state; }
+            set { _state = value; }
+        }
         #endregion
 
         public Object(String info, DxInitGraphics graphics)
@@ -223,14 +227,14 @@ namespace GameDirectXDemo
                         pathIndex++;
                         if (pathIndex >= path.Count)
                         {
-                            _state = Global.CharacterStatus.Idle;
+                            _state = Global.CharacterStatus.FinishTurn;
                             this.path = new List<Point>();
                             pathIndex = 0;
                         }
-                    }
                 }
+              
             }
-           
+            }
         }
 
 
@@ -276,7 +280,7 @@ namespace GameDirectXDemo
             this.selectImage.Position = this.Position;
            
 
-            if (_state == Global.CharacterStatus.Move)
+            if (_state != Global.CharacterStatus.FinishTurn)
             {
                 _ani.Update(deltaTime, this._currentDirection);
             }
