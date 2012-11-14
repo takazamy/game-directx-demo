@@ -49,7 +49,7 @@ namespace GameDirectXDemo.Screens
             {
                 HanldeKey(keyState);
             }
-           
+            
             base.Update(deltaTime, keyState, mouseState);
         }
 
@@ -86,20 +86,44 @@ namespace GameDirectXDemo.Screens
                 {
                     Console.WriteLine("Action Screen Choice Action");
                     CheckButtonClick(select.Position);
+                    return;
                 }
 
                 if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Move)
                 {
-                    Point startPoint = new Point(currSelect.Position.X,currSelect.Position.Y);
-                    Point endPoint = new Point((int)parent.gameCursor.tileMapPosition.X,(int)parent.gameCursor.tileMapPosition.Y);
-                    parent.path = parent.pathFinder.FindPath(startPoint,endPoint);
-                    currSelect.Move(parent.path);
+                    Point startPoint = new Point(currSelect.Position.X/32,currSelect.Position.Y/32);
+                    Point endPoint = new Point(parent.gameCursor.tileMapPosition.X/32,parent.gameCursor.tileMapPosition.Y/32);
+                    if (parent.colisionMap[endPoint.Y,endPoint.X] == 0 && parent.objectMap[endPoint.Y,endPoint.X] == 0)
+                    {
+                        int cost = (int)parent.pathFinder.Heuristic(startPoint,endPoint);
+                        if (cost <= currSelect._stamina)
+                        {
+                            currSelect._stamina -= cost;
+                            currSelect.path = parent.pathFinder.FindPath(startPoint, endPoint);
+                            parent.objectMap[startPoint.Y, startPoint.X] = 0;
+                            parent.objectMap[endPoint.Y, endPoint.X] = 1;
+                            this.choice = Global.ActionSreenChoice.NoAction;
+                            this.isInScreen = false;
+                        }
+                        else
+                        {
+                            ResetSelectAction();
+                        }
+                     
+                    }
+                    
+                    //currSelect.path = parent.path;
                     
                 }
                 if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Attack)
                 {
                     Object targetobj = parent.GetObjectAtPosition(parent.gameCursor.bound, Global.Side.Enemy);
-                    currSelect.Attack(targetobj);
+                    if (CheckCanAttack(currSelect, targetobj))
+                    {
+                         currSelect.Attack(targetobj);
+                   
+                    } 
+
                    
                 }
             }
@@ -108,6 +132,13 @@ namespace GameDirectXDemo.Screens
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
+        }
+        private void ResetSelectAction()
+        {
+            this.choice = Global.ActionSreenChoice.NoAction;
+            this.isInScreen = true;
+            this.isShow = true;
+            parent.gameCursor.enable = false;
         }
 
         private void CheckButtonClick(PointF pos)
@@ -141,6 +172,19 @@ namespace GameDirectXDemo.Screens
                 Console.WriteLine(ex.StackTrace);
             }
         }
+
+        private Boolean CheckCanAttack(Object currObj, Object targetObj)
+        {
+            Point start = new Point(currObj.Position.X/32,currObj.Position.Y/32);
+            Point end = new Point(targetObj.Position.X/32,targetObj.Position.Y/32);
+            float range = parent.pathFinder.Heuristic(start,end);
+            if (range > currObj.RangeAttack)
+                return false;
+            else
+                return true;
+            
+        }
+
         public override void Draw()
         {
             try
@@ -159,7 +203,7 @@ namespace GameDirectXDemo.Screens
                     move.DrawFast(this.Surface);
                     attack.DrawFast(this.Surface);
                     endTurn.DrawFast(this.Surface);
-                    parent.Surface.Draw(new Rectangle(this.Location, this.Size), this.Surface, DrawFlags.Wait);
+                    parent.tileMap.TileMapSurface.Draw(new Rectangle(this.Location, this.Size), this.Surface, DrawFlags.Wait);
                 }
             }
             catch (Exception ex)
@@ -169,6 +213,41 @@ namespace GameDirectXDemo.Screens
             }
             //base.Draw();
         }
-        
+
+        internal void SetPosition(Point point)
+        {
+
+            Point p = new Point(point.X + parent.gameCursor.size.Width,point.Y);
+            if (point.X + this.Size.Width <= parent.tileMap.tilemapSize.Width)
+            {
+                if (p.Y+ this.Size.Height <= parent.tileMap.tilemapSize.Height)
+                {
+                    this.Location = p;
+                }
+                else 
+                {
+                    p.Y = parent.tileMap.tilemapSize.Height- this.Size.Height ;
+                    this.Location = p;
+                }
+               
+            }else 
+	        {
+                p = new Point(point.X - this.Size.Width, point.Y);
+                if (p.X >= 0)
+                {
+                    if (p.Y + this.Size.Height <= parent.tileMap.tilemapSize.Height)
+                    {
+                        this.Location = p;
+
+                    }
+                    else
+                    {
+                        p.Y = parent.tileMap.tilemapSize.Height - this.Size.Height;
+                        this.Location = p;
+                    }
+                }
+	        }
+            
+        }
     }
 }
