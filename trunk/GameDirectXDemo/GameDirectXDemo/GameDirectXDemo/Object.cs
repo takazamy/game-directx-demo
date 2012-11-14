@@ -31,8 +31,8 @@ namespace GameDirectXDemo
         DxImage selectImage;
         public PointF positionCenter;
 
-        protected PointF _position;
-        public PointF Position
+        protected Point _position;
+        public Point Position
         {
             get { return _position; }
             set { _position = value; }
@@ -169,7 +169,7 @@ namespace GameDirectXDemo
                 {
                     case Global.ObjectDirection.DOWN:
                         {
-                            this._position.Y += _moveSpeed;
+                            this._position.Y += (int)_moveSpeed;
                             if (this._position.Y > path[pathIndex].Y)
                             {
                                 this._position.Y = path[pathIndex].Y;
@@ -178,7 +178,7 @@ namespace GameDirectXDemo
                         }
                     case Global.ObjectDirection.LEFT:
                         {
-                            this._position.X -= _moveSpeed;
+                            this._position.X -= (int)_moveSpeed;
                             if (this._position.X < path[pathIndex].X)
                             {
                                 this._position.X = path[pathIndex].X;
@@ -187,7 +187,7 @@ namespace GameDirectXDemo
                         }
                     case Global.ObjectDirection.RIGHT:
                         {
-                            this._position.X += _moveSpeed;
+                            this._position.X += (int)_moveSpeed;
                             if (this._position.X > path[pathIndex].X)
                             {
                                 this._position.X = path[pathIndex].X;
@@ -196,7 +196,7 @@ namespace GameDirectXDemo
                         }
                     case Global.ObjectDirection.UP:
                         {
-                            this._position.Y -= _moveSpeed;
+                            this._position.Y -= (int)_moveSpeed;
                             if (this._position.Y < path[pathIndex].Y)
                             {
                                 this._position.Y = path[pathIndex].Y;
@@ -222,7 +222,7 @@ namespace GameDirectXDemo
 
         public virtual void Attack(Object targetobj) 
         {
-            
+            Console.WriteLine("Attack The Enemy");
         }
 
         public virtual void Die() { }
