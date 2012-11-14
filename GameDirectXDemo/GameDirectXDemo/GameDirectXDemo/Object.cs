@@ -14,9 +14,9 @@ namespace GameDirectXDemo
         #region Properties
         int pathIndex = 0;
         public delegate void Action();
-        private int _fullHp;
+        public int _fullHp;
         public int _hp = 0;
-        private int _fullSta;
+        public int _fullSta;
         public int _stamina = 0;
         public int _damage = 0;
         public int _shield = 0;
@@ -105,6 +105,7 @@ namespace GameDirectXDemo
 
         protected Global.CharacterStatus _state = Global.CharacterStatus.Idle;
 
+
         #endregion
 
         public Object(String info, DxInitGraphics graphics)
@@ -122,8 +123,8 @@ namespace GameDirectXDemo
             _fullHp = _hp;
             _fullSta = _stamina;
             path = new List<Point>();
-        }
-
+          
+        }   
 
         public void Initialize()
         {
@@ -290,6 +291,7 @@ namespace GameDirectXDemo
             {
                 selectImage.DrawImage(desSurf);
             }
+
             _ani.Draw(desSurf);
         }
 
