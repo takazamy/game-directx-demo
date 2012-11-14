@@ -110,7 +110,7 @@ namespace GameDirectXDemo.Screens
 
                         if (colisionMap[row, col] == 0 && objectMap[row,col] == 0)
                         {
-                            PlayerList[i].Position = new PointF((float)col * 32, (float)row * 32);//32 = frameWidth 
+                            PlayerList[i].Position = new Point(col * 32, row * 32);//32 = frameWidth 
                             objectMap[row, col] = 1;
                             break;
                         }
@@ -129,7 +129,7 @@ namespace GameDirectXDemo.Screens
 
                         if (colisionMap[row, col] == 0 && objectMap[row,col] == 0)
                         {
-                            EnemyList[i].Position = new PointF((float)col * 32, (float)row * 32);//32 = frameWidth 
+                            EnemyList[i].Position = new Point(col * 32, row * 32);//32 = frameWidth 
                             objectMap[row, col] = 2;
                             break;
                         }
@@ -265,7 +265,7 @@ namespace GameDirectXDemo.Screens
         /// <param name="side"></param>
         /// <param name="all">Boolean if true will find in 2 Lists</param>
         /// <returns></returns>
-        private Object GetObjectAtPosition(RectangleF rect, Global.Side side,Boolean all = false)
+        public Object GetObjectAtPosition(RectangleF rect, Global.Side side,Boolean all = false)
         {
             Object temp = null;
             if (all)

@@ -53,7 +53,7 @@ namespace GameDirectXDemo.Screens
             base.Update(deltaTime, keyState, mouseState);
         }
 
-        private void HanldeKey(KeyboardState keystate,Object targetobj = null)
+        private void HanldeKey(KeyboardState keystate)
         {
             try
             {
@@ -90,20 +90,18 @@ namespace GameDirectXDemo.Screens
 
                 if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Move)
                 {
-                    Point startPoint = new Point((int)currSelect.Position.X,(int)currSelect.Position.Y);
+                    Point startPoint = new Point(currSelect.Position.X,currSelect.Position.Y);
                     Point endPoint = new Point((int)parent.gameCursor.tileMapPosition.X,(int)parent.gameCursor.tileMapPosition.Y);
                     parent.path = parent.pathFinder.FindPath(startPoint,endPoint);
                     currSelect.Move(parent.path);
                     
                 }
-                //if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Attack)
-                //{
-                //    currSelect.Attack(targetobj);
-                //    isInScreen = false;
-                //    currSelect = null;
-                //    isShow = false;
-                //    //currSelect.Move(...)
-                //}
+                if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Attack)
+                {
+                    Object targetobj = parent.GetObjectAtPosition(parent.gameCursor.bound, Global.Side.Enemy);
+                    currSelect.Attack(targetobj);
+                   
+                }
             }
             catch (Exception ex)
             {
@@ -127,6 +125,8 @@ namespace GameDirectXDemo.Screens
                 if (rect.Contains(attack.Position))
                 {
                     choice = Global.ActionSreenChoice.Attack;
+                    this.isShow = false;
+                    this.parent.gameCursor.enable = true;
                 }
                 if (rect.Contains(endTurn.Position))
                 {
