@@ -10,7 +10,7 @@ using GameDirectXDemo.Screens;
 
 namespace GameDirectXDemo
 {
-    class GameCursor
+    public class GameCursor
     {
         DxImage cursorImage;
         public PointF tileMapPosition;
@@ -44,6 +44,7 @@ namespace GameDirectXDemo
         {
             if (keystate[Key.Right])
             {
+                Console.WriteLine("Cursor Move Right");
                 PointF p = new PointF(tileMapPosition.X + this.size.Width, tileMapPosition.Y);
                 if (p.X + this.size.Width <= tilemapSize.Width)
                 {
@@ -63,6 +64,7 @@ namespace GameDirectXDemo
             }
             if (keystate[Key.Left])
             {
+                Console.WriteLine("Cursore Move Left");
                 PointF p = new PointF(tileMapPosition.X - this.size.Width, tileMapPosition.Y);
                 if (p.X >= 0)
                 {
@@ -80,7 +82,7 @@ namespace GameDirectXDemo
             }
             if (keystate[Key.Down])
             {
-
+                Console.WriteLine("Cursore Move Down");
                 PointF p = new PointF(tileMapPosition.X, tileMapPosition.Y + this.size.Height);
                 if (p.Y + this.size.Height <= tilemapSize.Height)
                 {
@@ -99,6 +101,7 @@ namespace GameDirectXDemo
             }
             if (keystate[Key.Up])
             {
+                Console.WriteLine("Cursore Move Up");
                 PointF p = new PointF(tileMapPosition.X, tileMapPosition.Y - this.size.Height);
                 if (p.Y >= 0)
                 {

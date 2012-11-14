@@ -32,8 +32,8 @@ namespace GameDirectXDemo
         /// <param name="RenderTarget">The target control to render to.</param>
         /// 
 
-        DxTileMap tileMap;
-        DxCamera camera;
+        //DxTileMap tileMap;
+        //DxCamera camera;
 
         public GameLogic(Control RenderTarget)
         {

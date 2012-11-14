@@ -11,8 +11,10 @@ namespace GameDirectXDemo
 {
     public class Object
     {
+        #region Properties
         int pathIndex = 0;
         public delegate void Action();
+        private int _fullHp;
         public int _hp = 0;
         public int _stamina = 0;
         public int _damage = 0;
@@ -97,6 +99,8 @@ namespace GameDirectXDemo
 
         protected Global.CharacterStatus _state = Global.CharacterStatus.Idle;
 
+        #endregion
+
         public Object(String info, DxInitGraphics graphics)
         {
             //Type,Side,hp,stamina,damage,shield
@@ -109,7 +113,7 @@ namespace GameDirectXDemo
             _stamina = int.Parse(val[3]);
             _damage = int.Parse(val[4]);
             _shield = int.Parse(val[5]);
-            
+            _fullHp = _hp;
             
         }
 
@@ -216,7 +220,10 @@ namespace GameDirectXDemo
         }
 
 
-        public virtual void Attack() { }
+        public virtual void Attack(Object targetobj) 
+        {
+            
+        }
 
         public virtual void Die() { }
 
