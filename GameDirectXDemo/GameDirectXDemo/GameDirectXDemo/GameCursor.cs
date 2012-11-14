@@ -13,22 +13,24 @@ namespace GameDirectXDemo
     public class GameCursor
     {
         DxImage cursorImage;
-        public PointF tileMapPosition;
-        public PointF gameScreenPosition;
+        public Point tileMapPosition;
+        public Point gameScreenPosition;
         DxInitGraphics _graphics;
         public Boolean enable = true;
         public Size size;
         GameScreen parent;
         Size tilemapSize;
+        public Rectangle bound;
         public GameCursor(DxInitGraphics graphics,GameScreen parent)
         {
             _graphics = graphics;
             cursorImage = new DxImage(GameResource.GameScreenCursor, Global.BitmapType.TRANSPARENT, Color.White.ToArgb(), _graphics.DDDevice);
-            gameScreenPosition = new PointF(0, 0);
-            tileMapPosition = new PointF(0, 0);
+            gameScreenPosition = new Point(0, 0);
+            tileMapPosition = new Point(0, 0);
             this.parent = parent;
             tilemapSize = new Size(parent.tileMap.TileMapSurface.SurfaceDescription.Width, parent.tileMap.TileMapSurface.SurfaceDescription.Height);
             size = new Size(cursorImage.FrameWidth, cursorImage.FrameHeight);
+            bound = new Rectangle(tileMapPosition, size);
         }
 
         public void Update(KeyboardState keystate)
@@ -38,6 +40,7 @@ namespace GameDirectXDemo
                 HandleKey(keystate);
                 cursorImage.Position = tileMapPosition;
             }
+            bound.Location = tileMapPosition;
         }
 
         private void HandleKey(KeyboardState keystate)
@@ -45,12 +48,12 @@ namespace GameDirectXDemo
             if (keystate[Key.Right])
             {
                 Console.WriteLine("Cursor Move Right");
-                PointF p = new PointF(tileMapPosition.X + this.size.Width, tileMapPosition.Y);
+                Point p = new Point(tileMapPosition.X + this.size.Width, tileMapPosition.Y);
                 if (p.X + this.size.Width <= tilemapSize.Width)
                 {
                     tileMapPosition = p;
                 }
-                p = new PointF(gameScreenPosition.X + this.size.Width, gameScreenPosition.Y);
+                p = new Point(gameScreenPosition.X + this.size.Width, gameScreenPosition.Y);
                 if (p.X + this.size.Width <= parent.Size.Width)
                 {
                     gameScreenPosition = p;
@@ -65,12 +68,12 @@ namespace GameDirectXDemo
             if (keystate[Key.Left])
             {
                 Console.WriteLine("Cursore Move Left");
-                PointF p = new PointF(tileMapPosition.X - this.size.Width, tileMapPosition.Y);
+                Point p = new Point(tileMapPosition.X - this.size.Width, tileMapPosition.Y);
                 if (p.X >= 0)
                 {
                     tileMapPosition = p;
                 }
-                p = new PointF(gameScreenPosition.X - this.size.Width, gameScreenPosition.Y);
+                p = new Point(gameScreenPosition.X - this.size.Width, gameScreenPosition.Y);
                 if (p.X >= 0)
                 {
                     gameScreenPosition = p;
@@ -83,12 +86,12 @@ namespace GameDirectXDemo
             if (keystate[Key.Down])
             {
                 Console.WriteLine("Cursore Move Down");
-                PointF p = new PointF(tileMapPosition.X, tileMapPosition.Y + this.size.Height);
+                Point p = new Point(tileMapPosition.X, tileMapPosition.Y + this.size.Height);
                 if (p.Y + this.size.Height <= tilemapSize.Height)
                 {
                     tileMapPosition = p;
                 }
-                p = new PointF(gameScreenPosition.X, gameScreenPosition.Y + this.size.Height);
+                p = new Point(gameScreenPosition.X, gameScreenPosition.Y + this.size.Height);
                 if(p.Y +this.size.Height <= parent.Size.Height)
                 {
                     gameScreenPosition = p;
@@ -102,12 +105,12 @@ namespace GameDirectXDemo
             if (keystate[Key.Up])
             {
                 Console.WriteLine("Cursore Move Up");
-                PointF p = new PointF(tileMapPosition.X, tileMapPosition.Y - this.size.Height);
+                Point p = new Point(tileMapPosition.X, tileMapPosition.Y - this.size.Height);
                 if (p.Y >= 0)
                 {
                     tileMapPosition = p;
                 }
-                p = new PointF(gameScreenPosition.X, gameScreenPosition.Y - this.size.Height);
+                p = new Point(gameScreenPosition.X, gameScreenPosition.Y - this.size.Height);
                 if (p.Y >= 0)
                 {
                     gameScreenPosition = p;
