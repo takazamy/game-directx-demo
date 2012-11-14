@@ -71,7 +71,7 @@ namespace GameDirectXDemo
             Idle = 0,
             Move = 1,
             Attack = 2,
-
+            FinishTurn = 3
         }
 
         public static Boolean CheckKeyDown(KeyboardState keyState)
@@ -93,6 +93,6 @@ namespace GameDirectXDemo
             Attack,
             EndTurn,
             NoAction
-        }
+        }        
     }
 }
