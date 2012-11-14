@@ -20,8 +20,8 @@ namespace GameDirectXDemo.Screens
         public Global.Turn gameTurn = Global.Turn.PlayerTurn;
        
         public GameCursor gameCursor;
-        int[,] colisionMap;
-        int[,] objectMap;
+        public int[,] colisionMap;
+        public int[,] objectMap;
         double counter = 0;
         public PathFinding pathFinder;
         public List<Point> path;
@@ -161,7 +161,7 @@ namespace GameDirectXDemo.Screens
                     //// Check gameCursor state;
                     gameCursor.Update(keyState);
                     actionScreen.Update(deltaTime, keyState, mouseState);
-                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen)
+                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen && actionScreen.currSelect._stamina >0)
                     {   
                         Console.WriteLine("Enter Action Screen");
                         actionScreen.isInScreen = true;
@@ -190,7 +190,23 @@ namespace GameDirectXDemo.Screens
                             }
                         }
                     }
-                    
+                    if (keyState[Key.X] && gameCursor.enable && actionScreen.choice != Global.ActionSreenChoice.NoAction)
+                    {
+                        Console.WriteLine("UnSelect Action");
+                        actionScreen.isInScreen = false;
+                        actionScreen.isShow = false;
+                        gameCursor.enable = true;
+                        actionScreen.currSelect = null;
+                        this.currSelect = null;
+                        for (int i = 0; i < PlayerList.Count; i++)
+                        {
+                            if (PlayerList[i].isSelected)
+                            {
+                                PlayerList[i].isSelected = false;
+                                break;
+                            }
+                        }
+                    }
                     //if (!actionScreen.isInScreen && actionScreen.isShow == false)
                     //{
                         
@@ -244,9 +260,10 @@ namespace GameDirectXDemo.Screens
                     else
                     {
                         haveTrue = true;
-                        //Console.WriteLine("true:" + i);
-                        Point p = new Point((int)gameCursor.gameScreenPosition.X + gameCursor.size.Width, (int)gameCursor.gameScreenPosition.Y);
-                        actionScreen.Location = p;
+                        //Console.WriteLine("true:" + i);                        
+                       // Point p = new Point(gameCursor.gameScreenPosition.X + gameCursor.size.Width, gameCursor.gameScreenPosition.Y);
+                        actionScreen.SetPosition(gameCursor.tileMapPosition);
+                       // actionScreen.Location = p;
                         actionScreen.isShow = true;
                         actionScreen.currSelect = PlayerList[i];
                         this.currSelect = PlayerList[i];
@@ -336,10 +353,10 @@ namespace GameDirectXDemo.Screens
                     //}
                     //else if (gameTurn == Global.Turn.EnemyTurn)
                     //{
-                        foreach (Object obj in this.EnemyList)
-                        {
-                            obj.Update(deltaTime, keyState, mouseState);
-                        }
+                    foreach (Object obj in this.EnemyList)
+                    {
+                        obj.Update(deltaTime, keyState, mouseState);
+                    }
                     //    
                     //}
 
@@ -398,10 +415,10 @@ namespace GameDirectXDemo.Screens
                     
                 }
                 gameCursor.Draw(tileMap.TileMapSurface);
-                
+                actionScreen.Draw();
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
-                actionScreen.Draw();
+                
                 base.Draw();
             }
             catch (Exception ex)
