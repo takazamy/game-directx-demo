@@ -16,7 +16,7 @@ namespace GameDirectXDemo.Screens
         DxImage unit1;
         DxImage unit2;
         DxImage unit3;
-        DxImage miniMap;
+        //DxImage miniMap;
         InfoScreen info1;
         InfoScreen info2;
         InfoScreen info3;
@@ -85,7 +85,7 @@ namespace GameDirectXDemo.Screens
                 }
             }
         }
-        int mission;
+        int mission ;
         string missionString = "";
         string mapPath = "";
         string errorString = "";
@@ -112,6 +112,7 @@ namespace GameDirectXDemo.Screens
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.StackTrace);
             }
         }
 

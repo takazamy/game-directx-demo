@@ -53,12 +53,13 @@ namespace GameDirectXDemo.Screens
             base.Update(deltaTime, keyState, mouseState);
         }
 
-        private void HanldeKey(KeyboardState keystate)
+        private void HanldeKey(KeyboardState keystate,Object targetobj = null)
         {
             try
             {
-                if (keystate[Key.Down])
+                if (keystate[Key.Down] && this.choice == Global.ActionSreenChoice.NoAction )
                 {
+                    Console.WriteLine("Action Screen Move Down");
                     PointF p = new PointF(select.Position.X, select.Position.Y + 30);
                     if (p.Y+select.FrameHeight<= this.Size.Height)
                     {
@@ -66,8 +67,9 @@ namespace GameDirectXDemo.Screens
                     }
                     
                 }
-                if (keystate[Key.Up])
+                if (keystate[Key.Up] && this.choice == Global.ActionSreenChoice.NoAction)
                 {
+                    Console.WriteLine("Action Screen Move Up");
                     PointF p = new PointF(select.Position.X, select.Position.Y - 30);
                     if (p.Y >= 0)
                     {
@@ -75,17 +77,38 @@ namespace GameDirectXDemo.Screens
                     }
                     
                 }
-                if (keystate[Key.Left] || keystate[Key.X])
+                if (keystate[Key.Left] && this.choice == Global.ActionSreenChoice.NoAction)
                 {
+                    Console.WriteLine("Action Screen UnInScreen");
                     this.isInScreen = false;
                 }
-                if (keystate[Key.Z])
+                if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.NoAction)
                 {
-                    //CheckButtonClick(select.Position);
+                    Console.WriteLine("Action Screen Choice Action");
+                    CheckButtonClick(select.Position);
                 }
+
+                if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Move)
+                {
+                    Point startPoint = new Point((int)currSelect.Position.X,(int)currSelect.Position.Y);
+                    Point endPoint = new Point((int)parent.gameCursor.tileMapPosition.X,(int)parent.gameCursor.tileMapPosition.Y);
+                    parent.path = parent.pathFinder.FindPath(startPoint,endPoint);
+                    currSelect.Move(parent.path);
+                    
+                }
+                //if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Attack)
+                //{
+                //    currSelect.Attack(targetobj);
+                //    isInScreen = false;
+                //    currSelect = null;
+                //    isShow = false;
+                //    //currSelect.Move(...)
+                //}
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
@@ -97,6 +120,8 @@ namespace GameDirectXDemo.Screens
                 if (rect.Contains(move.Position))
                 {
                     choice = Global.ActionSreenChoice.Move;
+                    this.isShow = false;
+                    this.parent.gameCursor.enable = true;
                     // move.
                 }
                 if (rect.Contains(attack.Position))
@@ -112,6 +137,8 @@ namespace GameDirectXDemo.Screens
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
         }
         public override void Draw()
@@ -137,7 +164,8 @@ namespace GameDirectXDemo.Screens
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
             //base.Draw();
         }

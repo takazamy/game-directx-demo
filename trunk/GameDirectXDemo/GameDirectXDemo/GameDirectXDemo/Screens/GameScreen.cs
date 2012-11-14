@@ -17,15 +17,15 @@ namespace GameDirectXDemo.Screens
         List<Object> PlayerList;
         List<Object> EnemyList;
         ActionScreen actionScreen;
-        Global.Turn gameTurn = Global.Turn.PlayerTurn;
+        public Global.Turn gameTurn = Global.Turn.PlayerTurn;
        
-        GameCursor gameCursor;
+        public GameCursor gameCursor;
         int[,] colisionMap;
         int[,] objectMap;
         double counter = 0;
-        PathFinding pathFinder;
-        List<Point> path;
-        Object currSelect;
+        public PathFinding pathFinder;
+        public List<Point> path;
+        public Object currSelect;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -155,68 +155,58 @@ namespace GameDirectXDemo.Screens
             {
                 if (Global.CheckKeyDown(keyState))
                 {
-                    // Check gameCursor state;
-                    gameCursor.Update(keyState);
-                    if (!actionScreen.isInScreen && actionScreen.isShow == false)
-                    {
-                        if (keyState[Key.Z])
-                        {
-                            //if (!disabeCursor)
-                            //{
-                            IsSelect(gameCursor.tileMapPosition);
-                            //}
 
-                        }
-                        if (keyState[Key.X])
+
+
+                    //// Check gameCursor state;
+                    gameCursor.Update(keyState);
+                    actionScreen.Update(deltaTime, keyState, mouseState);
+                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen)
+                    {   
+                        Console.WriteLine("Enter Action Screen");
+                        actionScreen.isInScreen = true;
+                    }
+                    if (keyState[Key.Z] && gameCursor.enable && actionScreen.choice == Global.ActionSreenChoice.NoAction)
+                    {
+                        Console.WriteLine("Select Object");
+                        IsSelect(gameCursor.tileMapPosition);                 
+
+                    }
+
+                    if (keyState[Key.X] && !gameCursor.enable && actionScreen.choice == Global.ActionSreenChoice.NoAction)
+                    {
+                        Console.WriteLine("UnSelect Object");
+                        actionScreen.isInScreen = false;
+                        actionScreen.isShow = false;
+                        gameCursor.enable = true;
+                        actionScreen.currSelect = null;
+                        this.currSelect = null;
+                        for (int i = 0; i < PlayerList.Count; i++)
                         {
-                            //IsSelect(gameCursor.tileMapPosition);
-                            actionScreen.isShow = false;
-                            gameCursor.enable = true;
-                            for (int i = 0; i < PlayerList.Count; i++)
+                            if (PlayerList[i].isSelected)
                             {
-                                if (PlayerList[i].isSelected)
-                                {
-                                    PlayerList[i].isSelected = false;
-                                    break;
-                                }
+                                PlayerList[i].isSelected = false;
+                                break;
                             }
                         }
+                    }
+                    
+                    //if (!actionScreen.isInScreen && actionScreen.isShow == false)
+                    //{
+                        
+                        
                         
                           
-                    }else if (!actionScreen.isInScreen)
-                    {
-                        if (keyState[Key.Right])
-                        {
-                            actionScreen.isInScreen = true;
-                        }
-                        if (keyState[Key.Z])
-                        {
-                            //if (!disabeCursor)
-                            //{
-                            IsSelect(gameCursor.tileMapPosition);
-                            //}
-
-                        }
-                        if (keyState[Key.X])
-                        {
-                            //IsSelect(gameCursor.tileMapPosition);
-                            actionScreen.isShow = false;
-                            gameCursor.enable = true;
-                            for (int i = 0; i < PlayerList.Count; i++)
-                            {
-                                if (PlayerList[i].isSelected)
-                                {
-                                    PlayerList[i].isSelected = false;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        actionScreen.Update(deltaTime, keyState, mouseState); 
-                    }
-                    //if (actionScreen.choice != Global.ActionSreenChoice.NoAction || actionScreen.choice != Global.ActionSreenChoice.EndTurn)
+                    //}else if (!actionScreen.isInScreen)
+                    //{
+                        
+                       
+                    //}
+                    ////else
+                    ////{
+                    ////    actionScreen.Update(deltaTime, keyState, mouseState); 
+                    ////}
+                    //if (keyState[Key.Z]&&(actionScreen.choice != Global.ActionSreenChoice.NoAction && actionScreen.choice != Global.ActionSreenChoice.EndTurn)&& actionScreen.isInScreen)
                     //{
                     //    actionScreen.isShow = false;
                     //    gameCursor.enable = true;
@@ -227,7 +217,8 @@ namespace GameDirectXDemo.Screens
             }
             catch (Exception ex)
             {
-               
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
         }
         /// <summary>
@@ -330,7 +321,7 @@ namespace GameDirectXDemo.Screens
         {
             
             counter += deltaTime;
-            if (counter >= 100)
+            if (counter >= 80)
             {
                 if (this.gameTurn == Global.Turn.PlayerTurn)
                 {
