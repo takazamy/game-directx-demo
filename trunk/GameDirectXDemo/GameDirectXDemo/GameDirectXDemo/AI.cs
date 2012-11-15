@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using GameDirectXDemo.Screens;
+using Microsoft.DirectX.DirectInput;
 
 namespace GameDirectXDemo
 {
@@ -20,14 +22,16 @@ namespace GameDirectXDemo
         int minDistance = int.MaxValue;
         int choosePathIndex;
         List<Point> _choosePath = new List<Point>();
+        GameScreen _parent;
         //int _distanceCanMove;
        public bool IsFinishTurn = false;
-        public AI(List<Object> objectList,List<Object> targetList,int[,] colisionMap,int[,] objectMap)
+        public AI(List<Object> objectList,List<Object> targetList,int[,] colisionMap,int[,] objectMap, GameScreen parent)
         {
             _objectList = objectList;
             _targetList = targetList;
             _pathFinder = new PathFinding(colisionMap);
             _objectMap = objectMap;
+            _parent = parent;
             
         }
         public void Move(Object obj, Object target)
@@ -77,33 +81,26 @@ namespace GameDirectXDemo
                             Point startPoint = new Point((int)_currObject.Position.X / 32, (int)_currObject.Position.Y / 32);
                             Point endPoint = new Point(destPos.X / 32, destPos.Y / 32);
                             _choosePath = _pathFinder.FindPath(startPoint, endPoint);
-                            _currObject._stamina -= _choosePath.Count;
+                          //  _currObject._stamina -= _choosePath.Count;
                             _objectMap[startPoint.Y, startPoint.X] = 0;
                             _objectMap[endPoint.Y, endPoint.X] = 2;
                             Console.WriteLine("choose Path {0}", _choosePath.Count);
                         }
                         else
                         {
-                            if (choosePathIndex >= 0)
+                            if (choosePathIndex > 0)
                             {
                                 choosePathIndex--;
                             }
                             else
                             {
                                 _currObject.State = Global.CharacterStatus.FinishTurn;
+                                choosePathIndex = 0;
+                                break;
                             }
                         }
                     }
                 }
-                //else
-                //{
-                //    for (int i = 0; i < path.Count - 1; i++)
-                //    {
-                //       _choosePath.Add(path[i]);                        
-                //    }
-                    
-                //}
-            
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
@@ -113,7 +110,7 @@ namespace GameDirectXDemo
         {
            
         }
-        public void Update(double deltaTime)
+        public void Update(double deltaTime, KeyboardState keyState, MouseState mouseState)
         {
             try
             {
@@ -125,11 +122,32 @@ namespace GameDirectXDemo
                     _currTarget = this.ChooseTarget(_currObject, _targetList);
                     if (_currObject.RangeAttack < minDistance)
                     {
+                        Console.WriteLine("Enemy {0} move", _currObject.Index);
                         this.Move(_currObject, _currTarget);
+                        //if (_currObject._stamina > 0 && _currObject.State == Global.CharacterStatus.FinishTurn)
+                        //{
+                        //    //_currObject.State = Global.CharacterStatus.Attack;
+                        //    Console.WriteLine("enemy {0} Can Attack", _currObject.Index);
+                        //}
                     }
                     else
                     {
-                        _currObject.Attack(_currTarget,_currObject._stamina);
+                        Console.WriteLine("in range");
+                        if (_currObject._stamina > 0)
+                        {
+                            int damage;
+                            Console.WriteLine("Enemy {0} attack", _currObject.Index);
+                            damage = _currObject.Attack(_currTarget, _currObject._stamina);
+                            Global.DamageInfo dinf = new Global.DamageInfo();
+                            dinf.damage = damage;
+                            dinf.position = _currTarget.positionCenter;
+                            _parent.DamageList.Add(dinf);
+                            _currObject.State = Global.CharacterStatus.FinishTurn;
+                        }
+                        else
+                        {
+                            _currObject.State = Global.CharacterStatus.FinishTurn;
+                        }
                     }
                     if (_currObject.State == Global.CharacterStatus.FinishTurn)
                     {
@@ -137,6 +155,7 @@ namespace GameDirectXDemo
                         {
                             Console.WriteLine(_objectIndex);
                             Console.WriteLine(_choosePath.Count);
+                            _currObject.Update(deltaTime, keyState, mouseState);
                             _objectIndex++;
                             elaspedTime = 0;
                             _choosePath = new List<Point>();
@@ -152,6 +171,7 @@ namespace GameDirectXDemo
                             Console.WriteLine(ex.StackTrace);
                         }
                     }
+                    _currObject.Update(deltaTime, keyState, mouseState);
                 }
             }
             catch(Exception ex)
