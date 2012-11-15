@@ -223,17 +223,31 @@ namespace GameDirectXDemo
                                 break;
                             }
                     }
+                    //Console.WriteLine("Direction {0}", _currentDirection);
                     #endregion
+                    
                     Point objectPos = new Point((int)this._position.X / 32, (int)this._position.Y / 32);
                     Point pathPos = new Point((int)path[pathIndex].X / 32, (int)path[pathIndex].Y / 32);
                     if (objectPos == pathPos)
                     {
-                        pathIndex++;
-                        if (pathIndex >= path.Count)
+                        try
                         {
-                            _state = Global.CharacterStatus.FinishTurn;
-                            this.path = new List<Point>();
-                            pathIndex = 0;
+                            pathIndex++;
+                            Console.WriteLine("pathcount {0}", path.Count);
+                            Console.WriteLine("pathindex {0}", pathIndex);
+                            //Console.WriteLine("objectPos {0}", objectPos);
+                            //Console.WriteLine("pathPos {0}", pathPos);
+                            if (pathIndex >= path.Count)
+                            {
+
+                                _state = Global.CharacterStatus.FinishTurn;
+                                this.path = new List<Point>();
+                                pathIndex = 0;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.StackTrace);
                         }
                 }
               
