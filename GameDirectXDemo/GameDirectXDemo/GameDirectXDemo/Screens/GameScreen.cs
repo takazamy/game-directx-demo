@@ -18,7 +18,7 @@ namespace GameDirectXDemo.Screens
         List<Object> EnemyList;
         public ActionScreen actionScreen;
         public Global.Turn gameTurn = Global.Turn.EnemyTurn;
-       
+        public int turn = 1;
         public GameCursor gameCursor;
         public int[,] colisionMap;
         public int[,] objectMap;
@@ -371,21 +371,51 @@ namespace GameDirectXDemo.Screens
         }
         public override void Update(double deltaTime, KeyboardState keyState, MouseState mouseState) 
         {
-            
+            if (turn == 1)
+            {
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+
+                    PlayerList[i].Update(deltaTime, keyState, mouseState);
+                    if (PlayerList[i]._hp <= 0)
+                    {
+                        PlayerList.RemoveAt(i);
+                    }
+
+
+                }
+
+                foreach (Object obj in this.EnemyList)
+                {
+                    obj.Update(deltaTime, keyState, mouseState);
+                }
+                    
+                
+            }
             counter += deltaTime;
             if (counter >= 80)
             {
                 if (this.gameTurn == Global.Turn.PlayerTurn)
                 {
-                    foreach (Object obj in this.PlayerList)
+
+                    for (int i = 0; i < PlayerList.Count; i++)
                     {
-                        obj.Update(deltaTime, keyState, mouseState);
+
+                        PlayerList[i].Update(deltaTime, keyState, mouseState);
+                        if (PlayerList[i]._hp <= 0)
+                        {
+                            PlayerList.RemoveAt(i);
+                        }
+
+
                     }
-                    
-                    foreach (Object obj in this.EnemyList)
-                    {
-                        obj.Update(deltaTime, keyState, mouseState);
-                    }
+
+                    //foreach (Object obj in this.EnemyList)
+                    //{
+                    //    obj.Update(deltaTime, keyState, mouseState);
+                    //}
+                    //    
+                    //}
                     //    
                     //}
 
@@ -394,11 +424,7 @@ namespace GameDirectXDemo.Screens
                     //{
                     
                     HandleKey(deltaTime,keyState,mouseState);
-                    //}
-                    //else
-                    // {
-                    //actionScreen.Update(deltaTime, keyState, mouseState);
-                    // }
+                    
 
                     counter = 0;
                 }
@@ -428,6 +454,15 @@ namespace GameDirectXDemo.Screens
                     }
                     
                 }
+            }
+
+            if (PlayerList.Count <= 0)
+            {
+                
+            }
+            if (EnemyList.Count <= 0)
+            {
+                
             }
         }
 
@@ -490,7 +525,7 @@ namespace GameDirectXDemo.Screens
                     obj.State = Global.CharacterStatus.Idle;
                     obj.ResetStamina();
                 }
-                
+                turn++;
             }
             else
             {

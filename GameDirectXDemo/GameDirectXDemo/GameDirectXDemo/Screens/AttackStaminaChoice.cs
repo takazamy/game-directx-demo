@@ -64,11 +64,19 @@ namespace GameDirectXDemo.Screens
         {
             if (keyState[Key.NumPadPlus])
             {
-                stamina++;
+                if (stamina < currObj._stamina)
+                {
+                    stamina++;
+                }
+                
             }
             if (keyState[Key.NumPadMinus])
             {
-                stamina--;
+                if (stamina > 0)
+                {
+                    stamina--;
+                }
+                
             }
             if (keyState[Key.Z])
             {
