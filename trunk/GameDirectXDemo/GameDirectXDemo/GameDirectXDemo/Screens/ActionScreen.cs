@@ -22,7 +22,7 @@ namespace GameDirectXDemo.Screens
         public Boolean isInScreen = false;
         public Object currSelect;
         public Global.ActionSreenChoice choice;
-        
+        public Object target;
 
         public ActionScreen(ScreenManager scrManager, DxInitGraphics graphics, Point location, Size size, GameScreen gameScreen) :
             base(scrManager, graphics, location, size)
@@ -50,7 +50,9 @@ namespace GameDirectXDemo.Screens
             if (isInScreen)
             {
                 HanldeKey(keyState);
+                
             }
+            
             
             base.Update(deltaTime, keyState, mouseState);
         }
@@ -93,6 +95,7 @@ namespace GameDirectXDemo.Screens
 
                 if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Move)
                 {
+                    Console.WriteLine("Action Screen Move Action");
                     Point startPoint = new Point(currSelect.Position.X/32,currSelect.Position.Y/32);
                     Point endPoint = new Point(parent.gameCursor.tileMapPosition.X/32,parent.gameCursor.tileMapPosition.Y/32);
                     if (parent.colisionMap[endPoint.Y,endPoint.X] == 0 && parent.objectMap[endPoint.Y,endPoint.X] == 0)
@@ -106,6 +109,8 @@ namespace GameDirectXDemo.Screens
                             parent.objectMap[endPoint.Y, endPoint.X] = 1;
                             this.choice = Global.ActionSreenChoice.NoAction;
                             this.isInScreen = false;
+                            SetPosition(parent.gameCursor.tileMapPosition);
+                            ResetSelectAction();
                         }
                         else
                         {
@@ -119,15 +124,18 @@ namespace GameDirectXDemo.Screens
                 }
                 if (keystate[Key.Z] && this.choice == Global.ActionSreenChoice.Attack)
                 {
+                    Console.WriteLine("Action Screen Attack Action");
                     Object targetobj = parent.GetObjectAtPosition(parent.gameCursor.bound, Global.Side.Enemy);
                     if (CheckCanAttack(currSelect, targetobj))
                     {
                         if (currSelect._stamina > 0)
                         {
-                            currSelect.Attack(targetobj);
+                            
+                           // parent.gameCursor.enable = false;
+                            parent.attStaChoice.Show(currSelect,targetobj);
+                            this.isInScreen = false;
+                            //currSelect.Attack(targetobj);
                         }
-
-
                     }
                     else
                     {
@@ -146,7 +154,7 @@ namespace GameDirectXDemo.Screens
                 Console.WriteLine(ex.StackTrace);
             }
         }
-        private void ResetSelectAction()
+        public void ResetSelectAction()
         {
             this.choice = Global.ActionSreenChoice.NoAction;
             this.isInScreen = true;
@@ -194,6 +202,7 @@ namespace GameDirectXDemo.Screens
             if (range > currObj.RangeAttack)
                 return false;
             else
+                currObj.range = range;
                 return true;
             
         }

@@ -16,7 +16,7 @@ namespace GameDirectXDemo.Screens
         List<Object> objects;
         List<Object> PlayerList;
         List<Object> EnemyList;
-        ActionScreen actionScreen;
+        public ActionScreen actionScreen;
         public Global.Turn gameTurn = Global.Turn.EnemyTurn;
        
         public GameCursor gameCursor;
@@ -28,7 +28,9 @@ namespace GameDirectXDemo.Screens
         public Object currSelect;
         private AI _aI;
         InfoScreen info;
-
+        public Boolean isInScreen = false;
+        public AttackStaminaChoice attStaChoice;
+        public List<Global.DamageInfo> DamageList;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -46,6 +48,9 @@ namespace GameDirectXDemo.Screens
             this.objects = objects;
             objectMap = new int[colisionMap.GetLength(0), colisionMap.GetLength(1)];
             pathFinder = new PathFinding(colisionMap);
+            attStaChoice = new AttackStaminaChoice(_scrManager, _graphics, this.Location, new Size(150, 100), this);
+            isInScreen = true;
+            DamageList = new List<Global.DamageInfo>();
             Initialize();
             _aI = new AI(EnemyList, PlayerList, colisionMap,objectMap);
         }
@@ -145,6 +150,7 @@ namespace GameDirectXDemo.Screens
         }
 
         #endregion
+
         /// <summary>
         /// Manage Interaction Through Keyboard
         /// </summary>
@@ -160,13 +166,15 @@ namespace GameDirectXDemo.Screens
 
                     //// Check gameCursor state;
                     gameCursor.Update(keyState);
-                    actionScreen.Update(deltaTime, keyState, mouseState);
-                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen && actionScreen.currSelect._stamina >0)
+                    
+                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen && actionScreen.currSelect._stamina >0)                    
                     {   
                         Console.WriteLine("Enter Action Screen");
                         actionScreen.isInScreen = true;
+                       // this.isInScreen = false;
                     }
                     if (keyState[Key.Z] && gameCursor.enable && actionScreen.choice == Global.ActionSreenChoice.NoAction)
+                    //if (keyState[Key.Z] && this.isInScreen)
                     {
                         Console.WriteLine("Select Object");
                         IsSelect(gameCursor.tileMapPosition);                 
@@ -174,39 +182,22 @@ namespace GameDirectXDemo.Screens
                     }
 
                     if (keyState[Key.X] && !gameCursor.enable && actionScreen.choice == Global.ActionSreenChoice.NoAction)
+                    //if (keyState[Key.X] && this.isInScreen)
                     {
                         Console.WriteLine("UnSelect Object");
-                        actionScreen.isInScreen = false;
-                        actionScreen.isShow = false;
-                        gameCursor.enable = true;
-                        actionScreen.currSelect = null;
-                        this.currSelect = null;
-                        for (int i = 0; i < PlayerList.Count; i++)
-                        {
-                            if (PlayerList[i].isSelected)
-                            {
-                                PlayerList[i].isSelected = false;
-                                break;
-                            }
-                        }
+                        ComeBackGameScreen();
                     }
-                    if (keyState[Key.X] && gameCursor.enable && actionScreen.choice != Global.ActionSreenChoice.NoAction)
+                    if (keyState[Key.X] && gameCursor.enable && actionScreen.choice != Global.ActionSreenChoice.NoAction && actionScreen.isInScreen)
                     {
                         Console.WriteLine("UnSelect Action");
-                        actionScreen.isInScreen = false;
-                        actionScreen.isShow = false;
-                        gameCursor.enable = true;
-                        actionScreen.currSelect = null;
-                        this.currSelect = null;
-                        for (int i = 0; i < PlayerList.Count; i++)
-                        {
-                            if (PlayerList[i].isSelected)
-                            {
-                                PlayerList[i].isSelected = false;
-                                break;
-                            }
-                        }
+                        ComeBackGameScreen();
                     }
+                    //if (keyState[Key.X] && gameCursor.enable && actionScreen.choice == Global.ActionSreenChoice.NoAction && !actionScreen.isInScreen)
+                    //{
+                    //    Console.WriteLine("UnSelect Action");
+                    //    actionScreen.SetPosition(actionScreen.currSelect.Position);
+                    //    actionScreen.ResetSelectAction();
+                    //}
                     if (keyState[Key.Space] && actionScreen.choice == Global.ActionSreenChoice.NoAction)
                     {
                         if (info != null)
@@ -237,26 +228,11 @@ namespace GameDirectXDemo.Screens
                         }                                     
                       
                     }
-                    //if (!actionScreen.isInScreen && actionScreen.isShow == false)
-                    //{
-                        
-                        
-                        
-                          
-                    //}else if (!actionScreen.isInScreen)
-                    //{
-                        
-                       
-                    //}
-                    ////else
-                    ////{
-                    ////    actionScreen.Update(deltaTime, keyState, mouseState); 
-                    ////}
-                    //if (keyState[Key.Z]&&(actionScreen.choice != Global.ActionSreenChoice.NoAction && actionScreen.choice != Global.ActionSreenChoice.EndTurn)&& actionScreen.isInScreen)
-                    //{
-                    //    actionScreen.isShow = false;
-                    //    gameCursor.enable = true;
-                    //}
+
+                    attStaChoice.Update(deltaTime, keyState, mouseState);
+                    actionScreen.Update(deltaTime, keyState, mouseState);
+                   
+                  
                     
                 }
                 
@@ -266,6 +242,27 @@ namespace GameDirectXDemo.Screens
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
+        }
+
+        /// <summary>
+        /// Come Back State When No Choice Anything
+        /// </summary>
+        public void ComeBackGameScreen() 
+        {
+            actionScreen.isInScreen = false;
+            actionScreen.isShow = false;
+            gameCursor.enable = true;
+            actionScreen.currSelect = null;
+            this.currSelect = null;
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+                if (PlayerList[i].isSelected)
+                {
+                    PlayerList[i].isSelected = false;
+                    break;
+                }
+            }
+            actionScreen.choice = Global.ActionSreenChoice.NoAction;
         }
         /// <summary>
         /// Check the selected of Objects
@@ -395,6 +392,7 @@ namespace GameDirectXDemo.Screens
 
                     //if (!disabeCursor)
                     //{
+                    
                     HandleKey(deltaTime,keyState,mouseState);
                     //}
                     //else
@@ -418,7 +416,18 @@ namespace GameDirectXDemo.Screens
                         ChangeTurn();
                         //_aI.IsFinishTurn = false;
                     }
-                }       
+                }
+
+                for (int i = 0; i < DamageList.Count; i++)
+                {
+                    DamageList[i].timeline -= deltaTime;
+                    DamageList[i].position.Y -= 2;
+                    if (DamageList[i].timeline <= 0)
+                    {
+                        DamageList.RemoveAt(i);
+                    }
+                    
+                }
             }
         }
 
@@ -451,7 +460,11 @@ namespace GameDirectXDemo.Screens
                 {
                     info.DrawTextObjectInfo(tileMap.TileMapSurface);                    
                 }
-               
+                this.attStaChoice.Draw();
+                foreach (Global.DamageInfo dinfo in this.DamageList)
+                {
+                    tileMap.TileMapSurface.DrawText(dinfo.position.X, dinfo.position.Y, dinfo.damage.ToString(), false);
+                }
                 camera.Draw(this.Surface);
                 //actionScreen.Draw(this.Surface);
                 
@@ -475,7 +488,9 @@ namespace GameDirectXDemo.Screens
                 foreach( Object obj in PlayerList)
                 {
                     obj.State = Global.CharacterStatus.Idle;
+                    obj.ResetStamina();
                 }
+                
             }
             else
             {
@@ -499,6 +514,7 @@ namespace GameDirectXDemo.Screens
                     foreach (Object obj in EnemyList)
                     {
                         obj.State = Global.CharacterStatus.Idle;
+                        obj.ResetStamina();
 
                     }
                     _aI.IsFinishTurn = false;
