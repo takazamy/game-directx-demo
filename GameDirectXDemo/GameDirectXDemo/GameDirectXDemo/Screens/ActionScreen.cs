@@ -134,6 +134,10 @@ namespace GameDirectXDemo.Screens
                         ResetSelectAction();
                     }                   
                 }
+                if(keystate[Key.Z] && this.choice == Global.ActionSreenChoice.EndTurn)
+                {
+                    parent.ChangeTurn();
+                }
                 
             }
             catch (Exception ex)
