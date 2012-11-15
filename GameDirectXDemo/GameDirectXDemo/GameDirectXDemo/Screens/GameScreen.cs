@@ -52,7 +52,7 @@ namespace GameDirectXDemo.Screens
             isInScreen = true;
             DamageList = new List<Global.DamageInfo>();
             Initialize();
-            _aI = new AI(EnemyList, PlayerList, colisionMap,objectMap);
+            _aI = new AI(EnemyList, PlayerList, colisionMap,objectMap,this);
         }
 
         public override void Initialize()
@@ -66,15 +66,21 @@ namespace GameDirectXDemo.Screens
                 actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this);
                 EnemyList = new List<Object>();
                 PlayerList = new List<Object>();
+                int enemyIndex = 0;
+                int playerIndex = 0;
                 foreach (Object obj in objects)
                 {
                     if (obj.Side == Global.Side.Enemy)
                     {
                         EnemyList.Add(obj);
+                        EnemyList[enemyIndex].Index = enemyIndex;
+                        enemyIndex++;
                     }
                     else
                     {
                         PlayerList.Add(obj);
+                        PlayerList[playerIndex].Index = playerIndex;
+                        playerIndex++;
                     }
                 }
                 CreateGame();
@@ -431,11 +437,11 @@ namespace GameDirectXDemo.Screens
                 else
                 {
                     
-                    _aI.Move(deltaTime);
-                    foreach (Object obj in this.objects)
-                    {
-                        obj.Update(deltaTime, keyState, mouseState);                        
-                    }                    
+                    _aI.Update(deltaTime,_keyState,_mouseState);
+                    //foreach (Object obj in this.objects)
+                    //{
+                    //    obj.Update(deltaTime, keyState, mouseState);                        
+                    //}                    
                     HandleKey(deltaTime, keyState, mouseState);
                     if (_aI.IsFinishTurn)
                     {
