@@ -29,6 +29,15 @@ namespace GameDirectXDemo
         }
         public void Move(double deltaTime)
         {
+            //if (IsFinishTurn)
+            //{
+            //    foreach (Object obj in _objectList)
+            //    {
+            //        obj.State = Global.CharacterStatus.Idle;
+                    
+            //    }
+            //    IsFinishTurn = false;
+            //}
             elaspedTime += deltaTime;
             if(elaspedTime >= 500)
             {
@@ -52,7 +61,7 @@ namespace GameDirectXDemo
                     {
                         IsFinishTurn = true;
                         _objectIndex = 0;
-                        //foreach (Object obj in _objectList)
+                        //foreach (Object obj in _objectList)z
                         //{
                         //    obj.State = Global.CharacterStatus.Idle;
                         //}
