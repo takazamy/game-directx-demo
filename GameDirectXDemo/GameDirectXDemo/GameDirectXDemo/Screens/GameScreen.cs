@@ -17,7 +17,7 @@ namespace GameDirectXDemo.Screens
         List<Object> PlayerList;
         List<Object> EnemyList;
         ActionScreen actionScreen;
-        public Global.Turn gameTurn = Global.Turn.PlayerTurn;
+        public Global.Turn gameTurn = Global.Turn.EnemyTurn;
        
         public GameCursor gameCursor;
         public int[,] colisionMap;
@@ -26,6 +26,7 @@ namespace GameDirectXDemo.Screens
         public PathFinding pathFinder;
         public List<Point> path;
         public Object currSelect;
+        private AI _aI;
         InfoScreen info;
 
         /// <summary>
@@ -45,9 +46,8 @@ namespace GameDirectXDemo.Screens
             this.objects = objects;
             objectMap = new int[colisionMap.GetLength(0), colisionMap.GetLength(1)];
             pathFinder = new PathFinding(colisionMap);
-
             Initialize();
-
+            _aI = new AI(EnemyList, PlayerList, colisionMap,objectMap);
         }
 
         public override void Initialize()
@@ -57,7 +57,7 @@ namespace GameDirectXDemo.Screens
             {
                 this._state = Global.ScreenState.GS_MAIN_GAME;
                 gameCursor = new GameCursor(_graphics, this);
-                camera = new DxCamera(Point.Empty, this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
+                camera = new DxCamera(new Point(150,150), this.Size, this.tileMap.TileMapSurface, _graphics.DDDevice);
                 actionScreen = new ActionScreen(_scrManager, _graphics, Point.Empty, new Size(60, 95), this);
                 EnemyList = new List<Object>();
                 PlayerList = new List<Object>();
@@ -87,8 +87,6 @@ namespace GameDirectXDemo.Screens
         private void CreateGame()
         {
             RandomPostion();
-            path = pathFinder.FindPath(new Point((int)EnemyList[0].Position.X / 32, (int)EnemyList[0].Position.Y / 32),
-                new Point((int)PlayerList[0].Position.X / 32, (int)PlayerList[0].Position.Y / 32));
         }
         /// <summary>
         /// Function Create Position for all Object in game
@@ -408,21 +406,20 @@ namespace GameDirectXDemo.Screens
                 }
                 else
                 {
-                    foreach (Object obj in this.EnemyList)
+                    
+                    _aI.Move(deltaTime);
+                    foreach (Object obj in this.objects)
                     {
-                        //if (obj.Side == Global.Side.Player)
-                        //{
-                        //obj.Update(deltaTime, keyState, mouseState);
-                        //}
-                        //EnemyList[0].Move(path);
+                        obj.Update(deltaTime, keyState, mouseState);                        
+                    }                    
+                    HandleKey(deltaTime, keyState, mouseState);
+                    if (_aI.IsFinishTurn)
+                    {
+                        ChangeTurn();
+                        //_aI.IsFinishTurn = false;
                     }
-                }
-                
+                }       
             }
-            
-            
-            
-            
         }
 
         public override void Draw() 
@@ -466,6 +463,47 @@ namespace GameDirectXDemo.Screens
             }
             
             
+        }
+        public void ChangeTurn()
+        {
+            if (gameTurn == Global.Turn.EnemyTurn)
+            {
+                this.gameTurn = Global.Turn.PlayerTurn;
+                actionScreen.isInScreen = false;
+                gameCursor.enable = true;
+                actionScreen.choice = Global.ActionSreenChoice.NoAction;
+                foreach( Object obj in PlayerList)
+                {
+                    obj.State = Global.CharacterStatus.Idle;
+                }
+            }
+            else
+            {
+                this.gameTurn = Global.Turn.EnemyTurn;
+                actionScreen.isInScreen = false;
+                actionScreen.isShow = false;
+                gameCursor.enable = true;
+                actionScreen.currSelect = null;
+                this.currSelect = null;
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    PlayerList[i].State = Global.CharacterStatus.FinishTurn;
+                    if (PlayerList[i].isSelected)
+                    {
+                        PlayerList[i].isSelected = false;
+                        break;
+                    }
+                }
+                if (_aI.IsFinishTurn)
+                {
+                    foreach (Object obj in EnemyList)
+                    {
+                        obj.State = Global.CharacterStatus.Idle;
+
+                    }
+                    _aI.IsFinishTurn = false;
+                }
+            }
         }
     }
 }
