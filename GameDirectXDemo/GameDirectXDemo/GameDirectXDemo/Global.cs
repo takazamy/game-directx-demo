@@ -105,5 +105,11 @@ namespace GameDirectXDemo
             public DamageInfo()
             { }
         }
+
+        public enum Result
+        {
+            WIN = 1,
+            LOSE = 2
+        }
     }
 }

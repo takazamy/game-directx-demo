@@ -165,6 +165,13 @@ namespace GameDirectXDemo {
             }
         }
         
+        internal static System.Drawing.Bitmap LoseScreen {
+            get {
+                object obj = ResourceManager.GetObject("LoseScreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap map {
             get {
                 object obj = ResourceManager.GetObject("map", resourceCulture);
@@ -312,6 +319,13 @@ namespace GameDirectXDemo {
         internal static System.Drawing.Bitmap tittle {
             get {
                 object obj = ResourceManager.GetObject("tittle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap WinScreen {
+            get {
+                object obj = ResourceManager.GetObject("WinScreen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
