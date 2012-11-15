@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.DirectX.DirectInput;
+using System.Drawing;
 
 namespace GameDirectXDemo
 {
@@ -93,6 +94,16 @@ namespace GameDirectXDemo
             Attack,
             EndTurn,
             NoAction
-        }        
+        }
+
+        public class DamageInfo
+        {
+            public int damage;
+            public Point position;
+            public double timeline = 500;
+
+            public DamageInfo()
+            { }
+        }
     }
 }
