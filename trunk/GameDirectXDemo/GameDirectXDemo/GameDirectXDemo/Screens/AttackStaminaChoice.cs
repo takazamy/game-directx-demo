@@ -62,7 +62,7 @@ namespace GameDirectXDemo.Screens
 
         public void HandleKey(KeyboardState keyState)
         {
-            if (keyState[Key.NumPadPlus])
+            if (keyState[Key.NumPadPlus] || keyState[Key.M])
             {
                 if (stamina < currObj._stamina)
                 {
@@ -70,7 +70,7 @@ namespace GameDirectXDemo.Screens
                 }
                 
             }
-            if (keyState[Key.NumPadMinus])
+            if (keyState[Key.NumPadMinus]|| keyState[Key.N]) 
             {
                 if (stamina > 0)
                 {
