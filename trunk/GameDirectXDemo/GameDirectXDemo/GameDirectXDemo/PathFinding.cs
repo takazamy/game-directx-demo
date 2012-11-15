@@ -94,7 +94,9 @@ namespace GameDirectXDemo
 
 
         }
+
         public float Heuristic(Point point1, Point point2)
+
         {
             return Math.Abs(point1.X - point2.X) + Math.Abs(point1.Y - point2.Y);
         }
