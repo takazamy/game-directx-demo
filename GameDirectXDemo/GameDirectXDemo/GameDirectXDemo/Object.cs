@@ -13,6 +13,7 @@ namespace GameDirectXDemo
     {
         #region Properties
         int pathIndex = 0;
+        public int Index{get;set;}
         public delegate void Action();
         public int _fullHp;
         public int _hp = 0;
@@ -120,6 +121,7 @@ namespace GameDirectXDemo
         {
             //Type,Side,hp,stamina,damage,shield
             this._graphics = graphics;
+            
             Initialize();
             String[] val = info.Split('-');
             ObjectType = (Global.ObjectType)Enum.Parse(typeof(Global.ObjectType), val[0]);
@@ -233,6 +235,13 @@ namespace GameDirectXDemo
                         try
                         {
                             pathIndex++;
+                            if (this.Side == Global.Side.Enemy)
+                            {
+                                if (this._stamina > 0)
+                                {
+                                    _stamina--;
+                                }
+                            }
                             Console.WriteLine("pathcount {0}", path.Count);
                             Console.WriteLine("pathindex {0}", pathIndex);
                             //Console.WriteLine("objectPos {0}", objectPos);
