@@ -275,8 +275,12 @@ namespace GameDirectXDemo
 		        rate = 1 - range * (float)0.1;
 	        }
             float dam = stamina *this._damage *rate - targetobj._shield;
+            if (dam > 0)
+            {
+                targetobj._hp -= (int)dam;
+            }
            
-            targetobj._hp -= (int)dam;
+            
 
             return (int)dam;
 
