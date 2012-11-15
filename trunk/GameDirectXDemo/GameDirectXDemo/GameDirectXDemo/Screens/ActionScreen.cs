@@ -142,10 +142,10 @@ namespace GameDirectXDemo.Screens
                         ResetSelectAction();
                     }                   
                 }
-                if(keystate[Key.Z] && this.choice == Global.ActionSreenChoice.EndTurn)
-                {
-                    parent.ChangeTurn();
-                }
+                //if(keystate[Key.Z] && this.choice == Global.ActionSreenChoice.EndTurn)
+               // {
+                    //parent.ChangeTurn();
+                //}
                 
             }
             catch (Exception ex)
@@ -182,7 +182,10 @@ namespace GameDirectXDemo.Screens
                 }
                 if (rect.Contains(endTurn.Position))
                 {
-                    choice = Global.ActionSreenChoice.EndTurn;
+                    //choice = Global.ActionSreenChoice.EndTurn;
+                    parent.ChangeTurn();
+                    this.isShow = false;
+                    //this.parent.gameCursor.enable = true;
                     //Show EndTurnBox
                     //this.parent 
                 }

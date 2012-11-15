@@ -81,20 +81,23 @@ namespace GameDirectXDemo.Screens
         {
             _scrManager._state = Global.ScreenState.GS_LEVEL;
             Boolean flag = false;
+            LevelScreen level = null;
             foreach (DxScreen scr in _scrManager.Children)
             {
                 if (scr._state == Global.ScreenState.GS_LEVEL)
                 {
                     flag = true;
+                    level = (LevelScreen)scr;
                     break;
                 }
             }
             if (!flag)
             {
-                LevelScreen level = new LevelScreen(_scrManager, _graphics, Point.Empty, new Size(_scrManager._renderTarget.Width, _scrManager._renderTarget.Height));
+                level = new LevelScreen(_scrManager, _graphics, Point.Empty, new Size(_scrManager._renderTarget.Width, _scrManager._renderTarget.Height));
                 _scrManager.Append(level);
                 //_scrManager.UpdateIndex();
             }
+            
             
             _scrManager.PlayScreen(Global.ScreenState.GS_LEVEL);
         }
