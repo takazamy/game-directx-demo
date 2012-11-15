@@ -30,8 +30,10 @@ namespace GameDirectXDemo
         protected float _moveSpeed = 32;
         public Boolean isSelected = false;
         DxImage selectImage;
-        public PointF positionCenter;
+        public Point positionCenter;
         public float RangeAttack { get; set; }
+        float rate;
+        public float range;
         public List<Point> path = null;
 
         protected Point _position;
@@ -61,6 +63,7 @@ namespace GameDirectXDemo
                         _canAttackNear = true;
                         _ani = new DxAnimation(this._objectImg, 100, 9, 11, Global.AnimationType.CONTINUOS);
                         RangeAttack = 1;
+                       
                        //khởi tạo image cho object
                         
                         break;
@@ -68,7 +71,8 @@ namespace GameDirectXDemo
                         _canAttackFar = true;
                         _canAttackNear = false;
                         _ani = new DxAnimation(this._objectImg, 100, 6, 8, Global.AnimationType.CONTINUOS);
-                        RangeAttack = 10;
+                        RangeAttack = 20;
+                        
                         break;
                     case Global.ObjectType.Assault:
                         _canAttackFar = true;
@@ -238,10 +242,30 @@ namespace GameDirectXDemo
         }
 
 
-        public virtual void Attack(Object targetobj) 
+        public virtual int Attack(Object targetobj,int stamina) 
         {
             Console.WriteLine("Attack The Enemy");
+            Random rand = new Random();
             _state = Global.CharacterStatus.Attack;
+            this._stamina -= stamina;
+            if(this.ObjectType == Global.ObjectType.Defender)
+            {
+                rate = 1;
+            }
+            if (this.ObjectType == Global.ObjectType.Ranger)
+	        {
+		        rate = range* (float)0.1;
+	        }
+            if (this.ObjectType == Global.ObjectType.Assault)
+	        {
+		        rate = 1 - range * (float)0.1;
+	        }
+            float dam = stamina *this._damage *rate - targetobj._shield;
+           
+            targetobj._hp -= (int)dam;
+
+            return (int)dam;
+
         }
 
         public virtual void Die() { }
@@ -271,6 +295,10 @@ namespace GameDirectXDemo
         public void DeSelected()
         {
             this.isSelected = false;
+        }
+        public void ResetStamina()
+        {
+            this._stamina = _fullSta;
         }
         public void Update(double deltaTime,KeyboardState keyState, MouseState mouseState)
         {
