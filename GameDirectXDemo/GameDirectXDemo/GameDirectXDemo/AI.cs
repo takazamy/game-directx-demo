@@ -62,8 +62,9 @@ namespace GameDirectXDemo
             try
             {
                 Point destPos;
-                //if (path.Count > _currObject._stamina)
-                //{
+                Point tempDestPos;
+                int tempPosIndex;
+                List<Point> tempPath= new List<Point>();
                     Console.WriteLine("path count {0}", path.Count);
                     if (path.Count >= _currObject._stamina)
                     {
@@ -73,15 +74,24 @@ namespace GameDirectXDemo
                     {
                         choosePathIndex = path.Count - 1;
                     }
+                
                     while (_choosePath.Count == 0)
                     {
                         destPos = path[choosePathIndex];
                         if (_objectMap[destPos.Y / 32, destPos.X / 32] == 0)
                         {
+                            
                             Point startPoint = new Point((int)_currObject.Position.X / 32, (int)_currObject.Position.Y / 32);
                             Point endPoint = new Point(destPos.X / 32, destPos.Y / 32);
                             _choosePath = _pathFinder.FindPath(startPoint, endPoint);
-                          //  _currObject._stamina -= _choosePath.Count;
+                            //tempPath = _pathFinder.FindPath(startPoint, endPoint);
+                            //tempPosIndex = 
+
+
+
+
+
+                            _currObject._stamina -= _choosePath.Count;
                             _objectMap[startPoint.Y, startPoint.X] = 0;
                             _objectMap[endPoint.Y, endPoint.X] = 2;
                             Console.WriteLine("choose Path {0}", _choosePath.Count);
@@ -137,6 +147,7 @@ namespace GameDirectXDemo
                         {
                             int damage;
                             Console.WriteLine("Enemy {0} attack", _currObject.Index);
+                            _currObject.range = _pathFinder.Heuristic(new Point(_currObject.Position.X / 32, _currObject.Position.Y / 32), new Point(_currTarget.Position.X / 32, _currTarget.Position.Y / 32));
                             damage = _currObject.Attack(_currTarget, _currObject._stamina);
                             Global.DamageInfo dinf = new Global.DamageInfo();
                             dinf.damage = damage;
