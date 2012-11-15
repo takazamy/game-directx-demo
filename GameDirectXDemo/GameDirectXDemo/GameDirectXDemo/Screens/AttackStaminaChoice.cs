@@ -44,6 +44,7 @@ namespace GameDirectXDemo.Screens
         {
             this.Location = obj.Position;
             this.MaxStamina = obj._stamina;
+            this.stamina = 0;
             currObj = obj;
             this.targetObj = tart;
             isShow = true;

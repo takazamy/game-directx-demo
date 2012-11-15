@@ -173,7 +173,7 @@ namespace GameDirectXDemo.Screens
                     //// Check gameCursor state;
                     gameCursor.Update(keyState);
                     
-                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen && actionScreen.currSelect._stamina >0)                    
+                    if (keyState[Key.Right] && !gameCursor.enable && !actionScreen.isInScreen)// && actionScreen.currSelect._stamina >0)                    
                     {   
                         Console.WriteLine("Enter Action Screen");
                         actionScreen.isInScreen = true;
@@ -383,10 +383,10 @@ namespace GameDirectXDemo.Screens
                 {
 
                     PlayerList[i].Update(deltaTime, keyState, mouseState);
-                    if (PlayerList[i]._hp <= 0)
-                    {
-                        PlayerList.RemoveAt(i);
-                    }
+                    //if (PlayerList[i]._hp <= 0)
+                    //{
+                    //    PlayerList.RemoveAt(i);
+                    //}
 
 
                 }
@@ -408,10 +408,10 @@ namespace GameDirectXDemo.Screens
                     {
 
                         PlayerList[i].Update(deltaTime, keyState, mouseState);
-                        if (PlayerList[i]._hp <= 0)
-                        {
-                            PlayerList.RemoveAt(i);
-                        }
+                        //if (PlayerList[i]._hp <= 0)
+                        //{
+                        //    PlayerList.RemoveAt(i);
+                        //}
 
 
                     }
@@ -460,16 +460,69 @@ namespace GameDirectXDemo.Screens
                     }
                     
                 }
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    if (PlayerList[i]._hp <= 0)
+                    {
+                        Point endPoint = new Point(PlayerList[i].Position.X / 32, PlayerList[i].Position.Y / 32);
+                        this.objectMap[endPoint.Y, endPoint.X] = 0;
+                        PlayerList.RemoveAt(i);
+                    }
+                }
+                for (int i = 0; i < EnemyList.Count; i++)
+                {
+                    if (EnemyList[i]._hp <= 0)
+                    {
+                        Point endPoint = new Point(EnemyList[i].Position.X / 32, EnemyList[i].Position.Y / 32);
+                        this.objectMap[endPoint.Y, endPoint.X] = 0;
+                        EnemyList.RemoveAt(i);
+                    }
+                }
+                if (PlayerList.Count <= 0)
+                {
+                    GoToEndScreen(Global.Result.LOSE);
+                }
+                if (EnemyList.Count <= 0)
+                {
+                    GoToEndScreen(Global.Result.WIN);
+                }
+            }
+            
+        }
+        public void SetGame(DxTileMap tileMap, List<Object> objects)
+        {
+            this.tileMap = tileMap;
+            colisionMap = tileMap.CollisionMap;
+            this.objects = objects;
+            objectMap = new int[colisionMap.GetLength(0), colisionMap.GetLength(1)];
+            pathFinder = new PathFinding(colisionMap);
+            attStaChoice = new AttackStaminaChoice(_scrManager, _graphics, this.Location, new Size(150, 100), this);
+            isInScreen = true;
+            DamageList = new List<Global.DamageInfo>();
+            Initialize();
+            _aI = new AI(EnemyList, PlayerList, colisionMap, objectMap, this);
+        }
+        private void GoToEndScreen(Global.Result result)
+        {
+            _scrManager._state = Global.ScreenState.GS_ENDGAME;
+            //Create GameScreen
+            Boolean flag = false;
+            foreach (DxScreen scr in _scrManager.Children)
+            {
+                if (scr._state == Global.ScreenState.GS_ENDGAME)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                EndScreen end = new EndScreen(_scrManager, _graphics, this.Location, this.Size, result);
+                _scrManager.Append(end);
+                //_scrManager.UpdateIndex();
             }
 
-            if (PlayerList.Count <= 0)
-            {
-                
-            }
-            if (EnemyList.Count <= 0)
-            {
-                
-            }
+            _scrManager.PlayScreen(Global.ScreenState.GS_ENDGAME);
         }
 
         public override void Draw() 

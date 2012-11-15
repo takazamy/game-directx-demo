@@ -166,7 +166,7 @@ namespace GameDirectXDemo.Screens
                 switch (CreateRandomNumber(1, 3))
                 {
                     case 1:
-                        temp = new Object("1-1-150-20-5-5", this._graphics);
+                        temp = new Object("1-1-150-20-2-5", this._graphics);
                         break;
                     case 2:
                         temp = new Object("2-1-50-5-20-5", this._graphics);
@@ -289,20 +289,26 @@ namespace GameDirectXDemo.Screens
                 _scrManager._state = Global.ScreenState.GS_MAIN_GAME;
                 //Create GameScreen
                 Boolean flag = false;
+                GameScreen game = null;
                 foreach (DxScreen scr in _scrManager.Children)
                 {
                     if (scr._state == Global.ScreenState.GS_MAIN_GAME)
                     {
                         flag = true;
+                        game =(GameScreen)scr;
                         break;
                     }
                 }
                 if (!flag)
                 {
-                    GameScreen game = new GameScreen(_scrManager, _graphics, this.Location, this.Size, this.objects, this.mapGame);
+                    game = new GameScreen(_scrManager, _graphics, this.Location, this.Size, this.objects, this.mapGame);
                     _scrManager.Append(game);
                     //_scrManager.UpdateIndex();
-                }               
+                }
+                else
+                {
+                    game.SetGame(this.mapGame, this.objects);
+                }
                 
                 _scrManager.PlayScreen(Global.ScreenState.GS_MAIN_GAME);
                 //  Console.WriteLine("Mouse up");
